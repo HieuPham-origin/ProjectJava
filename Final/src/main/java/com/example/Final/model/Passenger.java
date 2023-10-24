@@ -1,27 +1,50 @@
 package com.example.Final.model;
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="Passenger")
-@Getter @Setter
+@Table(name = "Passenger")
 @NoArgsConstructor
+@Getter @Setter
 @AllArgsConstructor
 public class Passenger {
     @Id
-    @Column(name="pasenger_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pasenger_id;
-    private String passener_name;
-    private String phone;
-    private boolean gender;
-    private Date dayofBirth;
+    @Column(name = "passenger_id")
+    private int passengerId;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "type")
+    private int type;
+
+    @ManyToOne
+    @JoinColumn(name = "type", referencedColumnName = "type_id", insertable = false, updatable = false)
+    private CustomerType customerType;
+
+    // Getters and setters
 }
+

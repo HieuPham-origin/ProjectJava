@@ -1,24 +1,30 @@
 package com.example.Final.model;
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import jakarta.persistence.*;
+import java.util.Date;
 
 @Entity
-@Table(name="Seat")
-@Getter @Setter
+@Table(name = "Seat")
 @NoArgsConstructor
+@Getter @Setter
 @AllArgsConstructor
 public class Seat {
     @Id
-    @Column(name="seat_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int seat_id;
-    private String status;
+    @Column(name = "seat_id")
+    private int seatId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plane_id")
+    @Column(name = "seat_status")
+    private String seatStatus;
+
+    @Column(name = "plane_id")
+    private int planeId;
+
+    @ManyToOne
+    @JoinColumn(name = "plane_id", referencedColumnName = "plane_id", insertable = false, updatable = false)
     private Plane plane;
 }
+

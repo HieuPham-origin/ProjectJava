@@ -1,25 +1,37 @@
 package com.example.Final.model;
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="Flight")
-@Getter @Setter
+@Table(name = "Flight")
 @NoArgsConstructor
+@Getter @Setter
 @AllArgsConstructor
 public class Flight {
     @Id
-    @Column(name="flight_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int flight_id;
-    private String flight_name;
-    private Date departure_time;
-    private Date arrived_time;
+    @Column(name = "flight_id")
+    private int flightId;
 
+    @Column(name = "flight_number")
+    private String flightNumber;
+
+    @Column(name = "departure_airport_id")
+    private int departureAirportId;
+
+    @Column(name = "arrival_airport_id")
+    private int arrivalAirportId;
+
+    @ManyToOne
+    @JoinColumn(name = "departure_airport_id", referencedColumnName = "airportId", insertable = false, updatable = false)
+    private Airport departureAirport;
+
+    @ManyToOne
+    @JoinColumn(name = "arrival_airport_id", referencedColumnName = "airportId", insertable = false, updatable = false)
+    private Airport arrivalAirport;
 }
+

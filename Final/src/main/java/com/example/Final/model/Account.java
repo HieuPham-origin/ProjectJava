@@ -7,23 +7,23 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Service")
+@Table(name = "Account")
 @NoArgsConstructor
 @Getter @Setter
 @AllArgsConstructor
-public class Service {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "service_id")
-    private int serviceId;
+    @Column(name = "account_id")
+    private int accountId;
 
-    @Column(name = "service_name")
-    private String serviceName;
+    @Column(name = "username")
+    private String username;
 
-    @Column(name = "price")
-    private int price;
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "role")
+    private String role;
 }
 

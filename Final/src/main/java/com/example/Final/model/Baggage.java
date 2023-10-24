@@ -1,21 +1,28 @@
 package com.example.Final.model;
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import jakarta.persistence.*;
+import java.util.Date;
 
 @Entity
-@Table(name="Baggage")
-@Getter @Setter
+@Table(name = "Baggage")
 @NoArgsConstructor
+@Getter @Setter
 @AllArgsConstructor
 public class Baggage {
     @Id
-    @Column(name="baggage_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int baggage_id;
+    @Column(name = "baggage_id")
+    private int baggageId;
+
+    @Column(name = "baggage_name")
+    private String baggageName;
+
+    @Column(name = "weight")
     private int weight;
 
+    @Column(name = "price")
+    private int price;
 }

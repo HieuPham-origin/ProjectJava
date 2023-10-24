@@ -1,21 +1,29 @@
 package com.example.Final.model;
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import jakarta.persistence.*;
+import java.util.Date;
 
 @Entity
-@Table(name="Airport")
-@Getter @Setter
+@Table(name = "Airport")
 @NoArgsConstructor
+@Getter @Setter
 @AllArgsConstructor
 public class Airport {
     @Id
-    @Column(name="airport_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int airport_id;
-    private String airport_name;
-    private String address;
+    @Column(name = "airport_id")
+    private int airportId;
+
+    @Column(name = "airport_name")
+    private String airportName;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "country")
+    private String country;
 }
+
