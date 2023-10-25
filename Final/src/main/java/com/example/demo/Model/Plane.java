@@ -1,23 +1,25 @@
-package com.example.Final.model;
+package com.example.demo.Model;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name = "Customer_type")
+@Table(name = "Plane")
 @NoArgsConstructor
 @Getter @Setter
 @AllArgsConstructor
-public class CustomerType {
+public class Plane {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "type_id")
-    private int typeId;
+    @Column(name = "plane_id")
+    private int planeId;
 
-    @Column(name = "type_name")
-    private String typeName;
+    @Column(name = "plane_name")
+    private String planeName;
+
+    @Column(name = "capacity")
+    private int capacity;
 }
-

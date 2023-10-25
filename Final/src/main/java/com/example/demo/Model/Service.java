@@ -1,4 +1,5 @@
-package com.example.Final.model;
+package com.example.demo.Model;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,18 +8,21 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Ticket_class")
+@Table(name = "Service")
 @NoArgsConstructor
 @Getter @Setter
 @AllArgsConstructor
-public class TicketClass {
+public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "class_id")
-    private int classId;
+    @Column(name = "service_id")
+    private int serviceId;
 
-    @Column(name = "class_name")
-    private String className;
+    @Column(name = "service_name")
+    private String serviceName;
+
+    @Column(name = "price")
+    private int price;
 
     @Column(name = "description")
     private String description;

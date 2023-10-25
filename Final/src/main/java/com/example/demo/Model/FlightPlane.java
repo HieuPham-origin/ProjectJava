@@ -1,4 +1,4 @@
-package com.example.Final.model;
+package com.example.demo.Model;
 
 import java.sql.Time;
 import java.util.Date;
@@ -43,11 +43,11 @@ public class FlightPlane {
     private int flightType;
 
     @ManyToOne
-    @JoinColumn(name = "flight_id", referencedColumnName = "flightId", insertable = false, updatable = false)
+    @JoinColumn(name = "flight_id", referencedColumnName = "flight_id", insertable = false, updatable = false)
     private Flight flight;
 
     @ManyToOne
-    @JoinColumn(name = "plane_id", referencedColumnName = "planeId", insertable = false, updatable = false)
+    @JoinColumn(name = "plane_id", referencedColumnName = "plane_id", insertable = false, updatable = false)
     private Plane plane;
 }
 

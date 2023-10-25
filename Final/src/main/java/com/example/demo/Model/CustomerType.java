@@ -1,4 +1,5 @@
-package com.example.Final.model;
+package com.example.demo.Model;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,17 +8,17 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Payment_Format")
+@Table(name = "Customer_type")
 @NoArgsConstructor
 @Getter @Setter
 @AllArgsConstructor
-public class PaymentFormat {
+public class CustomerType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_id")
-    private int paymentId;
+    @Column(name = "type_id")
+    private int typeId;
 
-    @Column(name = "payment_name")
-    private String paymentName;
+    @Column(name = "type_name")
+    private String typeName;
 }
 

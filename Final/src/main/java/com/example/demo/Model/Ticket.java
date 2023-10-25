@@ -1,4 +1,5 @@
-package com.example.Final.model;
+package com.example.demo.Model;
+
 
 import java.util.Date;
 import lombok.AllArgsConstructor;

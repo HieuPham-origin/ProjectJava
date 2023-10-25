@@ -1,24 +1,24 @@
-package com.example.Final.model;
+package com.example.demo.Model;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
+import java.util.Date;
 
 @Entity
-@Table(name = "Plane")
+@Table(name = "Payment_Format")
 @NoArgsConstructor
 @Getter @Setter
 @AllArgsConstructor
-public class Plane {
+public class PaymentFormat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "plane_id")
-    private int planeId;
+    @Column(name = "payment_id")
+    private int paymentId;
 
-    @Column(name = "plane_name")
-    private String planeName;
-
-    @Column(name = "capacity")
-    private int capacity;
+    @Column(name = "payment_name")
+    private String paymentName;
 }
+

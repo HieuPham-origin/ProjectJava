@@ -1,4 +1,5 @@
-package com.example.Final.model;
+package com.example.demo.Model;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,11 +28,11 @@ public class Flight {
     private int arrivalAirportId;
 
     @ManyToOne
-    @JoinColumn(name = "departure_airport_id", referencedColumnName = "airportId", insertable = false, updatable = false)
+    @JoinColumn(name = "departure_airport_id", referencedColumnName = "airport_id", insertable = false, updatable = false)
     private Airport departureAirport;
 
     @ManyToOne
-    @JoinColumn(name = "arrival_airport_id", referencedColumnName = "airportId", insertable = false, updatable = false)
+    @JoinColumn(name = "arrival_airport_id", referencedColumnName = "airport_id", insertable = false, updatable = false)
     private Airport arrivalAirport;
 }
 
