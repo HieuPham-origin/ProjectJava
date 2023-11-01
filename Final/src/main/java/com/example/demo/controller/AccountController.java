@@ -1,14 +1,46 @@
-package com.example.demo.Controller;
+package com.example.demo.controller;
 
+import com.example.demo.entity.Account;
+import com.example.demo.entity.Passenger;
+import com.example.demo.service.AccountService;
+import com.example.demo.service.PassengerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AccountController {
+    private final AccountService accountService;
+    private final PassengerService passengerService;
+
+    public AccountController(AccountService accountService, PassengerService passengerService) {
+        this.accountService = accountService;
+        this.passengerService = passengerService;
+    }
+
     @GetMapping("/login")
     public String login(){
         return "login";
     }
+    @PostMapping("/login")
+    public String login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        RedirectAttributes redirectAttributes) {
+
+        if (username.isEmpty() || password.isEmpty()) {
+            redirectAttributes.addAttribute("error", "Please provide both username and password");
+            return "redirect:/login";
+        }
+
+        if(!accountService.authorize(username,password)) {
+            redirectAttributes.addAttribute("error", "Invalid username or password");
+            return "redirect:/login";
+        }
+        return "redirect:/index";
+    }
+
     @GetMapping("/index")
     public String index(){
         return "index";
@@ -16,5 +48,55 @@ public class AccountController {
     @GetMapping("/register")
     public String register(){
         return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestParam("firstName") String firstName,
+                           @RequestParam("lastName") String lastName,
+                           @RequestParam("mobile") String mobile,
+                           @RequestParam("email") String email,
+                           @RequestParam("password") String password,
+                           @RequestParam("confirmPassword") String confirmPassword,
+                           RedirectAttributes redirectAttributes) {
+
+        // Perform validations on the input data
+        if (!password.equals(confirmPassword)) {
+            redirectAttributes.addAttribute("error", "Password mismatch");
+            return "redirect:/register";
+        }
+
+        if (accountService.emailExist(email)) {
+            redirectAttributes.addAttribute("error", "Email already exist");
+            return "redirect:/register";
+        }
+
+
+        // Create a new Account object with the provided data
+        Account account = new Account();
+        Passenger passenger = new Passenger();
+
+
+        passenger.setFirstName(firstName);
+        passenger.setLastName(lastName);
+        passenger.setPhoneNumber(mobile);
+        passenger.setEmail(email);
+        passenger.setType(1);  // Default adult
+
+        account.setUsername(email);
+        account.setPassword(password);
+        account.setRole("user"); // Default user
+
+        //Save to db
+        Account savedAccount = accountService.saveAccount(account);
+        Passenger savedPassenger = passengerService.savePassenger(passenger);
+
+
+        if (savedAccount == null || savedPassenger == null) {
+            redirectAttributes.addAttribute("error", "Account creation failed");
+            return "redirect:/register";
+        }
+
+        // Redirect to the login page after successful registration
+        return "redirect:/login";
     }
 }

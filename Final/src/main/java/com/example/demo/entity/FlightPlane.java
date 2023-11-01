@@ -1,4 +1,4 @@
-package com.example.demo.Model;
+package com.example.demo.entity;
 
 import java.sql.Time;
 import java.util.Date;

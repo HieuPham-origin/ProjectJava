@@ -1,4 +1,4 @@
-package com.example.demo.Model;
+package com.example.demo.entity;
 
 
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "Passenger")
@@ -25,19 +24,19 @@ public class Passenger {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = true)
     private String gender;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
 
     @Column(name = "email")
     private String email;
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = true)
     private String address;
 
-    @Column(name = "country")
+    @Column(name = "country", nullable = true)
     private String country;
 
     @Column(name = "type")
@@ -46,7 +45,5 @@ public class Passenger {
     @ManyToOne(optional = true)
     @JoinColumn(name = "type", referencedColumnName = "type_id", insertable = false, updatable = false)
     private CustomerType customerType;
-
-    // Getters and setters
 }
 

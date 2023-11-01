@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 
 <!-- Mirrored from rn53themes.net/themes/demo/travelz/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 30 Oct 2023 16:06:53 GMT -->
@@ -35,15 +35,19 @@
             <div class="tr-regi-form">
                 <h4>Sign <span>In</span></h4>
                 <p>It's free and always will be.</p>
-                <form class="col s12">
+                <div th:if="${param.error}">
+                    <p style="color: red;" th:text="${param.error}"></p>
+                </div>
+
+                <form class="col s12" th:action="@{/login}" method="post">
                     <div class="row">
                         <div class="input-field col s12">
-                            <input type="text" class="validate" placeholder="User Name" required>
+                            <input type="text" name="username" class="validate" placeholder="User Name" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input type="password" class="validate" placeholder="Password" required>
+                            <input type="password" name="password" class="validate" placeholder="Password" required>
                         </div>
                     </div>
                     <div class="row">

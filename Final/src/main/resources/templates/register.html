@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 
 
 <!-- Mirrored from rn53themes.net/themes/demo/travelz/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 30 Oct 2023 16:06:53 GMT -->
@@ -35,33 +35,33 @@
         <div class="tr-regi-form">
             <h4>Create an <span>Account</span></h4>
             <p>It's free and always will be.</p>
-            <form class="col s12">
+            <form class="col s12" th:action="@{/register}" method="post">
                 <div class="row">
                     <div class="input-field col m6 s12">
-                        <input type="text" class="validate" placeholder="First Name">
+                        <input type="text" name="firstName" class="validate" placeholder="First Name">
                     </div>
                     <div class="input-field col m6 s12">
-                        <input type="text" class="validate" placeholder="Last Name">
+                        <input type="text" name="lastName" class="validate" placeholder="Last Name">
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input type="number" class="validate" placeholder="Mobile">
+                        <input type="number" name="mobile" class="validate" placeholder="Mobile">
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input type="email" class="validate" placeholder="Email">
+                        <input type="email" name="email" class="validate" placeholder="Email">
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input type="password" class="validate" placeholder="Password">
+                        <input type="password" name="password" class="validate" placeholder="Password">
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input type="password" class="validate" placeholder="Confirm Password">
+                        <input type="password" name="confirmPassword" class="validate" placeholder="Confirm Password">
                     </div>
                 </div>
                 <div class="row">
@@ -69,7 +69,7 @@
                         <input type="submit" value="submit" class="waves-effect waves-light btn-large full-btn"> </div>
                 </div>
             </form>
-            <p>Are you a already member ? <a href="login.html">Click to Login</a>
+            <p>Are you a already member ? <a href="/login">Click to Login</a>
             </p>
         </div>
     </div>
