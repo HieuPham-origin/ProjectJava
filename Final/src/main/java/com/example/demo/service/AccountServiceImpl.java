@@ -45,6 +45,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account getAccountByUsername(String username){
+        return this.accountRepository.findByUsername(username);
+    }
+
+    @Override
     public boolean emailExist(String username) {
         return accountRepository.existsByUsername(username);
     }

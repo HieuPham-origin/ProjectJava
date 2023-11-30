@@ -4,7 +4,10 @@ import com.example.demo.entity.Account;
 import com.example.demo.entity.Passenger;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.PassengerService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AccountController {
     private final AccountService accountService;
     private final PassengerService passengerService;
+    private HttpServletRequest request;
 
     public AccountController(AccountService accountService, PassengerService passengerService) {
         this.accountService = accountService;
@@ -43,6 +47,7 @@ public class AccountController {
 
     @GetMapping("/index")
     public String index(){
+
         return "index";
     }
     @GetMapping("/register")
