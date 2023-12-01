@@ -13,11 +13,11 @@ public class FlightServiceImpl implements FlightService{
     @Autowired
     private FlightRepository flightRepository;
     @Override
-    public List<Flight> getAllFlight(){return this.flightRepository.findAll();}
+    public List<Flight> getAllFlights(){return this.flightRepository.findAll();}
     @Override
     public Optional<Flight> getFlightById(int id){return this.flightRepository.findById(id);}
     @Override
-    public Flight addFlight(Flight flight){return this.flightRepository.save(flight);}
+    public Flight save(Flight flight){return this.flightRepository.save(flight);}
     @Override
     public void deleteFlight(int id){
         this.flightRepository.deleteById(id);

@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface AirportService {
     List<Airport> getAllAirports();
-    public Optional<Airport> getAirportById(int id);
-    public Airport create(Airport airport);
-    public void delete(int id);
-    public Airport update(int id, Airport airport);
+    Optional<Airport> getAirportById(int id);
+    Airport save(Airport airport);
+    void delete(int id);
+    Airport update(int id, Airport airport);
 }

@@ -38,18 +38,14 @@
                     <h1>Plan Your Travel Now!</h1>
                     <p>650+ Travel Agents serving 65+ Destinations worldwide</p>
                     <div class="ban-search form-select pop pop-search">
-                        <form>
+                        <form method="post" th:action="@{/listflight}">
                             <ul>
                                 <li class="sr-look">
                                     <div class="form-group">
                                         <label>Your departure</label>
+
                                         <select class="chosen-select">
-                                            <option>Your destination</option>
-                                            <option>Any location</option>
-                                            <option>Chennai</option>
-                                            <option>New york</option>
-                                            <option>Perth</option>
-                                            <option>London</option>
+                                            <span th:each="airport : ${airports}" th:text="${airport.city}" />
                                         </select>
                                     </div>
                                 </li>

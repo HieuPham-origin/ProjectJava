@@ -17,7 +17,7 @@ public class PlaneServiceImpl implements PlaneService{
     @Override
     public Optional<Plane> getPlaneById(int id){return this.planeRepository.findById(id);}
     @Override
-    public Plane create(Plane plane){return this.planeRepository.save(plane);}
+    public Plane save(Plane plane){return this.planeRepository.save(plane);}
     @Override
     public void delete(int id){this.planeRepository.deleteById(id);}
     @Override

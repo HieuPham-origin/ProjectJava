@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FlightService {
-    List<Flight> getAllFlight();
+    List<Flight> getAllFlights();
     Optional<Flight> getFlightById(int id);
-    Flight addFlight(Flight flight);
+    Flight save(Flight flight);
     void deleteFlight(int id);
     Flight updateFlight(int id, Flight flight);
 }
