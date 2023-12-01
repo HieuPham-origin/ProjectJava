@@ -5,9 +5,7 @@ import com.example.demo.service.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +24,11 @@ public class AirportController {
     @PostMapping("/airport/save")
     public String saveAirport(Airport airportObj){
         airportService.save(airportObj);
+        return "redirect:/Admin/airport";
+    }
+    @PostMapping("/airport/delete/{id}")
+    public String deleteAirport(@PathVariable("id") int airportId) {
+        airportService.delete(airportId);
         return "redirect:/Admin/airport";
     }
 }
