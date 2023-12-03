@@ -5,6 +5,7 @@ import com.example.demo.repository.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,5 +30,20 @@ public class AirportServiceImpl implements AirportService{
         }else{
             return null;
         }
+    }
+
+    @Override
+    public List<Airport> getAirportsByKeySearch(String keySearch) {
+        List<Airport> airports = getAllAirports();
+        List<Airport> result = new ArrayList<>();
+        for (Airport airport: airports) {
+            if (airport.getAirportCode().toLowerCase().contains(keySearch.toLowerCase())
+                    || airport.getAirportName().toLowerCase().contains(keySearch.toLowerCase())
+                    || airport.getCountry().toLowerCase().contains(keySearch.toLowerCase())
+                    || airport.getCity().toLowerCase().contains(keySearch.toLowerCase())){
+                result.add(airport);
+            }
+        }
+        return result;
     }
 }

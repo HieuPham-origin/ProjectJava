@@ -11,4 +11,5 @@ public interface AirportService {
     public Airport create(Airport airport);
     public void delete(int id);
     public Airport update(int id, Airport airport);
+    List<Airport> getAirportsByKeySearch(String keySearch);
 }

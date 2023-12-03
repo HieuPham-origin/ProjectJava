@@ -1,0 +1,135 @@
+.search-bar {
+    background-color: white;
+    border: solid 1px #CBD4E6;
+    border-radius: 4px;
+    display: flex;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.search-bar .search-item {
+    display: flex;
+    padding: 0 24px;
+    align-items: center;
+}
+
+.search-bar .search-item .input-borderless {
+    border: none;
+}
+
+.search-bar .search-item input {
+    padding: 0px 12px;
+}
+
+
+.search-bar .search-item input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.search-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.seperator {
+    background-color: #CBD4E6;
+    height: 100%;
+    width: 1px;
+    position: relative;
+}
+
+#btn-switch {
+    border-radius: 100%;
+    border: solid 1px #CBD4E6;
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+}
+
+#btn-switch {
+    cursor: pointer;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.dropdown-toggle {
+    text-decoration: none;
+}
+
+.dropdown-item:active {
+    background-color: #605DEC;
+}
+
+.dropdown-item:active div {
+    color: white !important;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+.quantity {
+    padding: 0 4px;
+}
+
+#item-passenger .dropdown-item:active {
+    background-color: white !important;
+}
+
+#item-passenger .dropdown-item:active div {
+    color: black !important;
+}
+
+
+#item-passenger .dropdown-item:active .text-primary {
+    color: #605DEC !important;
+}
+
+#item-passenger .dropdown-item:active .text-secondary {
+    color: #7C8DB0 !important;
+}
+
+#item-passenger .dropdown-item .icon {
+    width: 40px;
+    text-align: center;
+}
+
+
+
+
+.airport-name {
+    font-size: smaller;
+    color: #7C8DB0;
+}
+
+.search-bar .airport-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: larger;
+    margin-left: auto;
+}
+
+.daterangepicker td.active {
+    background-color: #605DEC !important;
+}
+
+.form-check-input:checked {
+    background-color: #605DEC;
+    border-color: #605DEC;
+}
+

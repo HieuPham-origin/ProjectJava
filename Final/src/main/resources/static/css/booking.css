@@ -1,0 +1,99 @@
+.sidebar-item {
+    background-color: white;
+    border-radius: 12px;
+    border: solid 1px #CBD4E6;
+}
+
+hr {
+    background-color: #CBD4E6;
+    margin: 0;
+}
+
+.sidebar .item-title {
+    font-weight: bold;
+    padding: 8px 16px;
+    font-size: larger;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .flight-item {
+    padding: 8px;
+}
+
+.sidebar .flight-item.selected {
+    border-left: solid 4px #605DEC;
+}
+
+.flight-container {
+    border-radius: 12px;
+    border: solid 1px #CBD4E6;
+    background-color: white;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 16px
+}
+
+
+.airline-name {
+    font-weight: bold;
+}
+
+.departure-info {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.day {
+    color: #7C8DB0;
+    font-size: smaller;
+}
+
+.time {
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.flight-info {
+    display: flex;
+}
+
+.flight-info .airport-code {
+    font-weight: bold;
+}
+
+.duration-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+.vertical-seperator, .vertical-dashed-seperator {
+    width: 1px;
+    padding: 0 !important;
+    border-right: solid 1px #CBD4E6;
+}
+
+.vertical-dashed-seperator {
+    border-right: dashed 1px #CBD4E6;
+}
+
+.horizontal-dashed-seperator {
+    border-bottom: dashed 1px #CBD4E6;
+    width: 100px;
+    height: 1px;
+    display: inline-block;
+}
+
+.price {
+    font-size: xx-large;
+    color: #605DEC;
+    font-weight: bold;
+}

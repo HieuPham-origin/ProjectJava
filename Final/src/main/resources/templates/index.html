@@ -1,746 +1,287 @@
-
 <!DOCTYPE html>
-<html lang="en">
-
-
-<!-- Mirrored from rn53themes.net/themes/demo/travelz/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 30 Oct 2023 16:06:53 GMT -->
-<head>
-    <title>The Travel - Tour Travel</title>
-    <!--== META TAGS ==-->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <!-- FAV ICON -->
-    <link rel="shortcut icon" href="/images/fav.ico">
-    <!-- GOOGLE FONTS -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins%7CQuicksand:400,500,700" rel="stylesheet">
-    <!-- FONT-AWESOME ICON CSS -->
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-    <!--== ALL CSS FILES ==-->
-    <link rel="stylesheet" href="/css/jquery-ui.css">
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/mob.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="/js/html5shiv.js"></script>
-    <script src="/js/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body>
-<div th:replace="fragments/header :: header"></div>
-<section>
-    <div class="tourz-search">
-        <div class="container">
-            <div class="row">
-                <div class="tourz-search-1">
-                    <h1>Plan Your Travel Now!</h1>
-                    <p>650+ Travel Agents serving 65+ Destinations worldwide</p>
-                    <div class="ban-search form-select pop pop-search">
-                        <form>
-                            <ul>
-                                <li class="sr-look">
-                                    <div class="form-group">
-                                        <label>Your departure</label>
-                                        <select class="chosen-select">
-                                            <option>Your destination</option>
-                                            <option>Any location</option>
-                                            <option>Chennai</option>
-                                            <option>New york</option>
-                                            <option>Perth</option>
-                                            <option>London</option>
-                                        </select>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://kit.fontawesome.com/45f15e8235.js"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"
+        ></script>
+        <link rel="stylesheet" href="css/index.css" />
+        <link rel="stylesheet" href="css/utils.css" />
+        <link rel="stylesheet" href="css/search-bar.css" />
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+        ></script>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+        />
+        <title>Homepage</title>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="./fragments/header :: header"> </div>
+        <!-- Navbar -->
+        <!-- Navbar -->
+        <main
+                class="d-flex align-items-center flex-column justify-content-center"
+        >
+            <div class="text-main font-be text-gradient text-center mb-5">
+                More than <br />
+                just a flight
+            </div>
+            <div class="search-bar mt-5">
+                <div class="search-item dropup search-place">
+                    <div class="search-icon">
+                        <img
+                                src="images/flight-departure.png"
+                                alt=""
+                                srcset=""
+                        />
+                    </div>
+                    <a
+                            class="form-floating dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                    >
+                        <input
+                                type="text"
+                                class="form-control input-borderless"
+                                id="input-airport-departure"
+                                placeholder=""
+                        />
+                        <label
+                                for="input-airport-departure"
+                                class="text-secondary"
+                        >From where ?</label
+                        >
+                    </a>
+                    <ul class="dropdown-menu" id="dropdown-menu-departure">
+                        <li><h6 class="dropdown-header">Popular</h6></li>
+                        <li th:each="airport: ${airportList}">
+                            <a
+                                    class="dropdown-item d-flex"
+                                    href="#"
+                                    th:attr="data-value=${airport.airportCode + ' , ' + airport.city}"
+                            >
+                                <div class="me-3">
+                                    <div class="airport-location">
+                                        <span th:text="${airport.city}"></span>,
+                                        <span th:text="${airport.country}"></span>
                                     </div>
-                                </li>
-                                <li class="sr-look">
-                                    <div class="form-group">
-                                        <label>Your destination</label>
-                                        <select class="chosen-select">
-                                            <option>Your destination</option>
-                                            <option>Any location</option>
-                                            <option>Chennai</option>
-                                            <option>New york</option>
-                                            <option>Perth</option>
-                                            <option>London</option>
-                                        </select>
+                                    <div class="airport-name">
+                                        <span th:text="${airport.airportName}"></span>
                                     </div>
-                                </li>
-                                <li class="sr-gue">
-                                    <div class="form-group">
-                                        <label>Customer Type</label>
-                                        <select class="chosen-select">
-                                            <option>Package</option>
-                                            <option>Family Package</option>
-                                            <option>Honeymoon Package</option>
-                                            <option>Group Package</option>
-                                            <option>WeekEnd Package</option>
-                                            <option>Regular Package</option>
-                                        </select>
-                                    </div>
-                                </li>
-                                <li class="sr-date">
-                                    <div class="form-group">
-                                        <label>Age</label>
-                                        <input type="text" class="form-control datepicker" name="from" placeholder="Check in">
-                                    </div>
-                                </li>
-                                <li class="sr-date">
-                                    <div class="form-group">
-                                        <label>Age</label>
-                                        <input type="text" class="form-control datepicker" name="to" placeholder="Check out">
-                                    </div>
-                                </li>
-                                <li class="sr-btn">
-                                    <input type="submit" value="Search">
-                                </li>
-                            </ul>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section>
-    <div class="rows tb-space pad-bot-redu tb-space">
-        <div class="container">
-            <div class="tourz-hom-ser">
-                <ul class="slider-all">
-                    <li>
-                        <div class="hom-quick-acc hom-quick-acc-1">
-                            <h2>Book your<span>Travel package</span></h2>
-                            <a href="booking-tour-package.html" class="cta-1">Book now</a>
-                            <img src="images/home-1.png" loading="lazy" alt="">
-                        </div>
-                    </li>
-                    <li>
-                        <div class="hom-quick-acc hom-quick-acc-2">
-                            <h2>Book your<span>Car Rentals</span></h2>
-                            <a href="booking-car-rentals.html" class="cta-1">Book now</a>
-                            <img src="images/home-2.png" loading="lazy" alt="">
-                        </div>
-                    </li>
-                    <li>
-                        <div class="hom-quick-acc hom-quick-acc-3">
-                            <h2>Explore<span>Destinations </span></h2>
-                            <a href="destinations.html" class="cta-1">Explore</a>
-                            <img src="images/home-3.png" loading="lazy" alt="">
-                        </div>
-                    </li>
-                    <li>
-                        <div class="hom-quick-acc hom-quick-acc-4">
-                            <h2>Over 30,000+<span>Hotels</span></h2>
-                            <a href="hotels-list.html" class="cta-1">Book now</a>
-                            <img src="images/home-4.png" loading="lazy" alt="">
-                        </div>
-                    </li>
-                    <li>
-                        <div class="hom-quick-acc hom-quick-acc-5">
-                            <h2>Travel Events <span>Events</span></h2>
-                            <a href="events.html" class="cta-1">Explore</a>
-                            <img src="images/home-5.png" loading="lazy" alt="">
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!--====== HOME HOTELS ==========-->
-<section>
-    <div class="rows pad-bot-redu">
-        <div class="container">
-            <!-- TITLE & DESCRIPTION -->
-            <div class="spe-title">
-                <h2>Top <span>Destinations</span> </h2>
-                <div class="title-line">
-                    <div class="tl-1"></div>
-                    <div class="tl-2"></div>
-                    <div class="tl-3"></div>
-                </div>
-                <p>World's leading Hotel Booking website,Over 30,000 Hotel rooms worldwide.</p>
-            </div>
-            <!-- CITY -->
-            <div class="col-md-6">
-                <a href="tour-details.html">
-                    <div class="tour-mig-like-com">
-                        <div class="tour-mig-lc-img"> <img src="images/listing/home.jpg" alt=""> </div>
-                        <div class="tour-mig-lc-con">
-                            <h5>Europe</h5>
-                            <p><span>12 Packages</span> Starting from $2400</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="tour-details.html">
-                    <div class="tour-mig-like-com">
-                        <div class="tour-mig-lc-img"> <img src="images/listing/home3.jpg" alt=""> </div>
-                        <div class="tour-mig-lc-con tour-mig-lc-con2">
-                            <h5>Dubai</h5>
-                            <p>Starting from $2400</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="tour-details.html">
-                    <div class="tour-mig-like-com">
-                        <div class="tour-mig-lc-img"> <img src="images/listing/home2.jpg" alt=""> </div>
-                        <div class="tour-mig-lc-con tour-mig-lc-con2">
-                            <h5>India</h5>
-                            <p>Starting from $2400</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="tour-details.html">
-                    <div class="tour-mig-like-com">
-                        <div class="tour-mig-lc-img"> <img src="images/listing/home1.jpg" alt=""> </div>
-                        <div class="tour-mig-lc-con tour-mig-lc-con2">
-                            <h5>Usa</h5>
-                            <p>Starting from $2400</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="tour-details.html">
-                    <div class="tour-mig-like-com">
-                        <div class="tour-mig-lc-img"> <img src="images/listing/home4.jpg" alt=""> </div>
-                        <div class="tour-mig-lc-con tour-mig-lc-con2">
-                            <h5>London</h5>
-                            <p>Starting from $2400</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section>
-    <div class="rows pad-bot-redu">
-        <div class="container">
-            <!-- TITLE & DESCRIPTION -->
-            <div class="spe-title">
-                <h2>Tour <span>Packages</span></h2>
-                <div class="title-line">
-                    <div class="tl-1"></div>
-                    <div class="tl-2"></div>
-                    <div class="tl-3"></div>
-                </div>
-                <p>World's leading tour and travels Booking website,Over 30,000 packages worldwide.</p>
-            </div>
-            <!-- HOTEL GRID -->
-            <div class="to-ho-hotel">
-                <ul class="multiple-items">
-                    <li class="col-md-4">
-                        <div class="to-ho-hotel-con pack-new-box">
-                            <div class="to-ho-hotel-con-1">
-                                <img src="images/places/8.jpg" alt="">
-                                <div class="hom-pack-deta">
-                                    <h2>Family package</h2>
-                                    <h4><span>20+</span> destinations</h4>
-                                    <span class="cta-2">Book now</span>
                                 </div>
-                            </div>
-                            <a href="hotel-details.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="to-ho-hotel-con pack-new-box">
-                            <div class="to-ho-hotel-con-1">
-                                <img src="images/places/7.jpg" alt="">
-                                <div class="hom-pack-deta">
-                                    <h2>Honeymoon package</h2>
-                                    <h4><span>20+</span> destinations</h4>
-                                    <span class="cta-2">Book now</span>
-                                </div>
-                            </div>
-                            <a href="hotel-details.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="to-ho-hotel-con pack-new-box">
-                            <div class="to-ho-hotel-con-1">
-                                <img src="images/places/12.jpg" alt="">
-                                <div class="hom-pack-deta">
-                                    <h2>Group package</h2>
-                                    <h4><span>20+</span> destinations</h4>
-                                    <span class="cta-2">Book now</span>
-                                </div>
-                            </div>
-                            <a href="hotel-details.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="to-ho-hotel-con pack-new-box">
-                            <div class="to-ho-hotel-con-1">
-                                <img src="images/places/4.jpg" alt="">
-                                <div class="hom-pack-deta">
-                                    <h2>Friends package</h2>
-                                    <h4><span>20+</span> destinations</h4>
-                                    <span class="cta-2">Book now</span>
-                                </div>
-                            </div>
-                            <a href="hotel-details.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="to-ho-hotel-con pack-new-box">
-                            <div class="to-ho-hotel-con-1">
-                                <img src="images/places/2.jpg" alt="">
-                                <div class="hom-pack-deta">
-                                    <h2>Solo package</h2>
-                                    <h4><span>20+</span> destinations</h4>
-                                    <span class="cta-2">Book now</span>
-                                </div>
-                            </div>
-                            <a href="hotel-details.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="to-ho-hotel-con pack-new-box">
-                            <div class="to-ho-hotel-con-1">
-                                <img src="images/places/18.jpg" alt="">
-                                <div class="hom-pack-deta">
-                                    <h2>Adventure package</h2>
-                                    <h4><span>20+</span> destinations</h4>
-                                    <span class="cta-2">Book now</span>
-                                </div>
-                            </div>
-                            <a href="hotel-details.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="to-ho-hotel-con pack-new-box">
-                            <div class="to-ho-hotel-con-1">
-                                <img src="images/places/11.jpg" alt="">
-                                <div class="hom-pack-deta">
-                                    <h2>Religious package</h2>
-                                    <h4><span>20+</span> destinations</h4>
-                                    <span class="cta-2">Book now</span>
-                                </div>
-                            </div>
-                            <a href="hotel-details.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="to-ho-hotel-con pack-new-box">
-                            <div class="to-ho-hotel-con-1">
-                                <img src="images/places/1.jpg" alt="">
-                                <div class="hom-pack-deta">
-                                    <h2>Water sports package</h2>
-                                    <h4><span>20+</span> destinations</h4>
-                                    <span class="cta-2">Book now</span>
-                                </div>
-                            </div>
-                            <a href="hotel-details.html" class="fclick"></a>
-                        </div>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!--====== HOME HOTELS ==========-->
-<section>
-    <div class="rows hom-hotels tb-space pad-top-o">
-        <div class="container">
-            <!-- TITLE & DESCRIPTION -->
-            <div class="spe-title">
-                <h2>Popular <span>Destinations</span> </h2>
-                <div class="title-line">
-                    <div class="tl-1"></div>
-                    <div class="tl-2"></div>
-                    <div class="tl-3"></div>
-                </div>
-                <p>World's leading Hotel Booking website,Over 30,000 Hotel rooms worldwide.</p>
-            </div>
-            <!-- HOTEL GRID -->
-            <div class="to-ho-hotel">
-                <ul class="multiple-items7">
-                    <li class="col-md-4">
-                        <div class="plac-hom-box">
-                            <div class="plac-hom-box-im">
-                                <img src="images/places/10.jpg" alt="" loading="lazy">
-                                <h4>Taj Mahal</h4>
-                            </div>
-                            <div class="plac-hom-box-txt">
-                                <span>Symbol of love</span>
-                                <span>More details</span>
-                            </div>
-                            <a href="destinations.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="plac-hom-box">
-                            <div class="plac-hom-box-im">
-                                <img src="images/places/11.jpg" alt="" loading="lazy">
-                                <h4>Open House</h4>
-                            </div>
-                            <div class="plac-hom-box-txt">
-                                <span>Beach & Historical</span>
-                                <span>More details</span>
-                            </div>
-                            <a href="destinations.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="plac-hom-box">
-                            <div class="plac-hom-box-im">
-                                <img src="images/places/19.jpg" alt="" loading="lazy">
-                                <h4>Eiffel Tower</h4>
-                            </div>
-                            <div class="plac-hom-box-txt">
-                                <span>Historical places</span>
-                                <span>More details</span>
-                            </div>
-                            <a href="destinations.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="plac-hom-box">
-                            <div class="plac-hom-box-im">
-                                <img src="images/places/17.jpg" alt="" loading="lazy">
-                                <h4>Rio de Janeiro</h4>
-                            </div>
-                            <div class="plac-hom-box-txt">
-                                <span>Historical places</span>
-                                <span class="cta-3-sml">More details</span>
-                            </div>
-                            <a href="destinations.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="plac-hom-box">
-                            <div class="plac-hom-box-im">
-                                <img src="images/places/18.jpg" alt="" loading="lazy">
-                                <h4>Mauritius</h4>
-                            </div>
-                            <div class="plac-hom-box-txt">
-                                <span>Beach places</span>
-                                <span>More details</span>
-                            </div>
-                            <a href="destinations.html" class="fclick"></a>
-                        </div>
-                    </li>
-                    <li class="col-md-4">
-                        <div class="plac-hom-box">
-                            <div class="plac-hom-box-im">
-                                <img src="images/places/22.jpg" alt="" loading="lazy">
-                                <h4>Burj khalifa</h4>
-                            </div>
-                            <div class="plac-hom-box-txt">
-                                <span>Modern architecture</span>
-                                <span>More details</span>
-                            </div>
-                            <a href="destinations.html" class="fclick"></a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-<!--====== SECTION: FREE CONSULTANT ==========-->
-<section>
-    <div class="offer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="offer-l"> <span class="ol-1"></span> <span class="ol-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span> <span class="ol-4">Standardized Budget Packages</span>                            <span class="ol-3"></span> <span class="ol-5">$99/-</span>
-                        <ul>
-                            <li class="wow fadeInUp" data-wow-duration="0.5s">
-                                <a href="#!" class="waves-effect waves-light btn-large offer-btn"><img src="images/icon/dis1.png" alt="">
-                                </a><span>Free WiFi</span>
-                            </li>
-                            <li class="wow fadeInUp" data-wow-duration="0.7s">
-                                <a href="#!" class="waves-effect waves-light btn-large offer-btn"><img src="images/icon/dis2.png" alt=""> </a><span>Breakfast</span>
-                            </li>
-                            <li class="wow fadeInUp" data-wow-duration="0.9s">
-                                <a href="#!" class="waves-effect waves-light btn-large offer-btn"><img src="images/icon/dis3.png" alt=""> </a><span>Pool</span>
-                            </li>
-                            <li class="wow fadeInUp" data-wow-duration="1.1s">
-                                <a href="#!" class="waves-effect waves-light btn-large offer-btn"><img src="images/icon/dis4.png" alt=""> </a><span>Television</span>
-                            </li>
-                            <li class="wow fadeInUp" data-wow-duration="1.3s">
-                                <a href="#!" class="waves-effect waves-light btn-large offer-btn"><img src="images/icon/dis5.png" alt=""> </a><span>GYM</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="offer-r">
-                        <div class="or-1"> <span class="or-11">go</span> <span class="or-12">Stays</span> </div>
-                        <div class="or-2"> <span class="or-21">Get</span> <span class="or-22">70%</span> <span class="or-23">Off</span> <span class="or-24">use code: RG5481WERQ</span> <span class="or-25"></span> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section>
-    <div class="rows pla pad-bot-redu tb-space">
-        <div class="pla1 p-home container">
-            <!-- TITLE & DESCRIPTION -->
-            <div class="spe-title spe-title-1">
-                <h2>Top <span>Sight Seeing</span> in this month</h2>
-                <div class="title-line">
-                    <div class="tl-1"></div>
-                    <div class="tl-2"></div>
-                    <div class="tl-3"></div>
-                </div>
-                <p>World's leading tour and travels Booking website,Over 30,000 packages worldwide. Book travel packages and enjoy your holidays with distinctive experience</p>
-            </div>
-            <div class="popu-places-home">
-                <!-- POPULAR PLACES 1 -->
-                <div class="col-md-6 col-sm-6 col-xs-12 place">
-                    <div class="col-md-6 col-sm-12 col-xs-12"> <img src="images/place2.jpg" alt="" /> </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12">
-                        <h3><span>Honeymoon Package</span> 7 Days / 6 Nights</h3>
-                        <p>lorem ipsum simplelorem ipsum simplelorem ipsum simplelorem ipsum simple</p> <a href="tour-details.html" class="link-btn">more info</a> </div>
-                </div>
-                <!-- POPULAR PLACES 2 -->
-                <div class="col-md-6 col-sm-6 col-xs-12 place">
-                    <div class="col-md-6 col-sm-12 col-xs-12"> <img src="images/place1.jpg" alt="" /> </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12">
-                        <h3><span>Family package</span> 14 Days / 13 Nights</h3>
-                        <p>lorem ipsum simplelorem ipsum simplelorem ipsum simplelorem ipsum simple</p> <a href="tour-details.html" class="link-btn">more info</a> </div>
-                </div>
-            </div>
-            <div class="popu-places-home">
-                <!-- POPULAR PLACES 3 -->
-                <div class="col-md-6 col-sm-6 col-xs-12 place">
-                    <div class="col-md-6 col-sm-12 col-xs-12"> <img src="images/place3.jpg" alt="" /> </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12">
-                        <h3><span>Weekend Package </span> 3 Days / 2 Nights</h3>
-                        <p>lorem ipsum simplelorem ipsum simplelorem ipsum simplelorem ipsum simple</p> <a href="tour-details.html" class="link-btn">more info</a> </div>
-                </div>
-                <!-- POPULAR PLACES 4 -->
-                <div class="col-md-6 col-sm-6 col-xs-12 place">
-                    <div class="col-md-6 col-sm-12 col-xs-12"> <img src="images/place4.jpg" alt="" /> </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12">
-                        <h3><span>Group Package</span> 10 Days / 9 Nights</h3>
-                        <p>lorem ipsum simplelorem ipsum simplelorem ipsum simplelorem ipsum simple</p> <a href="tour-details.html" class="link-btn">more info</a> </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--====== REQUEST A QUOTE ==========-->
-<section>
-    <div class="ho-popu tb-space pad-bot-redu">
-        <div class="rows container">
-            <!-- TITLE & DESCRIPTION -->
-            <div class="spe-title">
-                <h2>Top <span>Branding</span> for this month</h2>
-                <div class="title-line">
-                    <div class="tl-1"></div>
-                    <div class="tl-2"></div>
-                    <div class="tl-3"></div>
-                </div>
-                <p>Book travel packages and enjoy your holidays with distinctive experience</p>
-            </div>
-            <div class="ho-popu-bod">
-                <div class="col-md-4">
-                    <div class="hot-page2-hom-pre-head">
-                        <h4>Top Branding <span>Hotels</span></h4>
-                    </div>
-                    <div class="hot-page2-hom-pre">
-                        <ul>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/hotels/1.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Taaj Club House</h5> <span>City: illunois, United States</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>4.5</span> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/hotels/2.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Universal luxury Grand Hotel</h5> <span>City: Rio,Brazil</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>4.2</span> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/hotels/3.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Barcelona Grand Pales</h5> <span>City: Chennai,India</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>5.0</span> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/hotels/4.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Lake Palace view Hotel</h5> <span>City: Beijing,China</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>2.5</span> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/hotels/8.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>First Class Grandd Hotel</h5> <span>City: Berlin,Germany</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>4.0</span> </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="hot-page2-hom-pre-head">
-                        <h4>Top Branding <span>Packages</span></h4>
-                    </div>
-                    <div class="hot-page2-hom-pre">
-                        <ul>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/trends/1.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Family Package Luxury</h5> <span>Duration: 7 Days and 6 Nights</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>4.1</span> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/trends/2.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Honeymoon Package Luxury</h5> <span>Duration: 14 Days and 13 Nights</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>4.4</span> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/trends/3.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Group Package Luxury</h5> <span>Duration: 28 Days and 29 Nights</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>3.0</span> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/trends/4.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Regular Package Luxury</h5> <span>Duration: 12 Days and 11 Nights</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>3.5</span> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/trends/1.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Custom Package Luxury</h5> <span>Duration: 10 Days and 10 Nights</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <span>5.0</span> </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="hot-page2-hom-pre-head">
-                        <h4>Top Branding <span>Reviewers</span></h4>
-                    </div>
-                    <div class="hot-page2-hom-pre">
-                        <ul>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/reviewer/1.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Christopher</h5> <span>No of Reviews: 620, City: illunois</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/reviewer/2.png" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Matthew</h5> <span>No of Reviews: 48, City: Rio</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/reviewer/3.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Stephanie</h5> <span>No of Reviews: 560, City: Chennai</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/reviewer/4.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Robert</h5> <span>No of Reviews: 920, City: Beijing</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> </div>
-                                </a>
-                            </li>
-                            <!--LISTINGS-->
-                            <li>
-                                <a href="hotels-list.html">
-                                    <div class="hot-page2-hom-pre-1"> <img src="images/reviewer/5.jpg" alt=""> </div>
-                                    <div class="hot-page2-hom-pre-2">
-                                        <h5>Danielle</h5> <span>No of Reviews: 768, City: Berlin</span> </div>
-                                    <div class="hot-page2-hom-pre-3"> <i class="fa fa-hand-o-right" aria-hidden="true"></i> </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--====== REQUEST A QUOTE ==========-->
-<section>
-    <div class="foot-mob-sec tb-space">
-        <div class="rows container">
-            <!-- FAMILY IMAGE(YOU CAN USE ANY PNG IMAGE) -->
-            <div class="col-md-6 col-sm-6 col-xs-12 family"> <img src="images/mobile.png" alt="" /> </div>
-            <!-- REQUEST A QUOTE -->
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <!-- THANK YOU MESSAGE -->
-                <div class="foot-mob-app">
-                    <h2>Have you tried our mobile app?</h2>
-                    <p>World's leading tour and travels Booking website,Over 30,000 packages worldwide. Book travel packages and enjoy your holidays with distinctive experience</p>
-                    <ul>
-                        <li><i class="fa fa-check" aria-hidden="true"></i> Easy Hotel Booking</li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i> Tour and Travel Packages</li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i> Package Reviews and Ratings</li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i> Manage your Bookings, Enquiry and Reviews</li>
+                                <div class="airport-code"><span th:text="${airport.airportCode}"></span></div>
+                            </a>
+                        </li>
                     </ul>
-                    <a href="#"><img src="images/android.png" alt=""> </a>
-                    <a href="#"><img src="images/apple.png" alt=""> </a>
                 </div>
+                <div class="seperator">
+                    <div id="btn-switch" class="text-secondary">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    </div>
+                </div>
+                <div class="search-item dropup search-place">
+                    <div class="search-icon">
+                        <img
+                                src="images/flight-destination.png"
+                                alt=""
+                                srcset=""
+                        />
+                    </div>
+                    <a
+                            class="form-floating dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                    >
+                        <input
+                                type="text"
+                                class="form-control input-borderless"
+                                id="input-airport-destination"
+                                placeholder=""
+                        />
+                        <label
+                                for="input-airport-destination"
+                                class="text-secondary"
+                        >To where ?</label
+                        >
+                    </a>
+                    <ul class="dropdown-menu" id="dropdown-menu-destination">
+                        <li><h6 class="dropdown-header">Popular</h6></li>
+                        <li th:each="airport: ${airportList}">
+                            <a
+                                    class="dropdown-item d-flex"
+                                    href="#"
+                                    th:attr="data-value=${airport.airportCode + ' , ' + airport.city}"
+                            >
+                                <div class="me-3">
+                                    <div class="airport-location">
+                                        <span th:text="${airport.city}"></span>,
+                                        <span th:text="${airport.country}"></span>
+                                    </div>
+                                    <div class="airport-name">
+                                        <span th:text="${airport.airportName}"></span>
+                                    </div>
+                                </div>
+                                <div class="airport-code"><span th:text="${airport.airportCode}"></span></div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="seperator"></div>
+                <div class="search-item">
+                    <div class="search-icon text-secondary">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+                    <div class="form-floating">
+                        <input
+                                class="form-control input-borderless"
+                                id="input-date"
+                                placeholder=""
+                                name="dates"
+                        />
+                        <label
+                                for="input-date"
+                                class="text-secondary"
+                        >Depart - Return</label
+                        >
+                    </div>
+                    <div class="form-check form-switch">
+                        <input
+                                class="form-check-input"
+                                type="checkbox"
+                                role="switch"
+                                id="check-return"
+                                checked
+                        />
+                        <label
+                                class="form-check-label text-secondary"
+                                for="check-return"
+                        >Return</label
+                        >
+                    </div>
+                </div>
+                <div class="seperator"></div>
+                <div class="search-item dropup" id="item-passenger">
+                    <div class="search-icon text-secondary">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <a
+                            class="form-floating dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside"
+                            aria-expanded="false"
+                    >
+                        <input
+                                type="text"
+                                class="form-control input-borderless"
+                                id="input-passenger"
+                                placeholder=""
+                        />
+                        <label
+
+                                for="input-passenger"
+                                class="text-secondary"
+                        >Passenger</label
+                        >
+                    </a>
+                    <ul class="dropdown-menu w-100">
+                        <li>
+                            <div
+                                    class="dropdown-item"
+                            >
+                                <div class="text-primary me-2 icon" style="font-size: xx-large;">
+                                    <i class="fa-solid fa-person-walking-luggage"></i>
+                                </div>
+                                <div>
+                                    <div class="">
+                                        Adult
+                                    </div>
+                                    <div class="text-secondary" style="font-size: smaller;">
+                                        > 16 yrs
+                                    </div>
+                                </div>
+                                <div class="quantity-picker ms-auto">
+                                    <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
+                                    <span class="quantity" id="quantity-adult">0</span>
+                                    <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div
+                                    class="dropdown-item "
+                            >
+                                <div class="text-primary me-2 icon" style="font-size: xx-large;">
+                                    <i class="fa-solid fa-child"></i>
+                                </div>
+                                <div>
+                                    <div class="">
+                                        Children
+                                    </div>
+                                    <div class="text-secondary" style="font-size: smaller;">
+                                        2 - 16 yrs
+                                    </div>
+                                </div>
+                                <div class="quantity-picker ms-auto">
+                                    <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
+                                    <span class="quantity" id="quantity-child">0</span>
+                                    <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div
+                                    class="dropdown-item "
+                            >
+                                <div class="text-primary me-2 icon" style="font-size: xx-large;">
+                                    <i class="fa-solid fa-baby"></i>
+                                </div>
+                                <div>
+                                    <div class="">
+                                        Infant
+                                    </div>
+                                    <div class="text-secondary" style="font-size: smaller;">
+                                        &lt; 2 yrs
+                                    </div>
+                                </div>
+                                <div class="quantity-picker ms-auto">
+                                    <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
+                                    <span class="quantity" id="quantity-infant">0</span>
+                                    <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn-primary btn px-4">Search</button>
             </div>
-        </div>
-    </div>
-</section>
-<div th:replace="fragments/footer :: footer"></div>
-</body>
+        </main>
+        <script src="js/search-bar.js"></script>
+    </body>
 </html>

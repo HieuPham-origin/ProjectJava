@@ -41,10 +41,6 @@ public class AccountController {
         return "redirect:/index";
     }
 
-    @GetMapping("/index")
-    public String index(){
-        return "index";
-    }
     @GetMapping("/register")
     public String register(){
         return "register";
@@ -69,19 +65,14 @@ public class AccountController {
             redirectAttributes.addAttribute("error", "Email already exist");
             return "redirect:/register";
         }
-
-
         // Create a new Account object with the provided data
         Account account = new Account();
         Passenger passenger = new Passenger();
-
-
         passenger.setFirstName(firstName);
         passenger.setLastName(lastName);
         passenger.setPhoneNumber(mobile);
         passenger.setEmail(email);
         passenger.setType(1);  // Default adult
-
         account.setUsername(email);
         account.setPassword(password);
         account.setRole("user"); // Default user
