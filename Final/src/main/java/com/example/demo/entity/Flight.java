@@ -20,18 +20,12 @@ public class Flight {
     @Column(name = "flight_number")
     private String flightNumber;
 
-    @Column(name = "departure_airport_id")
-    private int departureAirportId;
-
-    @Column(name = "arrival_airport_id")
-    private int arrivalAirportId;
-
-    @ManyToOne
-    @JoinColumn(name = "departure_airport_id", referencedColumnName = "airport_id", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "departure_airport_id", referencedColumnName = "airport_id")
     private Airport departureAirport;
 
-    @ManyToOne
-    @JoinColumn(name = "arrival_airport_id", referencedColumnName = "airport_id", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "arrival_airport_id", referencedColumnName = "airport_id")
     private Airport arrivalAirport;
 }
 

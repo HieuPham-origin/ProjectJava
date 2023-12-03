@@ -87,7 +87,7 @@ public class AccountController {
         passenger.setLastName(lastName);
         passenger.setPhoneNumber(mobile);
         passenger.setEmail(email);
-        passenger.setType(1);  // Default adult
+//        passenger.setType();  // Default adult
 
         account.setUsername(email);
         account.setPassword(password);

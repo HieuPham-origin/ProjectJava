@@ -23,6 +23,10 @@ public class FlightServiceImpl implements FlightService{
         this.flightRepository.deleteById(id);
     }
     @Override
+    public void deleteByAirportId(int arId, int deId){
+        this.deleteByAirportId(arId,deId);
+    }
+    @Override
     public Flight updateFlight(int id, Flight flight){
         Optional<Flight> exist = this.flightRepository.findById(id);
         if (exist.isPresent()){

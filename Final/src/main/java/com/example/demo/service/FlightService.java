@@ -10,5 +10,6 @@ public interface FlightService {
     Optional<Flight> getFlightById(int id);
     Flight save(Flight flight);
     void deleteFlight(int id);
+    void deleteByAirportId(int arId, int deId);
     Flight updateFlight(int id, Flight flight);
 }

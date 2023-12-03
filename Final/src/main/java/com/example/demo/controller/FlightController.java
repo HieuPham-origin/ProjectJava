@@ -37,13 +37,8 @@ public class FlightController {
         if (departureAirport.isPresent() && arrivalAirport.isPresent()){
             flight.setDepartureAirport(departureAirport.get());
             flight.setArrivalAirport(arrivalAirport.get());
-            flight.setArrivalAirportId(arrivalAirport.get().getAirportId());
-            flight.setDepartureAirportId(departureAirport.get().getAirportId());
         }
-
-
         flightService.save(flight);
-
         return "redirect:/Admin/flight";
     }
 }

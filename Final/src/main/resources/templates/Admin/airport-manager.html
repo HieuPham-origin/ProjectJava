@@ -312,10 +312,49 @@
                                         <td th:text="${airport.city}"></td>
                                         <td th:text="${airport.country}"></td>
                                         <td>
-                                            <a href="#deleteAirportModal" class="btn btn-danger"
-                                            data-toggle="modal"
-                                            th:attr="data-id=${airport.airportId}">Delete</a>
-                                            <button class="btn btn-primary">Edit</button>
+                                            <form th:action="@{/Admin/airport/delete/{id}(id=${airport.airportId})}" method="post">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                            <div id="updateAirportModal" tabindex="-1" role="dialog" aria-labelledby="updateAirportModalLabel" class="modal fade">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="updateAirportModalLabel">Update Airport</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form id="updateAirportForm" method="post" th:action="@{/Admin/airport/update/{id}(id=${airport.airportId})}">
+                                                            <div class="modal-body">
+                                                                <!-- Form Fields -->
+                                                                <input type="hidden" id="airportId" name="airportId" th:value="${airport.airportId}">
+                                                                <div class="form-group">
+                                                                    <label for="airportName">Airport Name</label>
+                                                                    <input type="text" class="form-control" id="airportNameU" name="airportName" th:value="${airport.airportName}" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="city">City</label>
+                                                                    <input type="text" class="form-control" id="cityU" name="city" th:value="${airport.city}" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="country">Country</label>
+                                                                    <input type="text" class="form-control" id="countryU" name="country" th:value="${airport.country}" required>
+                                                                </div>
+                                                                <!--                                                    <div class="form-group">-->
+                                                                <!--                                                        <label for="country">Code</label>-->
+                                                                <!--                                                        <input type="text" class="form-control" id="codeU" name="code" required>-->
+                                                                <!--                                                    </div>-->
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary" id="saveAirport">Save</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary" id="updateAirportButton" onclick="openFormU()">Update airport</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -430,6 +469,9 @@
     <script>
         function openForm() {
             $('#addAirportModal').modal('show');
+        }
+        function openFormU(){
+            $('#updateAirportModal').modal('show');
         }
     </script>
 </body>
