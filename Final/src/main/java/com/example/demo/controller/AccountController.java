@@ -1,20 +1,30 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Account;
+import com.example.demo.entity.Airport;
 import com.example.demo.entity.Passenger;
 import com.example.demo.service.AccountService;
+import com.example.demo.service.AirportService;
 import com.example.demo.service.PassengerService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class AccountController {
     private final AccountService accountService;
     private final PassengerService passengerService;
 
+    @Autowired
+    private AirportService airportService;
     public AccountController(AccountService accountService, PassengerService passengerService) {
         this.accountService = accountService;
         this.passengerService = passengerService;
@@ -72,7 +82,7 @@ public class AccountController {
         passenger.setLastName(lastName);
         passenger.setPhoneNumber(mobile);
         passenger.setEmail(email);
-        passenger.setType(1);  // Default adult
+//        passenger.setType();  // Default adult
         account.setUsername(email);
         account.setPassword(password);
         account.setRole("user"); // Default user
@@ -89,5 +99,11 @@ public class AccountController {
 
         // Redirect to the login page after successful registration
         return "redirect:/login";
+    }
+    @GetMapping("/index")
+    public String index(Model model){
+        List<Airport> airports = this.airportService.getAllAirports();
+        model.addAttribute("airports",airports);
+        return "index";
     }
 }

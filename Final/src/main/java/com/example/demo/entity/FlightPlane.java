@@ -19,12 +19,6 @@ public class FlightPlane {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "flight_id")
-    private int flightId;
-
-    @Column(name = "plane_id")
-    private int planeId;
-
     @Column(name = "departure_time")
     private Time departureTime;
 
@@ -42,11 +36,11 @@ public class FlightPlane {
     @Column(name = "flight_type")
     private int flightType;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "flight_id", referencedColumnName = "flight_id", insertable = false, updatable = false)
     private Flight flight;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plane_id", referencedColumnName = "plane_id", insertable = false, updatable = false)
     private Plane plane;
 }

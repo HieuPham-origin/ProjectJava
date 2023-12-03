@@ -23,7 +23,7 @@ public class Seat {
     @Column(name = "plane_id")
     private int planeId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plane_id", referencedColumnName = "plane_id", insertable = false, updatable = false)
     private Plane plane;
 }

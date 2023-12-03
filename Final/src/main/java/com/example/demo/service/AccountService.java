@@ -16,6 +16,6 @@ public interface AccountService {
     Account getAccountById(Integer accountId);
 
     boolean authorize(String username, String password);
-
+    Account getAccountByUsername(String username);
     boolean emailExist(String username);
 }

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Airport")
 @NoArgsConstructor
@@ -29,44 +31,15 @@ public class Airport {
     @Column(name="airport_code")
     private String airportCode;
 
-    public int getAirportId() {
-        return airportId;
-    }
-
-    public void setAirportId(int airportId) {
-        this.airportId = airportId;
-    }
-
-    public String getAirportName() {
-        return airportName;
-    }
-
-    public void setAirportName(String airportName) {
-        this.airportName = airportName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getAirportCode() {
-        return airportCode;
-    }
-
     public void setAirportCode(String airportCode) {
         this.airportCode = airportCode;
     }
+//    @OneToMany(mappedBy = "departureAirport", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Flight> departingFlights;
+//
+//    @OneToMany(mappedBy = "arrivalAirport", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Flight> arrivingFlights;
+
+// Getters and setters
 }
 

@@ -18,7 +18,7 @@ public class AirportServiceImpl implements AirportService{
     @Override
     public Optional<Airport> getAirportById(int id){return this.airportRepository.findById(id);}
     @Override
-    public Airport create(Airport airport){return this.airportRepository.save(airport);}
+    public Airport save(Airport airport){return this.airportRepository.save(airport);}
     @Override
     public void delete(int id){this.airportRepository.deleteById(id);}
     @Override
