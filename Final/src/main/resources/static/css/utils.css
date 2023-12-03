@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&family=Inter:wght@400;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700&display=swap');
+
+
+.text-primary {
+    color: #605DEC !important;
+}
+
+.text-secondary {
+    color: #7C8DB0 !important;
+}
+
+.btn {
+    border-radius: 4px !important;
+}
+
+.btn-primary {
+    background-color: #605DEC !important;
+    color: white;
+}
+
+.font-inter {
+    font-family: 'Inter', sans-serif;
+}
+
+.font-nunito {
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.font-be {
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+.text-gradient {
+    font-size: 72px;
+    background: -webkit-linear-gradient(#514EFF, #9747FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-small {
+    font-size: small;
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-large {
+    font-size: large;
+}

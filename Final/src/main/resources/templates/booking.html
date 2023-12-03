@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://kit.fontawesome.com/45f15e8235.js"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"
+        ></script>
+        <link rel="stylesheet" href="css/index.css" />
+        <link rel="stylesheet" href="css/utils.css" />
+        <link rel="stylesheet" href="css/booking.css" />
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+        ></script>
+        <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css"
+    />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+        />
+        <title>Booking</title>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light-subtle px-3">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Navbar brand -->
+                <a class="navbar-brand text-primary fw-bold font-inter" href="/"
+                    ><i class="fa-solid fa-circle"></i> FreeFlight
+                </a>
+
+                <!-- Collapsible wrapper -->
+                <div
+                    class="collapse navbar-collapse"
+                    id="navbarSupportedContent"
+                >
+                    <ul
+                        class="navbar-nav ms-auto mb-2 mb-lg-0 font-nunito d-flex align-items-center"
+                    >
+                        <!-- Link -->
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary ms-3" href="/"
+                                >Flights</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary ms-3" href="/"
+                                >Log in</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link btn btn-primary text-light px-3 py-2 ms-3"
+                                href="/"
+                                >Sign up</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+        <main class="p-5 row">
+            <div class="col-lg-8">
+                <nav style="--bs-breadcrumb-divider: '-';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item active"><i class="bi bi-1-circle-fill me-2"></i>Book</li>
+                      <li class="breadcrumb-item"><i class="bi bi-2-circle-fill me-2"></i>Review</li>
+                      <li class="breadcrumb-item"><i class="bi bi-3-circle-fill me-2"></i>Pay</li>
+                      <li class="breadcrumb-item"><i class="bi bi-4-circle-fill me-2"></i>E-ticket</li>
+                    </ol>
+                  </nav>
+                <h2>Your booking</h2>
+                <h4>Contact details</h4>
+                <div class="item-container mb-3">
+                    <div class="fw-bold text-large">Contact details</div>
+                    <hr />
+                    <div class="row gx-2">
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-contact-last-name"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-contact-last-name"
+                                >Last Name</label
+                            >
+                            <div class="form-text">e.g. Nguyen</div>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-contact-first-name"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-contact-first-name"
+                                >Middle & First Name</label
+                            >
+                            <div class="form-text">e.g. Van A</div>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-contact-phone"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-contact-phone"
+                                >Phone number</label
+                            >
+                            <div class="form-text">e.g. 0923456789</div>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-contact-email"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-contact-email">Email</label>
+                            <div class="form-text">e.g. name@example.com</div>
+                        </div>
+                    </div>
+                </div>
+                <h4>Traveler details</h4>
+                <div class="item-container mb-3">
+                    <div class="fw-bold text-large">Adult 1</div>
+                    <hr />
+                    <div class="row gx-2">
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-last-name-1"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-last-name-1">Last Name</label>
+                            <div class="form-text">e.g. Nguyen</div>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-first-name-1"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-first-name-1"
+                                >Middle & First Name</label
+                            >
+                            <div class="form-text">e.g. Van A</div>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="date"
+                                class="form-control"
+                                id="input-birth-1"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-birth-1">Date of birth</label>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <select
+                                class="form-select select-nationality"
+                                id="input-nationality-1"
+                                placeholder=""
+                                required
+                            ></select>
+                            <label for="input-nationality-1">Nationality</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-container mb-3">
+                    <div class="fw-bold text-large">Child 1</div>
+                    <hr />
+                    <div class="row gx-2">
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-last-name-1"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-last-name-1">Last Name</label>
+                            <div class="form-text">e.g. Nguyen</div>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-first-name-1"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-first-name-1"
+                                >Middle & First Name</label
+                            >
+                            <div class="form-text">e.g. Van A</div>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <input
+                                type="date"
+                                class="form-control"
+                                id="input-birth-1"
+                                placeholder=""
+                                required
+                            />
+                            <label for="input-birth-1">Date of birth</label>
+                        </div>
+                        <div class="form-floating col-6 mb-3">
+                            <select
+                                class="form-select select-nationality"
+                                id="input-nationality-1"
+                                placeholder=""
+                                required
+                            ></select>
+                            <label for="input-nationality-1">Nationality</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h2>Your flights</h2>
+                <div class="item-container mb-3">
+                    <div class="item-content">
+                        <div
+                            class="flight-item selected d-flex align-content-center"
+                        >
+                            <div class="icon mx-3">
+                                <img
+                                    src="images/flight-departure.png"
+                                    alt=""
+                                    srcset=""
+                                />
+                            </div>
+                            <div>
+                                <div class="text-secondary text-smaller">
+                                    Thu, 06 Jul 2003
+                                </div>
+                                <div class="">Ho Chi Minh City → Hanoi</div>
+                            </div>
+                        </div>
+                        <div id="chosen-departure-flight" class="flight-chosen">
+                            <div class="d-flex mb-2">
+                                <div class="logo me-2">
+                                    <img src="images/vna-logo.png" alt="" />
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Vietnam Airlines</div>
+                                    <div class="text-secondary">
+                                        VN6420 • Eco
+                                    </div>
+                                </div>
+                                <div class="ms-auto">
+                                    <span class="text-primary fw-bold"
+                                        >3.999.000₫</span
+                                    >
+                                    <span class="text-secondary"> / pax</span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="fw-bold">SGN</div>
+                                    <div class="text-secondary">09:00</div>
+                                </div>
+                                <div class="text-secondary">•</div>
+                                <div
+                                    class="d-flex flex-column align-items-center"
+                                >
+                                    <i
+                                        class="fa-solid fa-plane text-secondary"
+                                    ></i>
+                                    <div class="text-secondary">2h 30m</div>
+                                </div>
+                                <div class="text-secondary">•</div>
+
+                                <div>
+                                    <div class="fw-bold">HAN</div>
+                                    <div class="text-secondary">11:30</div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="flight-item d-flex align-content-center">
+                            <div class="icon mx-3">
+                                <img
+                                    src="images/flight-destination.png"
+                                    alt=""
+                                    srcset=""
+                                />
+                            </div>
+                            <div>
+                                <div class="text-secondary text-smaller">
+                                    Thu, 06 Jul 2003
+                                </div>
+                                <div class="">Hanoi → Ho Chi Minh City</div>
+                            </div>
+                        </div>
+                        <div id="chosen-departure-flight" class="flight-chosen">
+                            <div class="d-flex mb-2">
+                                <div class="logo me-2">
+                                    <img src="images/vna-logo.png" alt="" />
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Vietnam Airlines</div>
+                                    <div class="text-secondary">
+                                        VN6420 • Eco
+                                    </div>
+                                </div>
+                                <div class="ms-auto">
+                                    <span class="text-primary fw-bold"
+                                        >3.999.000₫</span
+                                    >
+                                    <span class="text-secondary"> / pax</span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="fw-bold">SGN</div>
+                                    <div class="text-secondary">09:00</div>
+                                </div>
+                                <div class="text-secondary">•</div>
+                                <div
+                                    class="d-flex flex-column align-items-center"
+                                >
+                                    <i
+                                        class="fa-solid fa-plane text-secondary"
+                                    ></i>
+                                    <div class="text-secondary">2h 30m</div>
+                                </div>
+                                <div class="text-secondary">•</div>
+
+                                <div>
+                                    <div class="fw-bold">HAN</div>
+                                    <div class="text-secondary">11:30</div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="">
+                            <div class="d-flex">
+                                Subtotal
+                                <div class="ms-auto">
+                                    <span class="text-primary fw-bold"
+                                        >3.999.000₫</span
+                                    >
+                                    <span class="text-secondary"> / pax</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                Total for 1 pax
+                                <div class="ms-auto">
+                                    <span
+                                        class="text-primary fw-bold text-large"
+                                        >3.999.000₫</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-primary btn w-100" style="border-radius: 12px !important;">
+                    CONTINUE TO REVIEW
+                </button>
+            </div>
+        </main>
+        <script src="js/search-bar.js"></script>
+        <script src="js/booking.js"></script>
+    </body>
+</html>

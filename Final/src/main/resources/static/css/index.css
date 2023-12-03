@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Noticia+Text:wght@400;700&display=swap");
+
+html,
+body {
+    max-height: 100vh;
+    height: 100vh;
+    font-family: 'Nunito Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    background-image: url(/images/map.png);
+    flex: 1 1 auto;
+}
+
+.text-main {
+    font-size: 116px;
+    font-weight: bold;
+}
+
