@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface AirportService {
     List<Airport> getAllAirports();
+    List<Airport> getAirportsByKeySearch(String keySearch);
     Optional<Airport> getAirportById(int id);
     Airport save(Airport airport);
     void delete(int id);

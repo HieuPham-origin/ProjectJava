@@ -27,6 +27,13 @@ public class Airport {
 
     @Column(name = "country")
     private String country;
+
+    @Column(name="airport_code")
+    private String airportCode;
+
+    public void setAirportCode(String airportCode) {
+        this.airportCode = airportCode;
+    }
 //    @OneToMany(mappedBy = "departureAirport", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Flight> departingFlights;
 //

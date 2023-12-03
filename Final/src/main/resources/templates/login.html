@@ -1,73 +1,79 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-
-<!-- Mirrored from rn53themes.net/themes/demo/travelz/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 30 Oct 2023 16:06:53 GMT -->
-<head>
-    <title>The Travel - Tour Travel</title>
-    <!--== META TAGS ==-->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <!-- FAV ICON -->
-    <link rel="shortcut icon" href="/images/fav.ico">
-    <!-- GOOGLE FONTS -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins%7CQuicksand:400,500,700" rel="stylesheet">
-    <!-- FONT-AWESOME ICON CSS -->
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-    <!--== ALL CSS FILES ==-->
-    <link rel="stylesheet" href="/css/jquery-ui.css">
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/mob.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="/js/html5shiv.js"></script>
-    <script src="/js/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body>
-    <div th:replace="fragments/header :: header"></div>
-    <section>
-        <div class="tr-register">
-            <div class="tr-regi-form">
-                <h4>Sign <span>In</span></h4>
-                <p>It's free and always will be.</p>
-                <div th:if="${param.error}">
-                    <p style="color: red;" th:text="${param.error}"></p>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://kit.fontawesome.com/45f15e8235.js"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"
+        ></script>
+        <link rel="stylesheet" href="css/index.css" />
+        <link rel="stylesheet" href="css/utils.css" />
+        <link rel="stylesheet" href="css/login.css" />
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+        ></script>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+        />
+        <title>Homepage</title>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="./fragments/header :: header"> </div>
+        <!-- Navbar -->
+        <main
+            class="d-flex align-items-center flex-column justify-content-center"
+        >
+            <div class="form-container row">
+                <div class="col-6" id="form-bg">
+                    <div>Welcome</div>
+                    <div>Abroad</div>
                 </div>
-
-                <form class="col s12" th:action="@{/login}" method="post">
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="text" name="username" class="validate" placeholder="User Name" required>
+                <div class="col-6">
+                    <form  th:action="@{/login}" method="post">
+                        <div class="text-primary font-be" id="form-title">Login</div>
+                        <div th:if="${param.error}">
+                            <p style="color: red;" th:text="${param.error}"></p>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="password" name="password" class="validate" placeholder="Password" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="submit" value="submit" class="waves-effect waves-light btn-large full-btn"> </div>
-                    </div>
-                </form>
-                <p><a href="forgot-pass.html">forgot password</a> | Are you a new user ? <a href="register.html">Register</a>
-                </p>
-                <div class="soc-login">
-                    <h4>Sign in using</h4>
-                    <ul>
-                        <li><a href="#"><i class="fa fa-facebook fb1"></i> Facebook</a> </li>
-                        <li><a href="#"><i class="fa fa-twitter tw1"></i> Twitter</a> </li>
-                        <li><a href="#"><i class="fa fa-google-plus gp1"></i> Google</a> </li>
-                    </ul>
+                          <div class="form-floating mb-3">
+                            <input name="username" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <label for="floatingInput">Username</label>
+                          </div>
+                          <div class="form-floating mb-3">
+                            <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <label for="floatingPassword">Password</label>
+                          </div>
+                          <a class="link-underline link-underline-opacity-0" href="">Forgot password ?</a> 
+                          <div class="text-secondary">Don't have an account ? <a class="link-underline link-underline-opacity-0" href="/register">Sign up now.</a> </div>
+                          <button type="submit" class="btn btn-primary w-100 mt-3">Log in</button>
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
-    <div th:replace="fragments/footer :: footer"></div>
-</body>
+        </main>
+        <script src="js/search-bar.js"></script>
+    </body>
 </html>
