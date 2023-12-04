@@ -72,7 +72,8 @@ public class AccountController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionPassenger");
+        session.removeAttribute("admin");
 
         // Redirect to the login page or any other desired page
         return "redirect:/login";

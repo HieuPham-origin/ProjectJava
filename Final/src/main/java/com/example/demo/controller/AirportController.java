@@ -53,8 +53,11 @@ public class AirportController {
     public String updateAirport(@PathVariable("id") Integer airportId, Airport airport){
         Optional<Airport> exist = airportService.getAirportById(airportId);
         if(exist.isPresent()){
-            airport.setAirportId(airportId);
-            airportService.update(airportId, airport);
+            exist.get().setAirportName(airport.getAirportName());
+            exist.get().setCity(airport.getCity());
+            exist.get().setCountry(airport.getCountry());
+            exist.get().setAirportCode(airport.getAirportCode());
+            airportService.update(airportId, exist.get());
             selectedAirport = airport;
             return "redirect:/Admin/airport";
         } else {

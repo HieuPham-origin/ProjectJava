@@ -1,12 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Airport;
 import com.example.demo.entity.Flight;
 import com.example.demo.entity.FlightPlane;
 import com.example.demo.entity.Plane;
 import com.example.demo.service.FlightPlaneService;
 import com.example.demo.service.FlightService;
-import com.example.demo.service.PassengerService;
 import com.example.demo.service.PlaneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/Admin")
@@ -45,12 +42,19 @@ public class FlightPlaneController {
                             @RequestParam("departureDay") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate departureDay,
                             @RequestParam("departureTime") @DateTimeFormat(pattern = "HH:mm") LocalTime departureTime,
                             @RequestParam("arrivalDay") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate arrivalDay,
-                            @RequestParam("arrivalTime") @DateTimeFormat(pattern = "HH:mm") LocalTime arrivalTime){
+                            @RequestParam("arrivalTime") @DateTimeFormat(pattern = "HH:mm") LocalTime arrivalTime,
+                            Model model){
         Flight flight = flightService.getFlightById(flightId).orElse(null);
         Plane plane = planeService.getPlaneById(planeId).orElse(null);
 
         if (flight == null || plane == null) {
             return null; // Handle the case when the flight or plane is not found
+        }
+
+        if (departureDay.isAfter(arrivalDay)) {
+            System.out.println("Invalid day");
+            model.addAttribute("errorMessage", "Invalid day");
+            return "redirect:/Admin/flightPlane";
         }
 
         FlightPlane flightPlane = new FlightPlane();

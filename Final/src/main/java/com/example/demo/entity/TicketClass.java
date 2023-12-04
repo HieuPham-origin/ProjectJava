@@ -20,6 +20,15 @@ public class TicketClass {
     @Column(name = "class_name")
     private String className;
 
+    @Column(name = "rate")
+    private int rate;
+
+    @Column(name = "cabin_baggage")
+    private int cabinBaggage;
+
+    @Column(name = "baggage")
+    private int baggage;
+
     @Column(name = "price")
     private int price;
 }

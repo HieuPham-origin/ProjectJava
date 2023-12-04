@@ -17,7 +17,6 @@ public class FlightPlaneServiceImpl implements FlightPlaneService{
     @Override
     public List<FlightPlane> findByFlightAndDepartureDayAndArrivalDay(Flight flightId, Date departureDay, Date arrivalDay) {
         return flightPlaneRepository.findByFlightAndDepartureDayAndArrivalDay(flightId,departureDay,arrivalDay);
-
     }
 
     @Override

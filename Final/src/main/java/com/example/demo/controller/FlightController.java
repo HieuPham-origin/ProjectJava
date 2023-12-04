@@ -55,6 +55,8 @@ public class FlightController {
 
         originalFlight.setArrivalAirport(airportService.getAirportById(arrivalAirportId).orElse(null));
         originalFlight.setDepartureAirport(airportService.getAirportById(departureAirportId).orElse(null));
+        originalFlight.setFlightAirline(flight.getFlightAirline());
+        originalFlight.setFlightPrice(flight.getFlightPrice());
 
         flightService.save(originalFlight);
         return "redirect:/Admin/flight";

@@ -39,8 +39,9 @@ public class PlaneController {
     public String updatePlane(@PathVariable("id") Integer planeId, Plane plane){
         Optional<Plane> exist = planeService.getPlaneById(planeId);
         if(exist.isPresent()){
-            plane.setPlaneId(planeId);
-            planeService.update(planeId, plane);
+            exist.get().setPlaneName(plane.getPlaneName());
+            exist.get().setCapacity(plane.getCapacity());
+            planeService.update(planeId, exist.get());
             return "redirect:/Admin/plane";
         } else {
             return null;
@@ -48,7 +49,7 @@ public class PlaneController {
     }
 
     @PostMapping("/plane/delete/{id}")
-    public String deleteplane(@PathVariable("id") Integer planeId) {
+    public String deletePlane(@PathVariable("id") Integer planeId) {
 
         Plane plane = planeService.getPlaneById(planeId).orElse(null);
         if(plane == null) {
