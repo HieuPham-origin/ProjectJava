@@ -255,8 +255,8 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Flights</h6>
-                            <button class="btn btn-primary" id="addAirportButton" onclick="openForm()">Add airport</button>
+                            <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 15px">Flights</h6>
+                            <button class="btn btn-primary" id="addAirportButton" onclick="openForm()">Add Flight</button>
                             <!-- Modal -->
                             <!-- Modal -->
                             <div id="addFlightModal" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
@@ -285,9 +285,15 @@
                                                 </div>
 
 
+
                                                 <div class="form-group">
-                                                    <label for="price">Price</label>
-                                                    <input type="text" class="form-control" id="price" name="price" required>
+                                                    <label for="flightAirline">Airline</label>
+                                                    <input type="text" class="form-control" id="flightAirline" name="flightAirline"  required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="flightPrice">Price</label>
+                                                    <input type="text" class="form-control" id="flightPrice" name="flightPrice" required>
                                                 </div>
 
                                             </div>
@@ -308,6 +314,7 @@
                                             <th>ID</th>
                                             <th>Departure Airport</th>
                                             <th>Arrival Airport</th>
+                                            <th>Airline</th>
                                             <th>Price</th>
                                             <th>Action</th>
                                         </tr>
@@ -317,6 +324,7 @@
                                             <th>ID</th>
                                             <th>Departure Airport</th>
                                             <th>Arrival Airport</th>
+                                            <th>Airline</th>
                                             <th>Price</th>
                                             <th>Action</th>
                                         </tr>
@@ -326,11 +334,12 @@
                                         <td th:text="${flight.flightId}"></td>
                                         <td th:text="${flight.departureAirport.getAirportName()}"></td>
                                         <td th:text="${flight.arrivalAirport.getAirportName()}"></td>
-                                        <td th:text="${flight.getPrice()}"></td>
+                                        <td th:text="${flight.getFlightAirline()}"></td>
+                                        <td th:text="${flight.getFlightPrice()}"></td>
                                         <td>
-                                            <form th:action="@{/Admin/flight/delete/{id}(id=${flight.flightId})}" method="post">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
+<!--                                            <form th:action="@{/Admin/flight/delete/{id}(id=${flight.flightId})}" method="post">-->
+<!--                                                <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--                                            </form>-->
                                             <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updateFlightModal' + ${flight.flightId}">
                                                 Update
                                             </button>
@@ -360,9 +369,15 @@
                                                                 </div>
 
                                                                 <div class="form-group">
-                                                                    <label for="price">Price</label>
-                                                                    <input type="text" class="form-control" id="price" name="price" th:value="${flight.getPrice()}" required>
+                                                                    <label for="flightAirline">Airline</label>
+                                                                    <input type="text" class="form-control" id="flightAirline" name="flightAirline" th:value="${flight.getFlightAirline()}"required>
                                                                 </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="flightPrice">Price</label>
+                                                                    <input type="text" class="form-control" id="flightPrice" name="flightPrice" th:value="${flight.getFlightPrice()}" required>
+                                                                </div>
+
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -11,4 +11,9 @@ public interface FlightPlaneService {
     List<FlightPlane> findByFlight(Flight flight);
     FlightPlane findById(int flightId);
 
+    FlightPlane save(FlightPlane flightPlane);
+    List<FlightPlane> getAllFlightPlanes();
+
+    FlightPlane getFlightPlaneById(int id);
+
 }

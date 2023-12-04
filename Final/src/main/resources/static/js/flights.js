@@ -165,7 +165,7 @@ $('.flight-item').click(function(){
                                                 ${e.flight.flightAirline}
                                             </div>
                                             <div class="text-large fw-bold">
-                                                ${e.plane.planeName} • ${e.flight.flightNumber}
+                                                ${e.plane.planeName}
                                             </div>
                                             <div
                                                 class="text-small text-secondary"
@@ -234,7 +234,7 @@ $(document).on('click','.btn-bookFlight', function(){
                         </div>
                         <div>
                             <div class="fw-bold">${data.flight.flightAirline}</div>
-                            <div class="text-secondary">${data.plane.planeName} • ${data.flight.flightNumber}</div>
+                            <div class="text-secondary">${data.plane.planeName}</div>
                         </div>
                         <div class="ms-auto">
                             <span class="text-primary fw-bold"

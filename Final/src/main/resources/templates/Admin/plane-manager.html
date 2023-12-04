@@ -247,12 +247,12 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Planes Management</h1>
+                    <h1 class="h3 mb-2 text-gray-800" >Planes Management</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Planes</h6>
+                            <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 15px">Planes</h6>
                             <button class="btn btn-primary" id="addPlaneButton" onclick="openForm()">Add plane</button>
                             <!-- Modal -->
                             <div id="addPlaneModal" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
@@ -314,12 +314,25 @@
                                             <td th:text="${plane.planeName}"></td>
                                             <td th:text="${plane.capacity}"></td>
                                             <td>
-                                                <form th:action="@{/Admin/plane/delete/{id}(id=${plane.planeId})}" method="post">
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">
-                                                    Update
-                                                </button>
+<!--                                                <form th:action="@{/Admin/plane/delete/{id}(id=${plane.planeId})}" method="post">-->
+<!--                                                    <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--                                                </form>-->
+<!--                                                <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">-->
+<!--                                                    Update-->
+<!--                                                </button>-->
+
+
+
+
+                                                <div class="btn-group" style="width: 50px" >
+                                                    <form  th:action="@{/Admin/plane/delete/{id}(id=${plane.planeId})}" method="post">
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                    <button style="margin-left: 12px; border-radius: 8%"  type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">
+                                                        Update
+                                                    </button>
+                                                </div>
+
 
                                                 <div th:id="'updatePlaneModal' + ${plane.planeId}" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
                                                     <div class="modal-dialog" role="document">

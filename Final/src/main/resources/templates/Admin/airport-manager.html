@@ -252,7 +252,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Airports</h6>
+                            <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 15px">Airports</h6>
                             <button class="btn btn-primary" id="addAirportButton" onclick="openForm()">Add airport</button>
                             <!-- Modal -->
                             <div id="addAirportModal" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
@@ -317,12 +317,16 @@
                                         <td th:text="${airport.country}"></td>
                                         <td th:text="${airport.airportCode}"></td>
                                         <td>
-                                            <form th:action="@{/Admin/airport/delete/{id}(id=${airport.airportId})}" method="post">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updateAirportModal' + ${airport.airportId}" onclick="fillEditForm(this)">
-                                                Update
-                                            </button>
+
+                                            <div class="btn-group" >
+                                                <form th:action="@{/Admin/airport/delete/{id}(id=${airport.airportId})}" method="post">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                                <button style="margin-left: 12px; border-radius: 8%" type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updateAirportModal' + ${airport.airportId}" onclick="fillEditForm(this)">
+                                                    Update
+                                                </button>
+                                            </div>
+
 
                                             <div th:id="'updateAirportModal' + ${airport.airportId}" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">   <div class="modal-dialog" role="document">
                                                     <div class="modal-content">

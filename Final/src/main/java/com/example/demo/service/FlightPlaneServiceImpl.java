@@ -30,4 +30,19 @@ public class FlightPlaneServiceImpl implements FlightPlaneService{
         Optional<FlightPlane> dbFlightPlane =  flightPlaneRepository.findById(flightId);
         return dbFlightPlane.orElse(null);
     }
+
+    @Override
+    public FlightPlane save(FlightPlane flightPlane) {
+        return flightPlaneRepository.save(flightPlane);
+    }
+
+    @Override
+    public List<FlightPlane> getAllFlightPlanes() {
+        return flightPlaneRepository.findAll();
+    }
+
+    @Override
+    public FlightPlane getFlightPlaneById(int id) {
+        return flightPlaneRepository.findById(id).orElse(null);
+    }
 }
