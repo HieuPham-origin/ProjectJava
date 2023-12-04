@@ -30,6 +30,12 @@ public class PassengerServiceImpl implements PassengerService{
     }
 
     @Override
+    public Passenger getPassengerByEmail(String email) {
+        return passengerRepository.findByEmail(email);
+    }
+
+
+    @Override
     public void deletePassenger(Integer passengerId) {
         passengerRepository.deleteById(passengerId);
     }

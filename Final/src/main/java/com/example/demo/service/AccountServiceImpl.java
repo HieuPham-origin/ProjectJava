@@ -53,4 +53,5 @@ public class AccountServiceImpl implements AccountService {
     public boolean emailExist(String username) {
         return accountRepository.existsByUsername(username);
     }
+
 }
