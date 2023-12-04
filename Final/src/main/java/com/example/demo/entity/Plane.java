@@ -22,4 +22,7 @@ public class Plane {
 
     @Column(name = "capacity")
     private int capacity;
+
+    @Column(name = "status")
+    private String status;
 }

@@ -248,9 +248,6 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Planes Management</h1>
-                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -317,9 +314,13 @@
                                             <td th:text="${plane.planeName}"></td>
                                             <td th:text="${plane.capacity}"></td>
                                             <td>
+                                                <form th:action="@{/Admin/plane/delete/{id}(id=${plane.planeId})}" method="post">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
                                                 <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">
                                                     Update
                                                 </button>
+
                                                 <div th:id="'updatePlaneModal' + ${plane.planeId}" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
@@ -426,20 +427,6 @@
             $('#addPlaneModal').modal('show');
         }
     </script>
-<!--    <script>-->
-<!--        function fillEditForm(btn) {-->
-<!--            let tds = $(btn).closest('tr').find('td')-->
-<!--            let id = tds[0].innerHTML;-->
-<!--            $("#action").val(id);-->
-<!--            $.get("../api/brand/" + id, {-->
-<!--            }, function (data, status) {-->
-<!--                console.log(data)-->
-<!--                document.updateForm.action = "/Admin/airport/update/" + id-->
-<!--                $('#NewName').val(data.name)-->
-
-<!--            }, "json");-->
-<!--        }-->
-<!--    </script>-->
 </body>
 
 </html>

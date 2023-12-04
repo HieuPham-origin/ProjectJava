@@ -46,4 +46,9 @@ public class AirportServiceImpl implements AirportService{
         }
         return result;
     }
+
+    @Override
+    public List<Airport> getAllAirportsExceptStatus(String status) {
+        return airportRepository.findAllByStatusNot(status);
+    }
 }

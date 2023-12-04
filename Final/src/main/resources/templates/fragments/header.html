@@ -14,6 +14,7 @@
                     id="navbarSupportedContent"
             >
                 <ul
+                        th:if="${user == null}"
                         class="navbar-nav ms-auto mb-2 mb-lg-0 font-nunito d-flex align-items-center"
                 >
                     <!-- Link -->
@@ -34,6 +35,26 @@
                         >Sign up</a
                         >
                     </li>
+                </ul>
+
+                <ul
+                        th:unless="${user == null}"
+                        class="navbar-nav ms-auto mb-2 mb-lg-0 font-nunito d-flex align-items-center"
+                >
+
+                    <li class="nav-item">
+                        <a class="nav-link text-secondary ms-3" href="/" th:text="${user.lastName}"
+                        ></a
+                        >
+                    </li>
+                    <!-- Link -->
+                    <li class="nav-item">
+                        <a class="nav-link text-secondary ms-3" href="/logout"
+                        >Logout</a
+                        >
+                    </li>
+
+
                 </ul>
             </div>
         </div>
