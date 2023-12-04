@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://kit.fontawesome.com/45f15e8235.js"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"
+        ></script>
+        <link rel="stylesheet" href="/css/index.css" />
+        <link rel="stylesheet" href="/css/utils.css" />
+        <link rel="stylesheet" href="/css/booking.css" />
+        <link rel="stylesheet" href="/css/profile.css" />
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+        ></script>
+        <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css"
+    />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+        />
+        <title>Profile</title>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="./fragments/header :: header"> </div>
+        <!-- Navbar -->
+
+        <main class="p-5" style="background-image: none;">
+            <h1>Manange account</h1>
+            <hr>
+            <div class="row">
+                <div class="col-4">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item">
+                          <a class="nav-link active" href="/profile/">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="/profile/password">Password</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="/profile/reservations">Reservations</a>
+                        </li>
+                      </ul>
+                </div>
+                <div class="col-4">
+                    <h2>Profile</h2>
+                    <div class="form-floating mb-3">
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="input-email"
+                            placeholder=""
+                            disabled
+                            value="name@example.com"
+                        />
+                        <label for="input-email"
+                            >Email</label
+                        >
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="form-floating">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-first-name"
+                                placeholder="name@example.com"
+                            />
+                            <label for="input-first-name">First name</label>
+                        </div>
+                        <div class="form-floating">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="input-last-name"
+                                placeholder="name@example.com"
+                            />
+                            <label for="input-last-name">Last name</label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="input-phone"
+                            placeholder=""
+                        />
+                        <label for="input-phone">Phone number</label>
+                    </div>
+                    <button class="btn btn-primary w-100 mt-3">
+                        Update
+                    </button>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
