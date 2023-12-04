@@ -51,7 +51,7 @@ $('.flight-item').click(function(){
             "sortByDuration" : $('input:radio[name=durationSort]:checked').val(),
         },
         success : function(data) {
-        console.log(data)
+            console.log(data)
             if (data.length===0){
                 let html=`<p> No result for this flight </p>`
                 $('#flight-all-container').append(html)

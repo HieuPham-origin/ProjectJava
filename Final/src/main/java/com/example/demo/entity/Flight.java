@@ -24,16 +24,12 @@ public class Flight {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "arrival_airport_id", referencedColumnName = "airport_id")
     private Airport arrivalAirport;
-<<<<<<< HEAD
-=======
 
     @Column(name = "status")
     private String status;
 
-    @Column(name = "price")
-    private double price;
-}
->>>>>>> 6ad1c308d5eedc874c064631d0094ee765482c1a
+//    @Column(name = "price")
+//    private double price;
 
     @Column(name = "flight_airline")
     private String flightAirline;

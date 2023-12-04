@@ -23,11 +23,10 @@ public class FlightPlaneController {
     private FlightService flightService;
     @Autowired
     private PlaneController planeController;
-    @GetMapping("/flightPlane")
-    public String showFlightPlane(Model model){
-        List<FlightPlane> flightPlanes = flightPlaneService.getAllFlightPlanes();
-        model.addAttribute("flightPlaneList", flightPlanes);
-        return "Admin/flight-manager";
-    }
-
+//    @GetMapping("/flightPlane")
+//    public String showFlightPlane(Model model){
+//        List<FlightPlane> flightPlanes = flightPlaneService.getAllFlightPlanes();
+//        model.addAttribute("flightPlaneList", flightPlanes);
+//        return "Admin/flight-manager";
+//    }
 }

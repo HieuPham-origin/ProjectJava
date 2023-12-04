@@ -104,8 +104,9 @@ public class SearchController {
         String destinationAirportCode =  destinationText.split(" , ")[0];
         Airport airportDeparture = airportService.getAirportByAirPortCode(departureAirportCode);
         Airport airportDestination = airportService.getAirportByAirPortCode(destinationAirportCode);
-        List<Flight> flights = flightService.getFlightsByDepartureAndDestination(airportDeparture.getAirportId(), airportDestination.getAirportId());
 
+        List<Flight> flights = flightService.getFlightsByDepartureAndDestination(airportDeparture.getAirportId(), airportDestination.getAirportId());
+        System.out.println(flights.get(0).getFlightId());
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<FlightPlane> result = new ArrayList<>();
         for (Flight flight: flights) {
