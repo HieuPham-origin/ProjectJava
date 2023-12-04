@@ -32,6 +32,8 @@ public class AirportServiceImpl implements AirportService{
         }
     }
 
+
+
     @Override
     public List<Airport> getAirportsByKeySearch(String keySearch) {
         List<Airport> airports = getAllAirports();
@@ -48,6 +50,10 @@ public class AirportServiceImpl implements AirportService{
     }
 
     @Override
+    public Airport getAirportByAirPortCode(String airportCode) {
+        return this.airportRepository.findByAirportCode(airportCode).get(0);
+    }
+
     public List<Airport> getAllAirportsExceptStatus(String status) {
         return airportRepository.findAllByStatusNot(status);
     }

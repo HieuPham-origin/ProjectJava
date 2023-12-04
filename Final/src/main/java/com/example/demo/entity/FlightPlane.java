@@ -40,5 +40,8 @@ public class FlightPlane {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plane_id", referencedColumnName = "plane_id", insertable = false, updatable = false)
     private Plane plane;
+    public long getDuration() {
+        return arrivalTime.getTime() - departureTime.getTime();
+    }
 }
 
