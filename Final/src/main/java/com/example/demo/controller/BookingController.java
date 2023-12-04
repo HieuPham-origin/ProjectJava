@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BookingController {
     @GetMapping(value = {"", "/"})
     public String booking(Model model) {
-
+        model.addAttribute("flight1");
+        model.addAttribute("flight1");
         return "booking";
     }
 
