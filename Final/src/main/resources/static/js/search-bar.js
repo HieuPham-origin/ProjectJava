@@ -46,7 +46,7 @@ function updatePassenger() {
     let infant = parseInt($('#quantity-infant').text());
 
     let texts = []
-    if (adult > 1) texts.push(adult == 1 ? adult + " adult" : adult + " adults")
+    if (adult > 0) texts.push(adult == 1 ? adult + " adult" : adult + " adults")
     if (child > 0) texts.push(child == 1 ? child + " child" : child + " children")
     if (infant > 0) texts.push(infant == 1 ? infant + " infant" : infant + " infants")
     $('#input-passenger').val("OK")
