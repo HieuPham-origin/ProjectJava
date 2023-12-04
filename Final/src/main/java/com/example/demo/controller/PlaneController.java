@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Airport;
+import com.example.demo.entity.Flight;
 import com.example.demo.entity.Plane;
 import com.example.demo.service.AirportService;
 import com.example.demo.service.PlaneService;
@@ -22,13 +23,15 @@ public class PlaneController {
     private PlaneService planeService;
     @GetMapping("/plane")
     public String showPlanes(Model model){
-        List<Plane> planes = planeService.getAllPlanes();
+        List<Plane> planes = planeService.getAllPlanes("Disabled");
         model.addAttribute("planeList", planes);
         model.addAttribute("prefix", "plane");
         return "Admin/plane-manager";
     }
+
     @PostMapping("/plane/save")
     public String savePlane(Plane plane){
+        plane.setStatus("Active");
         planeService.save(plane);
         return "redirect:/Admin/plane";
     }
@@ -43,4 +46,18 @@ public class PlaneController {
             return null;
         }
     }
+
+    @PostMapping("/plane/delete/{id}")
+    public String deleteplane(@PathVariable("id") Integer planeId) {
+
+        Plane plane = planeService.getPlaneById(planeId).orElse(null);
+        if(plane == null) {
+            return "redirect:/Admin/plane";
+        }
+        plane.setStatus("Disabled");
+        planeService.save(plane);
+        return "redirect:/Admin/plane";
+
+    }
+
 }

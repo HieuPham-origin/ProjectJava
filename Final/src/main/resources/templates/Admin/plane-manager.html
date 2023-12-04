@@ -317,9 +317,13 @@
                                             <td th:text="${plane.planeName}"></td>
                                             <td th:text="${plane.capacity}"></td>
                                             <td>
+                                                <form th:action="@{/Admin/plane/delete/{id}(id=${plane.planeId})}" method="post">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
                                                 <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">
                                                     Update
                                                 </button>
+
                                                 <div th:id="'updatePlaneModal' + ${plane.planeId}" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">

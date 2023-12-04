@@ -55,7 +55,7 @@ public class AccountController {
         Passenger passenger = passengerService.getPassengerByEmail(username);
         String role = account.getRole();
         if(role.equals("admin")) {
-            session.setAttribute("admin", passenger);
+            session.setAttribute("admin", account);
             return "redirect:/Admin/airport";
 
         }

@@ -13,7 +13,7 @@ public class PlaneServiceImpl implements PlaneService{
     @Autowired
     private PlaneRepository planeRepository;
     @Override
-    public List<Plane> getAllPlanes(){return this.planeRepository.findAll();}
+    public List<Plane> getAllPlanes(String status){return this.planeRepository.findAllByStatusNot(status);}
     @Override
     public Optional<Plane> getPlaneById(int id){return this.planeRepository.findById(id);}
     @Override
