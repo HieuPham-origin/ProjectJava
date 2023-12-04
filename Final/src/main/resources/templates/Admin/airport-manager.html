@@ -265,8 +265,8 @@
                                             </button>
                                         </div>
                                         <form id="addAirportForm" method="post" th:action="@{/Admin/airport/save}">
-                                        <div class="modal-body">
-                                            <!-- Form Fields -->
+                                            <div class="modal-body">
+                                                <!-- Form Fields -->
 
                                                 <div class="form-group">
                                                     <label for="airportName">Airport Name</label>
@@ -280,12 +280,15 @@
                                                     <label for="country">Country</label>
                                                     <input type="text" class="form-control" id="country" name="country" required>
                                                 </div>
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary" id="saveAirportButton">Save</button>
-                                        </div>
+                                                <div class="form-group">
+                                                    <label for="airportCode">Country</label>
+                                                    <input type="text" class="form-control" id="airportCode" name="airportCode" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary" id="saveAirportButton">Save</button>
+                                            </div>
                                         </form>
                                     </div>
 
@@ -301,6 +304,7 @@
                                         <th>Airport</th>
                                         <th>City</th>
                                         <th>Country</th>
+                                        <th>Airport Code</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -311,12 +315,16 @@
                                         <td th:text="${airport.airportName}"></td>
                                         <td th:text="${airport.city}"></td>
                                         <td th:text="${airport.country}"></td>
+                                        <td th:text="${airport.airportCode}"></td>
                                         <td>
                                             <form th:action="@{/Admin/airport/delete/{id}(id=${airport.airportId})}" method="post">
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
-                                            <div id="updateAirportModal" tabindex="-1" role="dialog" aria-labelledby="updateAirportModalLabel" class="modal fade">
-                                                <div class="modal-dialog" role="document">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updateAirportModal' + ${airport.airportId}" onclick="fillEditForm(this)">
+                                                Update
+                                            </button>
+
+                                            <div th:id="'updateAirportModal' + ${airport.airportId}" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">   <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="updateAirportModalLabel">Update Airport</h5>
@@ -327,35 +335,39 @@
                                                         <form id="updateAirportForm" method="post" th:action="@{/Admin/airport/update/{id}(id=${airport.airportId})}">
                                                             <div class="modal-body">
                                                                 <!-- Form Fields -->
-                                                                <input type="hidden" id="airportId" name="airportId" th:value="${airport.airportId}">
+
                                                                 <div class="form-group">
                                                                     <label for="airportName">Airport Name</label>
-                                                                    <input type="text" class="form-control" id="airportNameU" name="airportName" th:value="${airport.airportName}" required>
+                                                                    <input type="text" class="form-control" id="airportName"
+                                                                           th:value="${airport.airportName}" name="airportName" required>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="city">City</label>
-                                                                    <input type="text" class="form-control" id="cityU" name="city" th:value="${airport.city}" required>
+                                                                    <input type="text" class="form-control" id="city"
+                                                                           th:value="${airport.city}" name="city" required>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="country">Country</label>
-                                                                    <input type="text" class="form-control" id="countryU" name="country" th:value="${airport.country}" required>
+                                                                    <input type="text" class="form-control" id="country"
+                                                                           th:value="${airport.country}" name="country" required>
                                                                 </div>
-                                                                <!--                                                    <div class="form-group">-->
-                                                                <!--                                                        <label for="country">Code</label>-->
-                                                                <!--                                                        <input type="text" class="form-control" id="codeU" name="code" required>-->
-                                                                <!--                                                    </div>-->
+                                                                <div class="form-group">
+                                                                    <label for="airportCode">Airport Code</label>
+                                                                    <input type="text" class="form-control" id="airportCode"
+                                                                           th:value="${airport.airportCode}" name="airportCode" required>
+                                                                </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary" id="saveAirport">Save</button>
+                                                                <button type="submit" class="btn btn-primary" id="saveAirportButton">Save</button>
                                                             </div>
                                                         </form>
                                                     </div>
 
                                                 </div>
                                             </div>
-                                            <button class="btn btn-primary" id="updateAirportButton" onclick="openFormU()">Update airport</button>
                                         </td>
+
                                     </tr>
                                     </tbody>
                                     <tfoot>
@@ -364,6 +376,7 @@
                                         <th>Airport</th>
                                         <th>City</th>
                                         <th>Country</th>
+                                        <th>Airport Code</th>
                                         <th>Action</th>
                                     </tr>
                                     </tfoot>
@@ -377,6 +390,8 @@
 
             </div>
             <!-- End of Main Content -->
+
+
 
 
             <!-- Footer -->
@@ -444,14 +459,21 @@
 
     <!-- JavaScript custom script -->
 
-    <script>
-        // $(document).on("click", ".delete", function () {
-        //     let airportId = $(this).data('id');
-        //     $("#deleteAirportId").val( airportId );
-        //     $("#deleteAirportForm").attr('action', '/Admin/airport/delete/' + airportId);
-        // });
-    </script>
 
+    <script>
+        function fillEditForm(btn) {
+            let tds = $(btn).closest('tr').find('td')
+            let id = tds[0].innerHTML;
+            $("#action").val(id);
+            $.get("../api/brand/" + id, {
+            }, function (data, status) {
+                console.log(data)
+                document.updateForm.action = "/Admin/airport/update/" + id
+                $('#NewName').val(data.name)
+
+            }, "json");
+        }
+    </script>
 
     <!-- Page level plugins -->
     <!-- Link jQuery -->
@@ -470,10 +492,8 @@
         function openForm() {
             $('#addAirportModal').modal('show');
         }
-        function openFormU(){
-            $('#updateAirportModal').modal('show');
-        }
     </script>
+
 </body>
 
 </html>

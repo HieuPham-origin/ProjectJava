@@ -20,7 +20,7 @@ public class TicketClass {
     @Column(name = "class_name")
     private String className;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "price")
+    private int price;
 }
 

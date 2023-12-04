@@ -19,11 +19,13 @@ public class AirportController {
     private AirportService airportService;
     @Autowired
     private FlightService flightService;
+    private Airport selectedAirport;
     @GetMapping("/airport")
     public String showAirport(Model model){
         List<Airport> airports = airportService.getAllAirports();
         model.addAttribute("airportList", airports);
         model.addAttribute("prefix", "airport");
+        model.addAttribute("selectedAirport", selectedAirport);
         return "Admin/airport-manager";
     }
     @PostMapping("/airport/save")
@@ -43,11 +45,10 @@ public class AirportController {
         if(exist.isPresent()){
             airport.setAirportId(airportId);
             airportService.update(airportId, airport);
+            selectedAirport = airport; // Cập nhật giá trị cho biến selectedAirport
             return "redirect:/Admin/airport";
-
-        }else{
+        } else {
             return null;
         }
-
     }
 }

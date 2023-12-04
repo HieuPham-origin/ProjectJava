@@ -100,10 +100,10 @@ public class AccountController {
         // Redirect to the login page after successful registration
         return "redirect:/login";
     }
-    @GetMapping("/index")
-    public String index(Model model){
-        List<Airport> airports = this.airportService.getAllAirports();
-        model.addAttribute("airports",airports);
-        return "index";
-    }
+//    @GetMapping("/index")
+//    public String index(Model model){
+//        List<Airport> airports = this.airportService.getAllAirports();
+//        model.addAttribute("airports",airports);
+//        return "index";
+//    }
 }
