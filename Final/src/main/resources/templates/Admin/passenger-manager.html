@@ -247,14 +247,12 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Aiports Management</h1>
-                    <p class="mb-4"> <a target="_blank"
-                            href="https://datatables.net"></a></p>
+                    <h1 class="h3 mb-2 text-gray-800">Passengers Management</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Aiports</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Passengers</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -286,8 +284,7 @@
                                         <td th:text="${passenger.lastName}"></td>
                                         <td th:text="${passenger.phoneNumber}"></td>
                                         <td th:text="${passenger.email}"></td>
-                                        <td th:text="${passenger.customerType.getTypeName() }"></td>
-
+                                        <td th:text="${passenger.customerType.getTypeName()}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
