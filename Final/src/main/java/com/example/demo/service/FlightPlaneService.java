@@ -22,7 +22,6 @@ public class FlightPlaneService {
     public Optional<FlightPlane> getFlightPlaneById(int id){return this.flightPlaneRepository.findById(id);}
 
 
-
     public FlightPlane save(FlightPlane flightPlane){return this.flightPlaneRepository.save(flightPlane);}
 
     public void deleteFlightPlane(int id){

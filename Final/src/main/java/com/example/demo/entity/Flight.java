@@ -28,7 +28,5 @@ public class Flight {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "price")
-    private double price;
 }
 
