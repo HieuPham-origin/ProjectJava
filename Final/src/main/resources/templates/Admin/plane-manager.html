@@ -267,7 +267,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form id="addAirportForm" method="post" th:action="@{/Admin/plane/save}">
+                                        <form id="addPlaneForm" method="post" th:action="@{/Admin/plane/save}">
                                             <div class="modal-body">
                                                 <!-- Form Fields -->
 
@@ -300,6 +300,7 @@
                                             <th>ID</th>
                                             <th>Plane Name</th>
                                             <th>Capacity</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -307,6 +308,7 @@
                                             <th>ID</th>
                                             <th>Plane Name</th>
                                             <th>Capacity</th>
+                                            <th>Action</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -314,6 +316,46 @@
                                             <td th:text="${plane.planeId}"></td>
                                             <td th:text="${plane.planeName}"></td>
                                             <td th:text="${plane.capacity}"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">
+                                                    Update
+                                                </button>
+                                                <div th:id="'updatePlaneModal' + ${plane.planeId}" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="updateAirportModalLabel">Update Plane</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form id="updatePlaneForm" method="post" th:action="@{/Admin/plane/update/{id}(id=${plane.planeId})}">
+                                                                <div class="modal-body">
+                                                                    <!-- Form Fields -->
+
+                                                                    <div class="form-group">
+                                                                        <label for="planeName">Plane Name</label>
+                                                                        <input type="text" class="form-control" id="planeName"
+                                                                               th:value="${plane.planeName}" name="planeName" required>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="capacity">Capacity</label>
+                                                                        <input type="text" class="form-control" id="capacity"
+                                                                               th:value="${plane.capacity}" name="capacity" required>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary" id="updateAirportButton">Save</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
 
                                     </tbody>
@@ -384,7 +426,20 @@
             $('#addPlaneModal').modal('show');
         }
     </script>
+<!--    <script>-->
+<!--        function fillEditForm(btn) {-->
+<!--            let tds = $(btn).closest('tr').find('td')-->
+<!--            let id = tds[0].innerHTML;-->
+<!--            $("#action").val(id);-->
+<!--            $.get("../api/brand/" + id, {-->
+<!--            }, function (data, status) {-->
+<!--                console.log(data)-->
+<!--                document.updateForm.action = "/Admin/airport/update/" + id-->
+<!--                $('#NewName').val(data.name)-->
 
+<!--            }, "json");-->
+<!--        }-->
+<!--    </script>-->
 </body>
 
 </html>

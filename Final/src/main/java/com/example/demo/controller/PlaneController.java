@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/Admin")
 public class PlaneController {
@@ -28,5 +31,16 @@ public class PlaneController {
     public String savePlane(Plane plane){
         planeService.save(plane);
         return "redirect:/Admin/plane";
+    }
+    @PostMapping("/plane/update/{id}")
+    public String updatePlane(@PathVariable("id") Integer planeId, Plane plane){
+        Optional<Plane> exist = planeService.getPlaneById(planeId);
+        if(exist.isPresent()){
+            plane.setPlaneId(planeId);
+            planeService.update(planeId, plane);
+            return "redirect:/Admin/plane";
+        } else {
+            return null;
+        }
     }
 }
