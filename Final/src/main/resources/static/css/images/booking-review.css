@@ -1,0 +1,75 @@
+.select-item {
+    padding: 16px;
+}
+
+.select-item.selected {
+    border-left: solid 4px #605DEC;
+    background-color: #F2F7FF;
+}
+
+.select-item-title {
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.select-item.selected .select-item-title {
+    color: #605DEC;
+}
+
+.select-item:hover {
+    cursor: pointer;
+}
+
+.modal-dialog {
+    min-width: 1000px;
+}
+
+.modal-body {
+    padding: 0px;
+}
+
+.modal-content {
+    overflow: hidden;
+}
+
+.select-seat-container .item-container {
+    width: fit-content;
+}
+
+.seat-container {
+    display: grid;
+    grid-template-columns: repeat(7, 40px);
+    grid-template-rows: repeat(20, 40px);
+    gap: 8px;
+}
+
+.seat-container > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seat-box {
+    border-radius: 8px;
+    color: white;
+    user-select: none;
+}
+
+.seat-box.available {
+    background-color: #198754;
+}
+
+.seat-box.selected {
+    background-color:#605DEC;
+}
+
+.seat-box.available:hover, .seat-box.selected:hover {
+    cursor: pointer;
+}
+
+.seat-box.unavailable {
+    background-image: url(/images/xmark.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: lightgray;
+}

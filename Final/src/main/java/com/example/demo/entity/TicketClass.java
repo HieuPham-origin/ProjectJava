@@ -20,7 +20,12 @@ public class TicketClass {
     @Column(name = "class_name")
     private String className;
 
+<<<<<<< HEAD
     @Column(name = "ticket_class_price")
     private String price;
+=======
+    @Column(name = "price")
+    private int price;
+>>>>>>> 6ad1c308d5eedc874c064631d0094ee765482c1a
 }
 

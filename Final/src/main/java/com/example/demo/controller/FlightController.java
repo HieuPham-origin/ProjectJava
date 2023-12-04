@@ -38,7 +38,40 @@ public class FlightController {
             flight.setDepartureAirport(departureAirport.get());
             flight.setArrivalAirport(arrivalAirport.get());
         }
+        flight.setStatus("Active");
         flightService.save(flight);
         return "redirect:/Admin/flight";
     }
+
+    @PostMapping("/flight/update/{id}")
+    public String updateFlight(@PathVariable("id") Integer flightId, Flight flight,
+                               @RequestParam("departureAirport") int departureAirportId,
+                               @RequestParam("arrivalAirport") int arrivalAirportId){
+        Flight originalFlight = flightService.getFlightById(flightId).orElse(null);
+
+        if(originalFlight == null) {
+            return null;
+        }
+
+        originalFlight.setArrivalAirport(airportService.getAirportById(arrivalAirportId).orElse(null));
+        originalFlight.setDepartureAirport(airportService.getAirportById(departureAirportId).orElse(null));
+
+        flightService.save(originalFlight);
+        return "redirect:/Admin/flight";
+
+    }
+
+    @PostMapping("/flight/delete/{id}")
+    public String deleteFlight(@PathVariable("id") Integer flightId) {
+
+        Flight flight = flightService.getFlightById(flightId).orElse(null);
+        if(flight == null) {
+            return "redirect:/Admin/flight";
+        }
+        flight.setStatus("Disabled");
+        flightService.save(flight);
+        return "redirect:/Admin/flight";
+
+    }
+
 }

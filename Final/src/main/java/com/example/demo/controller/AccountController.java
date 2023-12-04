@@ -8,6 +8,7 @@ import com.example.demo.service.AirportService;
 import com.example.demo.service.PassengerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +38,9 @@ public class AccountController {
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
-                        RedirectAttributes redirectAttributes) {
+                        HttpSession session,
+                        RedirectAttributes redirectAttributes,
+                        Model model) {
 
         if (username.isEmpty() || password.isEmpty()) {
             redirectAttributes.addAttribute("error", "Please provide both username and password");
@@ -48,7 +51,27 @@ public class AccountController {
             redirectAttributes.addAttribute("error", "Invalid username or password");
             return "redirect:/login";
         }
-        return "redirect:/index";
+        Account account = accountService.getAccountByUsername(username);
+        Passenger passenger = passengerService.getPassengerByEmail(username);
+        String role = account.getRole();
+        if(role.equals("admin")) {
+            session.setAttribute("admin", account);
+            return "redirect:/Admin/airport";
+
+        }
+        else {
+            model.addAttribute("passenger", passenger);
+            session.setAttribute("sessionPassenger", passenger);
+            return "redirect:/index";
+        }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+
+        // Redirect to the login page or any other desired page
+        return "redirect:/login";
     }
 
     @GetMapping("/register")
@@ -100,4 +123,10 @@ public class AccountController {
         // Redirect to the login page after successful registration
         return "redirect:/login";
     }
+//    @GetMapping("/index")
+//    public String index(Model model){
+//        List<Airport> airports = this.airportService.getAllAirports();
+//        model.addAttribute("airports",airports);
+//        return "index";
+//    }
 }

@@ -53,4 +53,8 @@ public class AirportServiceImpl implements AirportService{
     public Airport getAirportByAirPortCode(String airportCode) {
         return this.airportRepository.findByAirportCode(airportCode).get(0);
     }
+
+    public List<Airport> getAllAirportsExceptStatus(String status) {
+        return airportRepository.findAllByStatusNot(status);
+    }
 }

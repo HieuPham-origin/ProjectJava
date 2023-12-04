@@ -12,4 +12,7 @@ public interface PassengerService {
     Passenger updatePassenger(Passenger passenger, Integer passengerId);
 
     void deletePassenger(Integer passengerId);
+
+    Passenger getPassengerByEmail(String email);
+
 }

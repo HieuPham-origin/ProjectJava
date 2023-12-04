@@ -19,23 +19,35 @@ public class AirportController {
     private AirportService airportService;
     @Autowired
     private FlightService flightService;
+    private Airport selectedAirport;
     @GetMapping("/airport")
     public String showAirport(Model model){
-        List<Airport> airports = airportService.getAllAirports();
+//        List<Airport> airports = airportService.getAllAirports();
+
+        List<Airport> airports = airportService.getAllAirportsExceptStatus("Disabled");
         model.addAttribute("airportList", airports);
         model.addAttribute("prefix", "airport");
+        model.addAttribute("selectedAirport", selectedAirport);
         return "Admin/airport-manager";
     }
     @PostMapping("/airport/save")
     public String saveAirport(Airport airportObj){
+        airportObj.setStatus("Active");
         airportService.save(airportObj);
         return "redirect:/Admin/airport";
     }
     @PostMapping("/airport/delete/{id}")
     public String deleteAirport(@PathVariable("id") Integer airportId) {
-        flightService.deleteByAirportId(airportId,airportId);
-        airportService.delete(airportId);
+//        flightService.deleteByAirportId(airportId,airportId);
+//        airportService.delete(airportId);
+        Airport airport = airportService.getAirportById(airportId).orElse(null);
+        if(airport == null) {
+            return "redirect:/Admin/airport";
+        }
+        airport.setStatus("Disabled");
+        airportService.save(airport);
         return "redirect:/Admin/airport";
+
     }
     @PostMapping("/airport/update/{id}")
     public String updateAirport(@PathVariable("id") Integer airportId, Airport airport){
@@ -43,11 +55,10 @@ public class AirportController {
         if(exist.isPresent()){
             airport.setAirportId(airportId);
             airportService.update(airportId, airport);
+            selectedAirport = airport;
             return "redirect:/Admin/airport";
-
-        }else{
+        } else {
             return null;
         }
-
     }
 }
