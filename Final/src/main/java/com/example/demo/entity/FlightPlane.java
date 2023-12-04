@@ -33,9 +33,6 @@ public class FlightPlane {
     @Temporal(TemporalType.DATE)
     private Date arrivalDay;
 
-    @Column(name = "flight_type")
-    private int flightType;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "flight_id", referencedColumnName = "flight_id", insertable = false, updatable = false)
     private Flight flight;
@@ -43,5 +40,8 @@ public class FlightPlane {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plane_id", referencedColumnName = "plane_id", insertable = false, updatable = false)
     private Plane plane;
+    public long getDuration() {
+        return arrivalTime.getTime() - departureTime.getTime();
+    }
 }
 

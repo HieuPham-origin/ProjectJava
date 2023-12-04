@@ -1,13 +1,14 @@
-package com.example.demo.repository;
+package com.example.demo.service;
 
 import com.example.demo.entity.Flight;
 import com.example.demo.entity.FlightPlane;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-public interface FlightPlaneRepository extends JpaRepository<FlightPlane, Integer> {
-    List<FlightPlane> findByFlight(Flight flight);
+public interface FlightPlaneService {
     List<FlightPlane> findByFlightAndDepartureDayAndArrivalDay(Flight flightId, Date departureDay, Date arrivalDay);
+    List<FlightPlane> findByFlight(Flight flight);
+    FlightPlane findById(int flightId);
 }

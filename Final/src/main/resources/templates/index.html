@@ -45,7 +45,6 @@
         <!-- Navbar -->
         <div th:replace="./fragments/header :: header"> </div>
         <!-- Navbar -->
-        <!-- Navbar -->
         <main
                 class="d-flex align-items-center flex-column justify-content-center"
         >
@@ -53,234 +52,238 @@
                 More than <br />
                 just a flight
             </div>
-            <div class="search-bar mt-5">
-                <div class="search-item dropup search-place">
-                    <div class="search-icon">
-                        <img
-                                src="images/flight-departure.png"
-                                alt=""
-                                srcset=""
-                        />
-                    </div>
-                    <a
-                            class="form-floating dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                    >
-                        <input
-                                type="text"
-                                class="form-control input-borderless"
-                                id="input-airport-departure"
-                                placeholder=""
-                        />
-                        <label
-                                for="input-airport-departure"
-                                class="text-secondary"
-                        >From where ?</label
+                <form th:action="@{/search}" method="post" class="search-bar mt-5">
+                    <div class="search-item dropup search-place">
+                        <div class="search-icon">
+                            <img
+                                    src="images/flight-departure.png"
+                                    alt=""
+                                    srcset=""
+                            />
+                        </div>
+                        <a
+                                class="form-floating dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
                         >
-                    </a>
-                    <ul class="dropdown-menu" id="dropdown-menu-departure">
-                        <li><h6 class="dropdown-header">Popular</h6></li>
-                        <li th:each="airport: ${airportList}">
-                            <a
-                                    class="dropdown-item d-flex"
-                                    href="#"
-                                    th:attr="data-value=${airport.airportCode + ' , ' + airport.city}"
+                            <input
+                                    type="text"
+                                    class="form-control input-borderless"
+                                    id="input-airport-departure"
+                                    name="departure"
+                                    placeholder=""
+                            />
+                            <label
+                                    for="input-airport-departure"
+                                    class="text-secondary"
+                            >From where ?</label
                             >
-                                <div class="me-3">
-                                    <div class="airport-location">
-                                        <span th:text="${airport.city}"></span>,
-                                        <span th:text="${airport.country}"></span>
+                        </a>
+                        <ul class="dropdown-menu" id="dropdown-menu-departure">
+                            <li><h6 class="dropdown-header">Popular</h6></li>
+                            <li th:each="airport: ${airportList}">
+                                <a
+                                        class="dropdown-item d-flex"
+                                        href="#"
+                                        th:attr="data-value=${airport.airportCode + ' , ' + airport.city}"
+                                >
+                                    <div class="me-3">
+                                        <div class="airport-location">
+                                            <span th:text="${airport.city}"></span>,
+                                            <span th:text="${airport.country}"></span>
+                                        </div>
+                                        <div class="airport-name">
+                                            <span th:text="${airport.airportName}"></span>
+                                        </div>
                                     </div>
-                                    <div class="airport-name">
-                                        <span th:text="${airport.airportName}"></span>
-                                    </div>
-                                </div>
-                                <div class="airport-code"><span th:text="${airport.airportCode}"></span></div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="seperator">
-                    <div id="btn-switch" class="text-secondary">
-                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                                    <div class="airport-code"><span th:text="${airport.airportCode}"></span></div>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                </div>
-                <div class="search-item dropup search-place">
-                    <div class="search-icon">
-                        <img
-                                src="images/flight-destination.png"
-                                alt=""
-                                srcset=""
-                        />
+                    <div class="seperator">
+                        <div id="btn-switch" class="text-secondary">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        </div>
                     </div>
-                    <a
-                            class="form-floating dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                    >
-                        <input
-                                type="text"
-                                class="form-control input-borderless"
-                                id="input-airport-destination"
-                                placeholder=""
-                        />
-                        <label
-                                for="input-airport-destination"
-                                class="text-secondary"
-                        >To where ?</label
+                    <div class="search-item dropup search-place">
+                        <div class="search-icon">
+                            <img
+                                    src="images/flight-destination.png"
+                                    alt=""
+                                    srcset=""
+                            />
+                        </div>
+                        <a
+                                class="form-floating dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
                         >
-                    </a>
-                    <ul class="dropdown-menu" id="dropdown-menu-destination">
-                        <li><h6 class="dropdown-header">Popular</h6></li>
-                        <li th:each="airport: ${airportList}">
-                            <a
-                                    class="dropdown-item d-flex"
-                                    href="#"
-                                    th:attr="data-value=${airport.airportCode + ' , ' + airport.city}"
+                            <input
+                                    type="text"
+                                    class="form-control input-borderless"
+                                    id="input-airport-destination"
+                                    name="destination"
+                                    placeholder=""
+                            />
+                            <label
+                                    for="input-airport-destination"
+                                    class="text-secondary"
+                            >To where ?</label
                             >
-                                <div class="me-3">
-                                    <div class="airport-location">
-                                        <span th:text="${airport.city}"></span>,
-                                        <span th:text="${airport.country}"></span>
+                        </a>
+                        <ul class="dropdown-menu" id="dropdown-menu-destination">
+                            <li><h6 class="dropdown-header">Popular</h6></li>
+                            <li th:each="airport: ${airportList}">
+                                <a
+                                        class="dropdown-item d-flex"
+                                        href="#"
+                                        th:attr="data-value=${airport.airportCode + ' , ' + airport.city}"
+                                >
+                                    <div class="me-3">
+                                        <div class="airport-location">
+                                            <span th:text="${airport.city}"></span>,
+                                            <span th:text="${airport.country}"></span>
+                                        </div>
+                                        <div class="airport-name">
+                                            <span th:text="${airport.airportName}"></span>
+                                        </div>
                                     </div>
-                                    <div class="airport-name">
-                                        <span th:text="${airport.airportName}"></span>
-                                    </div>
-                                </div>
-                                <div class="airport-code"><span th:text="${airport.airportCode}"></span></div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="seperator"></div>
-                <div class="search-item">
-                    <div class="search-icon text-secondary">
-                        <i class="fa-regular fa-calendar"></i>
+                                    <div class="airport-code"><span th:text="${airport.airportCode}"></span></div>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="form-floating">
-                        <input
-                                class="form-control input-borderless"
-                                id="input-date"
-                                placeholder=""
-                                name="dates"
-                        />
-                        <label
-                                for="input-date"
-                                class="text-secondary"
-                        >Depart - Return</label
+                    <div class="seperator"></div>
+                    <div class="search-item">
+                        <div class="search-icon text-secondary">
+                            <i class="fa-regular fa-calendar"></i>
+                        </div>
+                        <div class="form-floating">
+                            <input
+                                    class="form-control input-borderless"
+                                    id="input-date"
+                                    placeholder=""
+                                    name="dates"
+                            />
+                            <label
+                                    for="input-date"
+                                    class="text-secondary"
+                            >Depart - Return</label
+                            >
+                        </div>
+                        <div class="form-check form-switch">
+                            <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    role="switch"
+                                    name="checkReturn"
+                                    id="check-return"
+                                    checked
+                            />
+                            <label
+                                    class="form-check-label text-secondary"
+                                    for="check-return"
+                            >Return</label
+                            >
+                        </div>
+                    </div>
+                    <div class="seperator"></div>
+                    <div class="search-item dropup" id="item-passenger">
+                        <div class="search-icon text-secondary">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <a
+                                class="form-floating dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside"
+                                aria-expanded="false"
                         >
-                    </div>
-                    <div class="form-check form-switch">
-                        <input
-                                class="form-check-input"
-                                type="checkbox"
-                                role="switch"
-                                id="check-return"
-                                checked
-                        />
-                        <label
-                                class="form-check-label text-secondary"
-                                for="check-return"
-                        >Return</label
-                        >
-                    </div>
-                </div>
-                <div class="seperator"></div>
-                <div class="search-item dropup" id="item-passenger">
-                    <div class="search-icon text-secondary">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <a
-                            class="form-floating dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                            data-bs-auto-close="outside"
-                            aria-expanded="false"
-                    >
-                        <input
-                                type="text"
-                                class="form-control input-borderless"
-                                id="input-passenger"
-                                placeholder=""
-                        />
-                        <label
-
-                                for="input-passenger"
-                                class="text-secondary"
-                        >Passenger</label
-                        >
-                    </a>
-                    <ul class="dropdown-menu w-100">
-                        <li>
-                            <div
-                                    class="dropdown-item"
+                            <input
+                                    type="text"
+                                    class="form-control input-borderless"
+                                    id="input-passenger"
+                                    name="passenger"
+                                    placeholder=""
+                                    value="1 adult"
+                            />
+                            <label
+                                    for="input-passenger"
+                                    class="text-secondary"
+                            >Passenger</label
                             >
-                                <div class="text-primary me-2 icon" style="font-size: xx-large;">
-                                    <i class="fa-solid fa-person-walking-luggage"></i>
-                                </div>
-                                <div>
-                                    <div class="">
-                                        Adult
+                        </a>
+                        <ul class="dropdown-menu w-100">
+                            <li>
+                                <div
+                                        class="dropdown-item"
+                                >
+                                    <div class="text-primary me-2 icon" style="font-size: xx-large;">
+                                        <i class="fa-solid fa-person-walking-luggage"></i>
                                     </div>
-                                    <div class="text-secondary" style="font-size: smaller;">
-                                        > 16 yrs
+                                    <div>
+                                        <div class="">
+                                            Adult
+                                        </div>
+                                        <div class="text-secondary" style="font-size: smaller;">
+                                            > 16 yrs
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="quantity-picker ms-auto">
-                                    <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
-                                    <span class="quantity" id="quantity-adult">0</span>
-                                    <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div
-                                    class="dropdown-item "
-                            >
-                                <div class="text-primary me-2 icon" style="font-size: xx-large;">
-                                    <i class="fa-solid fa-child"></i>
-                                </div>
-                                <div>
-                                    <div class="">
-                                        Children
-                                    </div>
-                                    <div class="text-secondary" style="font-size: smaller;">
-                                        2 - 16 yrs
+                                    <div class="quantity-picker ms-auto">
+                                        <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
+                                        <span class="quantity" id="quantity-adult">1</span>
+                                        <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
                                     </div>
                                 </div>
-                                <div class="quantity-picker ms-auto">
-                                    <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
-                                    <span class="quantity" id="quantity-child">0</span>
-                                    <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div
-                                    class="dropdown-item "
-                            >
-                                <div class="text-primary me-2 icon" style="font-size: xx-large;">
-                                    <i class="fa-solid fa-baby"></i>
-                                </div>
-                                <div>
-                                    <div class="">
-                                        Infant
+                            </li>
+                            <li>
+                                <div
+                                        class="dropdown-item "
+                                >
+                                    <div class="text-primary me-2 icon" style="font-size: xx-large;">
+                                        <i class="fa-solid fa-child"></i>
                                     </div>
-                                    <div class="text-secondary" style="font-size: smaller;">
-                                        &lt; 2 yrs
+                                    <div>
+                                        <div class="">
+                                            Children
+                                        </div>
+                                        <div class="text-secondary" style="font-size: smaller;">
+                                            2 - 16 yrs
+                                        </div>
+                                    </div>
+                                    <div class="quantity-picker ms-auto">
+                                        <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
+                                        <span class="quantity" id="quantity-child">0</span>
+                                        <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
                                     </div>
                                 </div>
-                                <div class="quantity-picker ms-auto">
-                                    <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
-                                    <span class="quantity" id="quantity-infant">0</span>
-                                    <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
+                            </li>
+                            <li>
+                                <div
+                                        class="dropdown-item "
+                                >
+                                    <div class="text-primary me-2 icon" style="font-size: xx-large;">
+                                        <i class="fa-solid fa-baby"></i>
+                                    </div>
+                                    <div>
+                                        <div class="">
+                                            Infant
+                                        </div>
+                                        <div class="text-secondary" style="font-size: smaller;">
+                                            &lt; 2 yrs
+                                        </div>
+                                    </div>
+                                    <div class="quantity-picker ms-auto">
+                                        <i class="fa-solid fa-circle-minus text-primary btn-minus"></i>
+                                        <span class="quantity" id="quantity-infant">0</span>
+                                        <i class="fa-solid fa-circle-plus text-primary btn-plus"></i>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <button class="btn-primary btn px-4">Search</button>
-            </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn-primary btn px-4">Search</button>
+                </form>
         </main>
         <script src="js/search-bar.js"></script>
     </body>

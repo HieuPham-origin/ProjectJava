@@ -32,9 +32,5 @@ public class HomeController {
         model.addAttribute("airportList",airports);
         return "index";
     }
-    @PostMapping("/index/search")
-    @ResponseBody
-    public List<Airport> indexSearchPlace(@RequestParam("newSearch") String newSearch) {
-        return airportService.getAirportsByKeySearch(newSearch);
-    }
+
 }

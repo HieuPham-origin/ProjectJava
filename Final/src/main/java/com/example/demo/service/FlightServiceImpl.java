@@ -5,6 +5,7 @@ import com.example.demo.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,5 +36,18 @@ public class FlightServiceImpl implements FlightService{
         }else{
             return null;
         }
+    }
+
+    @Override
+    public List<Flight> getFlightsByDepartureAndDestination(int departureAirportId, int destinationAirportId) {
+        List<Flight> flights = getAllFlights();
+        List<Flight> result = new ArrayList<>();
+        for (Flight flight: flights) {
+            if (flight.getArrivalAirport().getAirportId()==destinationAirportId &&
+                    flight.getDepartureAirport().getAirportId()==departureAirportId){
+                result.add(flight);
+            }
+        }
+        return result;
     }
 }

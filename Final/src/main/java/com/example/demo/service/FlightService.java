@@ -12,4 +12,5 @@ public interface FlightService {
     void deleteFlight(int id);
     void deleteByAirportId(int arId, int deId);
     Flight updateFlight(int id, Flight flight);
+    List<Flight> getFlightsByDepartureAndDestination(int departureAirportId, int destinationAirportId);
 }

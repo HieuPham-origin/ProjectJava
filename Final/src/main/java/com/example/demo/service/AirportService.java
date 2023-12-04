@@ -12,4 +12,5 @@ public interface AirportService {
     Airport save(Airport airport);
     void delete(int id);
     Airport update(int id, Airport airport);
+    Airport getAirportByAirPortCode(String airportCode);
 }

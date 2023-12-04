@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,50 +48,10 @@
         <title>Homepage</title>
     </head>
     <body>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light-subtle px-3">
-            <!-- Container wrapper -->
-            <div class="container-fluid">
-                <!-- Navbar brand -->
-                <a class="navbar-brand text-primary fw-bold font-inter" href="/"
-                    ><i class="fa-solid fa-circle"></i> FreeFlight
-                </a>
-
-                <!-- Collapsible wrapper -->
-                <div
-                    class="collapse navbar-collapse"
-                    id="navbarSupportedContent"
-                >
-                    <ul
-                        class="navbar-nav ms-auto mb-2 mb-lg-0 font-nunito d-flex align-items-center"
-                    >
-                        <!-- Link -->
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary ms-3" href="/"
-                                >Flights</a
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary ms-3" href="/"
-                                >Log in</a
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                class="nav-link btn btn-primary text-light px-3 py-2 ms-3"
-                                href="/"
-                                >Sign up</a
-                            >
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Container wrapper -->
-        </nav>
-        <!-- Navbar -->
+    <div th:replace="./fragments/header :: header"> </div>
         <main class="d-flex align-items-center flex-column">
-            <div class="search-bar w-100">
-                <div class="search-item dropup search-place">
+            <form th:action="@{/search}" method="post" class="search-bar w-100">
+                <div class="search-item dropdown search-place">
                     <div class="search-icon">
                         <img
                             src="images/flight-departure.png"
@@ -105,10 +65,12 @@
                         aria-expanded="false"
                     >
                         <input
-                            type="text"
-                            class="form-control input-borderless"
-                            id="input-airport-departure"
-                            placeholder=""
+                                type="text"
+                                class="form-control input-borderless"
+                                id="input-airport-departure"
+                                name="departure"
+                                th:value="${departure}"
+                                placeholder=""
                         />
                         <label
                             for="input-airport-departure"
@@ -116,40 +78,24 @@
                             >From where ?</label
                         >
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" id="dropdown-menu-departure">
                         <li><h6 class="dropdown-header">Popular</h6></li>
-                        <li>
+                        <li th:each="airport: ${airportList}">
                             <a
-                                class="dropdown-item d-flex"
-                                href="#"
-                                data-value="Ho Chi Minh City"
+                                    class="dropdown-item d-flex"
+                                    href="#"
+                                    th:attr="data-value=${airport.airportCode + ' , ' + airport.city}"
                             >
-                                <div>
+                                <div class="me-3">
                                     <div class="airport-location">
-                                        Ho Chi Minh City, Viet Nam
+                                        <span th:text="${airport.city}"></span>,
+                                        <span th:text="${airport.country}"></span>
                                     </div>
                                     <div class="airport-name">
-                                        Tan Son Nhat Airport
+                                        <span th:text="${airport.airportName}"></span>
                                     </div>
                                 </div>
-                                <div class="airport-code">SGN</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                class="dropdown-item d-flex"
-                                href="#"
-                                data-value="Ho Chi Minh City"
-                            >
-                                <div>
-                                    <div class="airport-location">
-                                        Ho Chi Minh City, Viet Nam
-                                    </div>
-                                    <div class="airport-name">
-                                        Tan Son Nhat Airport
-                                    </div>
-                                </div>
-                                <div class="airport-code">SGN</div>
+                                <div class="airport-code"><span th:text="${airport.airportCode}"></span></div>
                             </a>
                         </li>
                     </ul>
@@ -159,7 +105,7 @@
                         <i class="fa-solid fa-arrow-right-arrow-left"></i>
                     </div>
                 </div>
-                <div class="search-item dropup search-place">
+                <div class="search-item dropdown search-place">
                     <div class="search-icon">
                         <img
                             src="images/flight-destination.png"
@@ -173,10 +119,12 @@
                         aria-expanded="false"
                     >
                         <input
-                            type="text"
-                            class="form-control input-borderless"
-                            id="input-airport-destination"
-                            placeholder=""
+                                type="text"
+                                class="form-control input-borderless"
+                                id="input-airport-destination"
+                                name="destination"
+                                th:value="${destination}"
+                                placeholder=""
                         />
                         <label
                             for="input-airport-destination"
@@ -184,40 +132,24 @@
                             >To where ?</label
                         >
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" id="dropdown-menu-destination">
                         <li><h6 class="dropdown-header">Popular</h6></li>
-                        <li>
+                        <li th:each="airport: ${airportList}">
                             <a
-                                class="dropdown-item d-flex"
-                                href="#"
-                                data-value="Ho Chi Minh City"
+                                    class="dropdown-item d-flex"
+                                    href="#"
+                                    th:attr="data-value=${airport.airportCode + ' , ' + airport.city}"
                             >
-                                <div>
+                                <div class="me-3">
                                     <div class="airport-location">
-                                        Ho Chi Minh City, Viet Nam
+                                        <span th:text="${airport.city}"></span>,
+                                        <span th:text="${airport.country}"></span>
                                     </div>
                                     <div class="airport-name">
-                                        Tan Son Nhat Airport
+                                        <span th:text="${airport.airportName}"></span>
                                     </div>
                                 </div>
-                                <div class="airport-code">SGN</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                class="dropdown-item d-flex"
-                                href="#"
-                                data-value="Ho Chi Minh City"
-                            >
-                                <div>
-                                    <div class="airport-location">
-                                        Ho Chi Minh City, Viet Nam
-                                    </div>
-                                    <div class="airport-name">
-                                        Tan Son Nhat Airport
-                                    </div>
-                                </div>
-                                <div class="airport-code">SGN</div>
+                                <div class="airport-code"><span th:text="${airport.airportCode}"></span></div>
                             </a>
                         </li>
                     </ul>
@@ -229,10 +161,11 @@
                     </div>
                     <div class="form-floating">
                         <input
-                            class="form-control input-borderless"
-                            id="input-date"
-                            placeholder=""
-                            name="dates"
+                                class="form-control input-borderless"
+                                id="input-date"
+                                placeholder=""
+                                name="dates"
+                                th:value="${dates}"
                         />
                         <label for="input-date" class="text-secondary"
                             >Depart - Return</label
@@ -240,11 +173,12 @@
                     </div>
                     <div class="form-check form-switch">
                         <input
-                            class="form-check-input"
-                            type="checkbox"
-                            role="switch"
-                            id="check-return"
-                            checked
+                                class="form-check-input"
+                                type="checkbox"
+                                role="switch"
+                                id="check-return"
+                                name="checkReturn"
+                                th:checked="${checkReturn}"
                         />
                         <label
                             class="form-check-label text-secondary"
@@ -254,7 +188,7 @@
                     </div>
                 </div>
                 <div class="seperator"></div>
-                <div class="search-item dropup" id="item-passenger">
+                <div class="search-item dropdown" id="item-passenger">
                     <div class="search-icon text-secondary">
                         <i class="fa-solid fa-user"></i>
                     </div>
@@ -265,10 +199,13 @@
                         aria-expanded="false"
                     >
                         <input
-                            type="text"
-                            class="form-control input-borderless"
-                            id="input-passenger"
-                            placeholder=""
+                                type="text"
+                                class="form-control input-borderless"
+                                id="input-passenger"
+                                name="passenger"
+                                th:value="${passenger}"
+                                placeholder=""
+                                value="1 adult"
                         />
                         <label for="input-passenger" class="text-secondary"
                             >Passenger</label
@@ -299,7 +236,7 @@
                                         class="fa-solid fa-circle-minus text-primary btn-minus"
                                     ></i>
                                     <span class="quantity" id="quantity-adult"
-                                        >0</span
+                                        >1</span
                                     >
                                     <i
                                         class="fa-solid fa-circle-plus text-primary btn-plus"
@@ -359,7 +296,7 @@
                                         class="fa-solid fa-circle-minus text-primary btn-minus"
                                     ></i>
                                     <span class="quantity" id="quantity-infant"
-                                        >0</span
+                                        >1</span
                                     >
                                     <i
                                         class="fa-solid fa-circle-plus text-primary btn-plus"
@@ -375,7 +312,7 @@
                         Search flights
                     </button>
                 </div>
-            </div>
+            </form>
             <div class="main-container container-fluid p-3">
                 <div class="row">
                     <div class="col-3 sidebar">
@@ -386,9 +323,8 @@
                                 Your Flights
                             </div>
                             <div class="item-content">
-                                <div
-                                    class="flight-item selected d-flex align-content-center"
-                                >
+                                </div>
+                                <div class="flight-item selected d-flex align-content-center">
                                     <div class="icon mx-3">
                                         <img
                                             src="images/flight-departure.png"
@@ -400,110 +336,42 @@
                                         <div
                                             class="text-secondary text-smaller"
                                         >
-                                            Thu, 06 Jul 2003
+                                            <span class="dateDepartureText" th:text="${dateDeparture}"></span>
                                         </div>
                                         <div class="">
-                                            Ho Chi Minh City → Hanoi
+                                            <input type="hidden" class="departureText" th:value="${departure}">
+                                            <input type="hidden" class="destinationText" th:value="${destination}">
+                                            <span th:text="${departureCity + ' → ' + destinationCity}"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="chosen-departure-flight" class="flight-chosen">
-                                    <div class="d-flex mb-2">
-                                        <div class="logo me-2">
-                                            <img src="images/vna-logo.png" alt="">
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold">Vietnam Airlines</div>
-                                            <div class="text-secondary">VN6420 • Eco</div>
-                                        </div>
-                                        <div class="ms-auto">
-                                            <span class="text-primary fw-bold"
-                                                >3.999.000₫</span
-                                            >
-                                            <span class="text-secondary">
-                                                / pax</span
-                                            >
-                                        </div>
-                                    </div>
 
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <div class="fw-bold">SGN</div>
-                                            <div class="text-secondary">09:00</div>
-                                        </div>
-                                        <div class="text-secondary">•</div>
-                                        <div class="d-flex flex-column align-items-center">
-                                            <i class="fa-solid fa-plane text-secondary"></i>
-                                            <div class="text-secondary">2h 30m</div>
-                                        </div>
-                                        <div class="text-secondary">•</div>
-
-                                        <div>
-                                            <div class="fw-bold">HAN</div>
-                                            <div class="text-secondary">11:30</div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <hr />
-                                <div
-                                    class="flight-item d-flex align-content-center"
-                                >
+                                <div th:if="${checkReturn=='true'}" class="flight-item d-flex align-content-center">
                                     <div class="icon mx-3">
                                         <img
-                                            src="images/flight-destination.png"
-                                            alt=""
-                                            srcset=""
+                                                src="images/flight-departure.png"
+                                                alt=""
+                                                srcset=""
                                         />
                                     </div>
                                     <div>
                                         <div
-                                            class="text-secondary text-smaller"
+                                                class="text-secondary text-smaller"
                                         >
-                                            Thu, 06 Jul 2003
+                                            <span class="dateDepartureText" th:text="${dateDestination}"></span>
                                         </div>
                                         <div class="">
-                                            Hanoi → Ho Chi Minh City
+                                            <input type="hidden" class="departureText" th:value="${destination}">
+                                            <input type="hidden" class="destinationText" th:value="${departure}">
+                                            <span th:text="${destinationCity + ' → ' + departureCity}"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="chosen-departure-flight" class="flight-chosen">
-                                    <div class="d-flex mb-2">
-                                        <div class="logo me-2">
-                                            <img src="images/vna-logo.png" alt="">
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold">Vietnam Airlines</div>
-                                            <div class="text-secondary">VN6420 • Eco</div>
-                                        </div>
-                                        <div class="ms-auto">
-                                            <span class="text-primary fw-bold"
-                                                >3.999.000₫</span
-                                            >
-                                            <span class="text-secondary">
-                                                / pax</span
-                                            >
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <div class="fw-bold">SGN</div>
-                                            <div class="text-secondary">09:00</div>
-                                        </div>
-                                        <div class="text-secondary">•</div>
-                                        <div class="d-flex flex-column align-items-center">
-                                            <i class="fa-solid fa-plane text-secondary"></i>
-                                            <div class="text-secondary">2h 30m</div>
-                                        </div>
-                                        <div class="text-secondary">•</div>
-
-                                        <div>
-                                            <div class="fw-bold">HAN</div>
-                                            <div class="text-secondary">11:30</div>
-                                        </div>
-                                    </div>
+                                <div th:if="${checkReturn=='true'}" id="chosen-arrival-flight" class="flight-chosen">
                                 </div>
-
                                 <hr />
                                 <div
                                     class="p-3"
@@ -530,432 +398,249 @@
                                     <button class="btn-primary btn w-100 mt-3">CONTINUE TO BOOKING</button>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Flight -->
-
-                        <!-- Sort -->
-                        <div class="sidebar-item mb-3">
-                            <div class="item-title">
-                                <i class="bi bi-sort-down"></i>
-                                Sort
-                            </div>
-                            <!-- Price -->
-                            <div class="filter-item">
-                                <button
-                                    class="btn btn-toggle border-0 collapsed"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#price-collapse"
-                                    aria-expanded="false"
-                                >
-                                    <b>Price</b>
-                                </button>
-                                <div class="collapse" id="price-collapse">
-                                    <div class="filter-group">
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="radio"
-                                                    name="priceSort"
-                                                    value="asc"
-                                                />Price ascending</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="radio"
-                                                    name="priceSort"
-                                                    value="desc"
-                                                />Price descending</label
-                                            >
+                            <!-- Flight -->
+                            <!-- Sort -->
+                            <div class="sidebar-item mb-3">
+                                <div class="item-title">
+                                    <i class="bi bi-sort-down"></i>
+                                    Sort
+                                </div>
+                                <!-- Price -->
+                                <div class="filter-item">
+                                    <button
+                                            class="btn btn-toggle border-0 collapsed"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#price-collapse"
+                                            aria-expanded="false"
+                                    >
+                                        <b>Price</b>
+                                    </button>
+                                    <div class="collapse" id="price-collapse">
+                                        <div class="filter-group">
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="radio"
+                                                            name="priceSort"
+                                                            value="asc"
+                                                    />Price ascending</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="radio"
+                                                            name="priceSort"
+                                                            value="desc"
+                                                    />Price descending</label
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Price -->
-                            <!-- Duration -->
-                            <div class="filter-item">
-                                <button
-                                    class="btn btn-toggle border-0 collapsed"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#duration-collapse"
-                                    aria-expanded="false"
-                                >
-                                    <b>Duration</b>
-                                </button>
-                                <div class="collapse" id="duration-collapse">
-                                    <div class="filter-group">
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="radio"
-                                                    name="durationSort"
-                                                    value="asc"
-                                                />Duration ascending</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="radio"
-                                                    name="durationSort"
-                                                    value="desc"
-                                                />Duration descending</label
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Duration -->
-                        </div>
-                        <!-- Sort -->
-
-                        <!-- Filter -->
-                        <div class="sidebar-item">
-                            <div class="item-title">
-                                <i class="bi bi-filter"></i>
-                                Filter
-                            </div>
-                            <!-- Airlines -->
-                            <div class="filter-item">
-                                <button
-                                    class="btn btn-toggle border-0 collapsed"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#airline-collapse"
-                                    aria-expanded="false"
-                                >
-                                    <b>Airlines</b>
-                                </button>
-                                <div class="collapse" id="airline-collapse">
-                                    <div class="filter-group">
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="airline[]"
-                                                    value="vna"
-                                                />Vietnam Airlines</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="airline[]"
-                                                    value="vietjet"
-                                                />Vietjet Air</label
-                                            >
+                                <!-- Price -->
+                                <!-- Duration -->
+                                <div class="filter-item">
+                                    <button
+                                            class="btn btn-toggle border-0 collapsed"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#duration-collapse"
+                                            aria-expanded="false"
+                                    >
+                                        <b>Duration</b>
+                                    </button>
+                                    <div class="collapse" id="duration-collapse">
+                                        <div class="filter-group">
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="radio"
+                                                            name="durationSort"
+                                                            value="asc"
+                                                    />Duration ascending</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="radio"
+                                                            name="durationSort"
+                                                            value="desc"
+                                                    />Duration descending</label
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Duration -->
                             </div>
-                            <!-- Airlines -->
-                            <!-- Departure Time -->
-                            <div class="filter-item">
-                                <button
-                                    class="btn btn-toggle border-0 collapsed"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#departure-collapse"
-                                    aria-expanded="false"
-                                >
-                                    <b>Departure time</b>
-                                </button>
-                                <div class="collapse" id="departure-collapse">
-                                    <div class="filter-group">
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="departure[]"
-                                                    value="morning"
-                                                />Morning (06:00 - 12:00)</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="departure[]"
-                                                    value="afternoon"
-                                                />Afternoon (12:00 -
-                                                18:00)</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="departure[]"
-                                                    value="evening"
-                                                />Evening (18:00 - 24:00)</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="departure[]"
-                                                    value="night"
-                                                />Night (00:00 - 06:00)</label
-                                            >
+                            <!-- Sort -->
+                            <!-- Filter -->
+                            <div class="sidebar-item">
+                                <div class="item-title">
+                                    <i class="bi bi-filter"></i>
+                                    Filter
+                                </div>
+                                <!-- Airlines -->
+                                <input type="hidden" id="input-filter-airline">
+                                <div class="filter-item">
+                                    <button
+                                            class="btn btn-toggle border-0 collapsed"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#airline-collapse"
+                                            aria-expanded="false"
+                                    >
+                                        <b>Airlines</b>
+                                    </button>
+                                    <div class="collapse" id="airline-collapse">
+                                        <div class="filter-group">
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="airline[]"
+                                                            value="vna"
+                                                    />Vietnam Airlines</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="airline[]"
+                                                            value="vietjet"
+                                                    />Vietjet Air</label
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Departure Time -->
-                            <!-- Arrival Time -->
-                            <div class="filter-item">
-                                <button
-                                    class="btn btn-toggle border-0 collapsed"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#arrival-collapse"
-                                    aria-expanded="false"
-                                >
-                                    <b>Arrival time</b>
-                                </button>
-                                <div class="collapse" id="arrival-collapse">
-                                    <div class="filter-group">
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="arrival[]"
-                                                    value="morning"
-                                                />Morning (06:00 - 12:00)</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="arrival[]"
-                                                    value="afternoon"
-                                                />Afternoon (12:00 -
-                                                18:00)</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="arrival[]"
-                                                    value="evening"
-                                                />Evening (18:00 - 24:00)</label
-                                            >
-                                        </div>
-                                        <div class="mt-1">
-                                            <label class="form-check-label">
-                                                <input
-                                                    class="form-check-input me-3"
-                                                    type="checkbox"
-                                                    name="arrival[]"
-                                                    value="night"
-                                                />Night (00:00 - 06:00)</label
-                                            >
+                                <!-- Airlines -->
+                                <!-- Departure Time -->
+                                <div class="filter-item">
+                                    <button
+                                            class="btn btn-toggle border-0 collapsed"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#departure-collapse"
+                                            aria-expanded="false"
+                                    >
+                                        <b>Departure time</b>
+                                    </button>
+                                    <div class="collapse" id="departure-collapse">
+                                        <div class="filter-group">
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="departure[]"
+                                                            value="morning"
+                                                    />Morning (06:00 - 12:00)</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="departure[]"
+                                                            value="afternoon"
+                                                    />Afternoon (12:00 -
+                                                    18:00)</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="departure[]"
+                                                            value="evening"
+                                                    />Evening (18:00 - 24:00)</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="departure[]"
+                                                            value="night"
+                                                    />Night (00:00 - 06:00)</label
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Departure Time -->
+                                <!-- Arrival Time -->
+                                <div class="filter-item">
+                                    <button
+                                            class="btn btn-toggle border-0 collapsed"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#arrival-collapse"
+                                            aria-expanded="false"
+                                    >
+                                        <b>Arrival time</b>
+                                    </button>
+                                    <div class="collapse" id="arrival-collapse">
+                                        <div class="filter-group">
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="arrival[]"
+                                                            value="morning"
+                                                    />Morning (06:00 - 12:00)</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="arrival[]"
+                                                            value="afternoon"
+                                                    />Afternoon (12:00 -
+                                                    18:00)</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="arrival[]"
+                                                            value="evening"
+                                                    />Evening (18:00 - 24:00)</label
+                                                >
+                                            </div>
+                                            <div class="mt-1">
+                                                <label class="form-check-label">
+                                                    <input
+                                                            class="form-check-input me-3"
+                                                            type="checkbox"
+                                                            name="arrival[]"
+                                                            value="night"
+                                                    />Night (00:00 - 06:00)</label
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Arrival Time -->
                             </div>
-                            <!-- Arrival Time -->
-                        </div>
-                        <!-- Filter -->
+                            <!-- Filter -->
+                            </div>
+                    <div class="col-9" id="flight-all-container">
                     </div>
-                    <div class="col-9">
-                        <div class="flight-container mb-3">
-                            <div class="flight-info-container mb-3">
-                                <div class="airline-logo">
-                                    <img src="images/vna-logo.png" alt="" />
-                                    <div class="airline-name">
-                                        Vietnam Airlines
-                                    </div>
-                                </div>
-                                <div class="vertical-seperator"></div>
-                                <div class="flight-info">
-                                    <div class="departure-info">
-                                        <div class="day">Monday</div>
-                                        <div class="time">09:30</div>
-                                        <div class="airport-code">SGN</div>
-                                    </div>
-                                    <div class="duration-info mx-lg-4 mx-md-3 mx-sm-1">
-                                        <div class="duration">2h 30m</div>
-                                        <div class="d-flex align-items-center">
-                                            <i
-                                                class="text-primary fa-regular fa-circle"
-                                            ></i>
-                                            <div
-                                                class="horizontal-dashed-seperator"
-                                            ></div>
-                                            <i
-                                                class="text-primary fa-solid fa-circle"
-                                            ></i>
-                                        </div>
-                                        <a
-                                            class="link-underline link-underline-opacity-0 link-primary btn-detail"
-                                            >Details
-                                            <i
-                                                class="fa-solid fa-chevron-down"
-                                            ></i
-                                        ></a>
-                                    </div>
-                                    <div class="departure-info">
-                                        <div class="day">Monday</div>
-                                        <div class="time">11:30</div>
-                                        <div class="airport-code">SGN</div>
-                                    </div>
-                                </div>
-                                <div class="vertical-dashed-seperator"></div>
-                                <div
-                                    class="book-info d-flex flex-column align-items-center justify-content-center"
-                                >
-                                    <div class="price-info">
-                                        <span class="price">3.999.000 VND</span>
-                                        <span class="text-secondary fs-4">
-                                            / pax</span
-                                        >
-                                    </div>
-                                    <button class="btn btn-primary w-100">
-                                        Book
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="flight-detail-container collapse">
-                                <div class="flight-detail">
-                                    <div
-                                        class="d-flex flex-column justify-content-between align-items-end"
-                                    >
-                                        <div>
-                                            <div class="time">09:30</div>
-                                            <div class="date">24 Sep</div>
-                                        </div>
-                                        <div class="duration">2h 30m</div>
-                                        <div>
-                                            <div class="time">09:30</div>
-                                            <div class="date">24 Sep</div>
-                                        </div>
-                                    </div>
-                                    <div class="vertical-dashed-seperator mx-4">
-                                        <i
-                                            class="text-primary fa-regular fa-circle"
-                                            style="background-color: #f2f7ff"
-                                        ></i>
-                                        <i
-                                            class="text-primary fa-solid fa-circle mt-auto"
-                                        ></i>
-                                    </div>
-                                    <div
-                                        class="d-flex flex-column justify-content-between"
-                                    >
-                                        <div>
-                                            <div class="text-large fw-bold">
-                                                Ho Chi Minh City (SGN)
-                                            </div>
-                                            <div
-                                                class="text-small text-secondary"
-                                            >
-                                                Tan Son Nhat Airport
-                                            </div>
-                                        </div>
-                                        <div class="my-4">
-                                            <div class="text-large fw-bold">
-                                                Vietnam Airlines
-                                            </div>
-                                            <div class="text-large fw-bold">
-                                                VN6420 • Economy
-                                            </div>
-                                            <div
-                                                class="text-small text-secondary"
-                                            >
-                                                Baggage 23kg
-                                            </div>
-                                            <div
-                                                class="text-small text-secondary"
-                                            >
-                                                Cabin baggage 1 x 7kg
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="text-large fw-bold">
-                                                Ha Noi (HAN)
-                                            </div>
-                                            <div
-                                                class="text-small text-secondary"
-                                            >
-                                                Noi Bai Airport
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flight-container">
-                            <div class="flight-info-container">
-                                <div class="airline-logo">
-                                    <img src="images/vietjet-logo.png" alt="" />
-                                    <div class="airline-name">Vietjet Air</div>
-                                </div>
-                                <div class="vertical-seperator"></div>
-                                <div class="flight-info">
-                                    <div class="departure-info">
-                                        <div class="day">Monday</div>
-                                        <div class="time">09:30</div>
-                                        <div class="airport-code">SGN</div>
-                                    </div>
-                                    <div class="duration-info mx-lg-4">
-                                        <div class="duration">2h 30m</div>
-                                        <div class="d-flex align-items-center">
-                                            <i
-                                                class="text-primary fa-regular fa-circle"
-                                            ></i>
-                                            <div
-                                                class="horizontal-dashed-seperator"
-                                            ></div>
-                                            <i
-                                                class="text-primary fa-solid fa-circle"
-                                            ></i>
-                                        </div>
-                                        <a
-                                            class="link-underline link-underline-opacity-0 link-primary"
-                                            >Details
-                                            <i
-                                                class="fa-solid fa-chevron-down"
-                                            ></i
-                                        ></a>
-                                    </div>
-                                    <div class="departure-info">
-                                        <div class="day">Monday</div>
-                                        <div class="time">11:30</div>
-                                        <div class="airport-code">SGN</div>
-                                    </div>
-                                </div>
-                                <div class="vertical-dashed-seperator"></div>
-                                <div
-                                    class="book-info d-flex flex-column align-items-center justify-content-center"
-                                >
-                                    <div class="price-info">
-                                        <span class="price">3.999.000 VND</span>
-                                        <span class="text-secondary fs-4">
-                                            / pax</span
-                                        >
-                                    </div>
-                                    <button class="btn btn-primary w-100">
-                                        Book
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
