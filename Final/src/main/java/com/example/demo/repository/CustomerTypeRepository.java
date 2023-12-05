@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface CustomerTypeRepository extends JpaRepository<CustomerType, Integer> {
     CustomerType findByTypeId(int id);
+    CustomerType findByTypeNameIgnoreCase(String s);
 }
