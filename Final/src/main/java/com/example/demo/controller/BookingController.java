@@ -42,14 +42,15 @@ public class BookingController {
     public String booking(HttpServletRequest req, Model model) {
         HttpSession session = req.getSession();
 
-        session.setAttribute("flight1Id", 1);
-        session.setAttribute("flight2Id", 3);
-        session.setAttribute("isReturn", false);
-        session.setAttribute("ticketClass1Id", 2);
-        session.setAttribute("ticketClass2Id", 3);
+        if (session.getAttribute("flight1Id") == null || session.getAttribute("ticketClass1Id") == null)
+            return "redirect:/";
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
 
-        FlightPlane flight1 = flightPlaneService.findById(1);
-        FlightPlane flight2 = flightPlaneService.findById(3);
+        FlightPlane flight1 = flightPlaneService.findById((int) session.getAttribute("flight1Id"));
+        FlightPlane flight2 = isReturn ? flightPlaneService.findById((int) session.getAttribute("flight2Id")) : null;
+        List<Baggage> baggages = baggageService.getAllBaggages();
+        TicketClass ticketClass1 = ticketClassService.getById((int) session.getAttribute("ticketClass1Id"));
+        TicketClass ticketClass2 = isReturn ? ticketClassService.getById((int) session.getAttribute("ticketClass2Id")) : null;
 
         BookingDetail form = new BookingDetail();
         List<PassengerDTO> passengerDTOS = new ArrayList<>();
@@ -67,7 +68,12 @@ public class BookingController {
 
         model.addAttribute("form", form);
         model.addAttribute("flight1", new FlightDTO(flight1));
-        model.addAttribute("flight2", new FlightDTO(flight2));
+        model.addAttribute("ticketClass1", ticketClass1);
+        if (isReturn) {
+            model.addAttribute("flight2", new FlightDTO(flight2));
+            model.addAttribute("ticketClass2", ticketClass2);
+        }
+        model.addAttribute("isReturn", isReturn);
         return "booking";
     }
 
@@ -200,7 +206,7 @@ public class BookingController {
         HttpSession session = req.getSession();
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
 
         BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
 
@@ -227,7 +233,7 @@ public class BookingController {
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
 
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
 
 
         BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
@@ -259,7 +265,7 @@ public class BookingController {
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
 
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
         FlightPlane flightPlane1 = flightPlaneService.getFlightPlaneById((int)session.getAttribute("flight1Id"));
         FlightPlane flightPlane2 = isReturn ? flightPlaneService.getFlightPlaneById((int) session.getAttribute("flight2Id")) : null;
 
@@ -368,7 +374,8 @@ public class BookingController {
         }
         reservation.setTimeCreated(new Date());
         reservation.setTotal(total);
-        reservationService.create(reservation);
+        reservation = reservationService.create(reservation);
+        model.addAttribute("reservation");
         return "booking-complete";
     }
 

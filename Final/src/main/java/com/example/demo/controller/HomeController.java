@@ -44,11 +44,11 @@ public class HomeController {
                                            @RequestParam("departureTicketClassId") int departureTicketClassId,
                                            @RequestParam("arrivalTicketClassId") int arrivalTicketClassId
                                            ){
-        httpSession.setAttribute("isReturn","true");
-        httpSession.setAttribute("flight1Id",departureFlightId);
-        httpSession.setAttribute("flight2Id",arrivalFlightId);
-        httpSession.setAttribute("flight1TicketClassId",departureTicketClassId);
-        httpSession.setAttribute("flight2TicketClassId",arrivalTicketClassId);
+        httpSession.setAttribute("isReturn",true);
+        httpSession.setAttribute("flight1Id", Integer.parseInt(departureFlightId));
+        httpSession.setAttribute("flight2Id", Integer.parseInt(arrivalFlightId));
+        httpSession.setAttribute("ticketClass1Id",departureTicketClassId);
+        httpSession.setAttribute("ticketClass2Id",arrivalTicketClassId);
         return "success";
     }
 
@@ -57,9 +57,9 @@ public class HomeController {
     public String sendDataSessionForNotReturn(@RequestParam("departureFlightId") String departureFlightId,
                                            @RequestParam("departureTicketClassId") int departureTicketClassId
     ){
-        httpSession.setAttribute("isReturn","false");
-        httpSession.setAttribute("flight1Id",departureFlightId);
-        httpSession.setAttribute("flight1TicketClassId",departureTicketClassId);
+        httpSession.setAttribute("isReturn",false);
+        httpSession.setAttribute("flight1Id", Integer.parseInt(departureFlightId));
+        httpSession.setAttribute("ticketClass1Id",departureTicketClassId);
         return "success";
     }
 }

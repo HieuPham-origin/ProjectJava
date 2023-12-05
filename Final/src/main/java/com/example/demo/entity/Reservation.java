@@ -27,6 +27,7 @@ public class Reservation {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeCreated;
 
+    @Column(name = "total")
     private int total;
 
     @ManyToOne

@@ -122,7 +122,7 @@
                                 <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
                                     <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
                                     <div th:if="${bookingDetail.baggageIds1[iStat.index] == 0}" class="ms-auto">No extra baggage</div>
-                                    <div th:if="${bookingDetail.baggageIds1[iStat.index] != 0}" th:text="${baggageList1[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList1[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
+                                    <div th:if="${bookingDetail.baggageIds1[iStat.index] != 0}" th:text="${baggageList1[iStat.index].baggageName + ' - ' + baggageList1[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList1[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
                                 </div>
                             </div>
                             <hr th:if="${isReturn && bookingDetail.hasExtraBaggage1 && bookingDetail.hasExtraBaggage2}">
@@ -131,7 +131,7 @@
                                 <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
                                     <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
                                     <div th:if="${bookingDetail.baggageIds2[iStat.index] == 0}" class="ms-auto">No extra baggage</div>
-                                    <div th:if="${bookingDetail.baggageIds2[iStat.index] != 0}" th:text="${baggageList2[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList2[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
+                                    <div th:if="${bookingDetail.baggageIds2[iStat.index] != 0}" th:text="${baggageList2[iStat.index].baggageName + ' - ' + baggageList2[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList2[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
                                 </div>
                             </div>
                         </div>
