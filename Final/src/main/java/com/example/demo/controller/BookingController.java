@@ -288,11 +288,13 @@ public class BookingController {
         Reservation reservation = new Reservation();
         reservation.setTickets(new ArrayList<>());
         int total = 0;
+        System.out.println("1");
         for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
             int ticketTotal = flightPlane1.getFlight().getFlightPrice() * ticketClass1.getRate();
             PassengerDTO passengerDTO = bookingDetail.getPassengerDTOS().get(i);
             Ticket ticket = new Ticket();
             ticket.setReservation(reservation);
+            ticket.setTicketClass(ticketClass1);
             if (bookingDetail.getBaggageIds1().get(i) != 0) {
                 Baggage baggage = baggageService.getById(bookingDetail.getBaggageIds1().get(i));
                 ticket.setBaggage(baggage);
@@ -312,13 +314,16 @@ public class BookingController {
             }
             else
                 seatDetail = seatService.getSeatDetailById(bookingDetail.getSeatDetailIds1().get(i));
-            if (seatDetail == null)
-                continue;
+            if (seatDetail == null) {
+                // continue
+            }
             ticket.setSeatDetail(seatDetail);
             ticket.setDayOrder(new Date());
             ticket.setTotalPrice(ticketTotal);
-            seatDetail.setTaken(true);
-            seatDetail.setTicket(ticket);
+            if (seatDetail != null) {
+                seatDetail.setTaken(true);
+                seatDetail.setTicket(ticket);
+            }
             Passenger passenger = new Passenger();
             passenger.setType(customerTypeService.getCustomerTypeByName(passengerDTO.getType()));
             passenger.setGender(passengerDTO.getGender());
@@ -328,11 +333,13 @@ public class BookingController {
             passenger.setLastName(passengerDTO.getLastName());
 
             ticket.setPassenger(passenger);
-            ticketService.create(ticket);
+            ticket.setDayPay(new Date());
+            //ticket = ticketService.create(ticket);
             reservation.getTickets().add(ticket);
 
             total += ticketTotal;
         }
+        System.out.println("2");
 
         if (isReturn) {
             for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
@@ -345,6 +352,7 @@ public class BookingController {
                     ticket.setBaggage(baggage);
                     ticketTotal += baggage.getPrice();
                 }
+                ticket.setTicketClass(ticketClass2);
 
                 SeatDetail seatDetail = null;
                 if (bookingDetail.getSeatDetailIds2().get(i) == 0) { // not choose seat
@@ -358,13 +366,16 @@ public class BookingController {
                 }
                 else
                     seatDetail = seatService.getSeatDetailById(bookingDetail.getSeatDetailIds2().get(i));
-                if (seatDetail == null)
-                    continue;
+                if (seatDetail == null) {
+                    // continue
+                }
                 ticket.setSeatDetail(seatDetail);
                 ticket.setDayOrder(new Date());
                 ticket.setTotalPrice(ticketTotal);
-                seatDetail.setTaken(true);
-                seatDetail.setTicket(ticket);
+                if (seatDetail != null) {
+                    seatDetail.setTaken(true);
+                    seatDetail.setTicket(ticket);
+                }
                 Passenger passenger = new Passenger();
                 passenger.setType(customerTypeService.getCustomerTypeByName(passengerDTO.getType()));
                 passenger.setGender(passengerDTO.getGender());
@@ -372,20 +383,22 @@ public class BookingController {
                 passenger.setDateOfBirth(passengerDTO.getDateOfBirth());
                 passenger.setFirstName(passengerDTO.getFirstName());
                 passenger.setLastName(passengerDTO.getLastName());
-
+                ticket.setDayPay(new Date());
                 ticket.setPassenger(passenger);
-                ticketService.create(ticket);
+                //ticket = ticketService.create(ticket);
                 reservation.getTickets().add(ticket);
                 total += ticketTotal;
             }
         }
+        System.out.println("3");
 
-        if (session.getAttribute("sessionPassenger") != null) { // book with account
-            Passenger user = (Passenger) session.getAttribute("sessionPassenger");
-            reservation.setAccount(accountService.getAccountByUsername(user.getEmail()));
+        if (session.getAttribute("sessionAccount") != null) { // book with account
+            Account account = (Account) session.getAttribute("sessionAccount");
+            reservation.setAccount(account);
         }
         reservation.setTimeCreated(new Date());
         reservation.setTotal(total);
+        System.out.println(total);
         reservation.setContactEmail(bookingDetail.getContactDetail().getEmail());
         reservation.setContactName(bookingDetail.getContactDetail().getLastName() + ' ' + bookingDetail.getContactDetail().getLastName());
         reservation.setContactPhone(bookingDetail.getContactDetail().getPhoneNumber());
