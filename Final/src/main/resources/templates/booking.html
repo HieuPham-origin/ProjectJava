@@ -203,9 +203,7 @@
         <h2>Your flights</h2>
         <div class="item-container mb-3">
             <div class="item-content">
-                <div
-                        class="flight-item selected d-flex align-content-center"
-                >
+                <div class="flight-item d-flex align-content-center">
                     <div class="icon mx-3">
                         <img
                                 src="/images/flight-departure.png"
@@ -233,7 +231,7 @@
                             </div>
                         </div>
                         <div class="ms-auto">
-                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(priceTicket, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                             <span class="text-secondary"> / pax</span>
@@ -263,7 +261,7 @@
                     </div>
                 </div>
                 <hr />
-                <div class="flight-item d-flex align-content-center">
+                <div th:if="${isReturn=='true'}" class="flight-item d-flex align-content-center">
                     <div class="icon mx-3">
                         <img
                                 src="/images/flight-destination.png"
@@ -278,7 +276,7 @@
                         <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
                     </div>
                 </div>
-                <div th:object="${flight2}" id="chosen-departure-flight" class="flight-chosen">
+                <div th:if="${isReturn=='true'}" th:object="${flight2}" id="chosen-arrival-flight" class="flight-chosen">
                     <div class="d-flex mb-2">
                         <div class="logo me-2">
                             <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
@@ -291,7 +289,7 @@
                             </div>
                         </div>
                         <div class="ms-auto">
-                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(priceTicket, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                             <span class="text-secondary"> / pax</span>
