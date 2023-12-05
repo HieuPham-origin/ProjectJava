@@ -112,7 +112,7 @@ public class ProfileController {
     }
 
     @GetMapping("/reservations")
-    public String reservations(HttpSession session) {
+    public String reservations(HttpSession session, Model model) {
         Account account = (Account) session.getAttribute("sessionAccount");
         if (account == null) {
             return "redirect:/login";
@@ -120,7 +120,9 @@ public class ProfileController {
         else{
             Reservation reservation = reservationService.findByAccount(account);
             System.out.println(reservation.getId());
+            model.addAttribute("reservation",reservation);
+            model.addAttribute("total",reservation.getTotal());
+            return "profile-reservation";
         }
-        return "profile-reservation";
     }
 }
