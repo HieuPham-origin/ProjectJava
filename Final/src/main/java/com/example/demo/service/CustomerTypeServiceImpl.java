@@ -14,4 +14,9 @@ public class CustomerTypeServiceImpl implements CustomerTypeService{
     public CustomerType getCustomerTypeById(int id) {
         return customerTypeRepository.findByTypeId(id);
     }
+
+    @Override
+    public CustomerType getCustomerTypeByName(String s) {
+        return customerTypeRepository.findByTypeNameIgnoreCase(s);
+    }
 }

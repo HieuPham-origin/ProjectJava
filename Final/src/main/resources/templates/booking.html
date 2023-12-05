@@ -155,6 +155,21 @@
                     <div class="form-text">e.g. Van A</div>
                 </div>
                 <div class="form-floating col-6 mb-3">
+                    <select
+                            class="form-select"
+                            th:field="*{passengerDTOS[__${iStat.index}__].gender}"
+                            th:id="${'input-gender-' + iStat.index}"
+                            placeholder=""
+                            required
+                    >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <label th:for="${'input-gender-' + iStat.index}"
+                    >Gender</label
+                    >
+                </div>
+                <div class="form-floating col-6 mb-3">
                     <input
                             type="date"
                             class="form-control"
@@ -208,8 +223,8 @@
                 <div th:object="${flight1}" id="chosen-departure-flight" class="flight-chosen">
                     <div class="d-flex mb-2">
                         <div class="logo me-2">
-                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vietjet-logo.png" alt="" />
-                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vna-logo.png" alt="" />
+                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
+                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vietjet-logo.png" alt="" />
                         </div>
                         <div>
                             <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
@@ -266,8 +281,8 @@
                 <div th:object="${flight2}" id="chosen-departure-flight" class="flight-chosen">
                     <div class="d-flex mb-2">
                         <div class="logo me-2">
-                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vietjet-logo.png" alt="" />
-                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vna-logo.png" alt="" />
+                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
+                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vietjet-logo.png" alt="" />
                         </div>
                         <div>
                             <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>

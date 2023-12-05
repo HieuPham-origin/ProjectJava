@@ -16,4 +16,5 @@ public class PassengerDTO {
     private Date dateOfBirth;
     private String nationality;
     private String type;
+    private String gender;
 }

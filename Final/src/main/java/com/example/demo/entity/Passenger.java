@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "Passenger")
 @NoArgsConstructor
@@ -38,6 +40,9 @@ public class Passenger {
 
     @Column(name = "country", nullable = true)
     private String country;
+
+    @Column(name = "date_of_birth", nullable = true)
+    private Date dateOfBirth;
 
     @ManyToOne(optional = true,cascade = CascadeType.ALL)
     @JoinColumn(name = "type", referencedColumnName = "type_id")
