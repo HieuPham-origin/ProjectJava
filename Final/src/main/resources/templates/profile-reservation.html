@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -70,129 +70,221 @@
                 </div>
                 <div class="col-8">
                     <h2>Reservation history</h2>
-                    <div class="item-container mb-3">
-                        <div class="d-flex">
-                            <div>RESERVATION CODE: ABCXYZ &ensp;|&ensp; TIME CREATED: 4/12/2003</div>
-                            <a class="link-underline link-underline-opacity-0 ms-auto" href=""> <i class="fa-solid fa-ticket"></i> E-ticket</a>
-                        </div>
-                        <hr>
+                    <div th:each="reservation: ${reservations}">
                         <div class="item-container mb-3">
-                            <div class="item-content">
-                                <div
-                                    class="flight-item selected d-flex align-content-center"
-                                >
-                                    <div class="icon mx-3">
-                                        <img
-                                            src="/images/flight-departure.png"
-                                            alt=""
-                                            srcset=""
-                                        />
-                                    </div>
-                                    <div>
-                                        <div class="text-secondary text-smaller">
-                                            Thu, 06 Jul 2003
-                                        </div>
-                                        <div class="">Ho Chi Minh City → Hanoi</div>
-                                    </div>
+                            <div class="d-flex">
+                                <div>RESERVATION CODE: <span th:text="${reservation.code}"></span>  &ensp;|&ensp; TIME CREATED:
+                                    <span th:text="${reservation.timeCreated}"></span>
                                 </div>
-                                <div id="chosen-departure-flight" class="flight-chosen">
-                                    <div class="d-flex mb-2">
-                                        <div class="logo me-2">
-                                            <img src="/images/vna-logo.png" alt="" />
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold">Vietnam Airlines</div>
-                                            <div class="text-secondary">
-                                                VN6420 • Eco
+                                <a class="link-underline link-underline-opacity-0 ms-auto" href=""> <i class="fa-solid fa-ticket"></i> E-ticket</a>
+                            </div>
+                            <hr>
+                            <div class="item-container mb-3">
+                                <div class="item-content">
+                                    <div th:each="ticket: ${reservation.tickets}">
+                                        <div
+                                                class="flight-item selected d-flex align-content-center"
+                                        >
+                                            <div th:if="${ticket.seatDetail.flightPlane.flight.flightAirline=='Vietjet Air'}" class="icon mx-3">
+                                                <img
+                                                        style="height:50px; width: auto"
+                                                        src="/images/vietjet-logo.png"
+                                                        alt=""
+                                                        srcset=""
+                                                />
+                                            </div>
+                                            <div th:if="${ticket.seatDetail.flightPlane.flight.flightAirline=='Vietnam Airlines'}" class="icon mx-3">
+                                                <img
+                                                        style="height:50px; width: auto"
+                                                        src="/images/vna-logo.png"
+                                                        alt=""
+                                                        srcset=""
+                                                />
+                                            </div>
+                                            <div>
+                                                <div class="text-secondary text-smaller">
+                                                    <span th:text="${ticket.seatDetail.flightPlane.departureDay}"></span>
+                                                </div>
+                                                <div class="">
+                                                    <span th:text="${ticket.seatDetail.flightPlane.flight.departureAirport.city}"></span>
+                                                    →
+                                                    <span th:text="${ticket.seatDetail.flightPlane.flight.arrivalAirport.city}"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="fw-bold">SGN</div>
-                                            <div class="text-secondary">Tan Son Nhat Airport</div>
-                                            <div class="text-larger fw-bold">09:00</div>
-                                        </div>
-                                        <div class="text-secondary">•</div>
-                                        <div
-                                            class="d-flex flex-column align-items-center"
-                                        >
-                                            <i
-                                                class="fa-solid fa-plane text-secondary"
-                                            ></i>
-                                            <div class="text-secondary">2h 30m</div>
-                                        </div>
-                                        <div class="text-secondary">•</div>
-        
-                                        <div class="text-end">
-                                            <div class="fw-bold">HAN</div>
-                                            <div class="text-secondary">Noi Bai Airport</div>
-                                            <div class="text-larger fw-bold">11:30</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr />
-                                <div class="flight-item d-flex align-content-center">
-                                    <div class="icon mx-3">
-                                        <img
-                                            src="/images/flight-destination.png"
-                                            alt=""
-                                            srcset=""
-                                        />
-                                    </div>
-                                    <div>
-                                        <div class="text-secondary text-smaller">
-                                            Thu, 06 Jul 2003
-                                        </div>
-                                        <div class="">Hanoi → Ho Chi Minh City</div>
-                                    </div>
-                                </div>
-                                <div id="chosen-departure-flight" class="flight-chosen">
-                                    <div class="d-flex mb-2">
-                                        <div class="logo me-2">
-                                            <img src="/images/vna-logo.png" alt="" />
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold">Vietnam Airlines</div>
-                                            <div class="text-secondary">
-                                                VN6420 • Eco
+                                        <div id="chosen-departure-flight" class="flight-chosen">
+                                            <div class="d-flex mb-2">
+                                                <div th:if="${ticket.seatDetail.flightPlane.flight.flightAirline=='Vietjet Air'}" class="logo me-2">
+                                                    <img src="/images/vietjet-logo.png" alt="" />
+                                                </div>
+                                                <div th:if="${ticket.seatDetail.flightPlane.flight.flightAirline=='Vietnam Airlines'}" class="logo me-2">
+                                                    <img src="/images/vna-logo.png" alt="" />
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">Vietnam Airlines</div>
+                                                    <div class="text-secondary">
+                                                        <span th:text="${ticket.seatDetail.flightPlane.plane.planeName}"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <div class="fw-bold">
+                                                        <span th:text="${ticket.seatDetail.flightPlane.flight.departureAirport.airportCode}"></span>
+                                                    </div>
+                                                    <div class="text-secondary">
+                                                        <span th:text="${ticket.seatDetail.flightPlane.flight.departureAirport.airportName}"></span>
+                                                    </div>
+                                                    <div class="text-larger fw-bold">
+                                                        <span th:text="${ticket.seatDetail.flightPlane.departureTime}"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="text-secondary">•</div>
+                                                <div
+                                                        class="d-flex flex-column align-items-center"
+                                                >
+                                                    <i
+                                                            class="fa-solid fa-plane text-secondary"
+                                                    ></i>
+                                                    <!--                                            <div class="text-secondary">2h 30m</div>-->
+                                                </div>
+                                                <div class="text-secondary">•</div>
+
+                                                <div class="text-end">
+                                                    <div class="fw-bold">
+                                                        <span th:text="${ticket.seatDetail.flightPlane.flight.arrivalAirport.airportCode}"></span>
+                                                    </div>
+                                                    <div class="text-secondary">
+                                                        <span th:text="${ticket.seatDetail.flightPlane.flight.arrivalAirport.airportName}"></span>
+                                                    </div>
+                                                    <div class="text-larger fw-bold">
+                                                        <span th:text="${ticket.seatDetail.flightPlane.arrivalTime}"></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-    
+                                        <hr />
                                     </div>
-        
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="fw-bold">SGN</div>
-                                            <div class="text-secondary">Tan Son Nhat Airport</div>
-                                            <div class="text-larger fw-bold">09:00</div>
-                                        </div>
-                                        <div class="text-secondary">•</div>
-                                        <div
-                                            class="d-flex flex-column align-items-center"
-                                        >
-                                            <i
-                                                class="fa-solid fa-plane text-secondary"
-                                            ></i>
-                                            <div class="text-secondary">2h 30m</div>
-                                        </div>
-                                        <div class="text-secondary">•</div>
-        
-                                        <div class="text-end">
-                                            <div class="fw-bold">HAN</div>
-                                            <div class="text-secondary">Noi Bai Airport</div>
-                                            <div class="text-larger fw-bold">11:30</div>
-                                        </div>
-                                    </div>
-                                </div> 
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <div class="me-2">TOTAL: </div>
+                                <div class="text-danger text-larger fw-bold">
+                                <span th:text="${#strings.replace(#strings.replace(#numbers.formatDecimal(reservation.getTotal(), 0, 'COMMA', 2, 'POINT'), '.00', ''), ',', '.')} + 'VND'">
+
+                                </span>
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="d-flex justify-content-end align-items-center">
-                            <div class="me-2">TOTAL: </div>
-                            <div class="text-danger text-larger fw-bold">5.000.000 VND</div>
-                        </div>
                     </div>
+<!--                    <div class="item-container mb-3">-->
+<!--                        <div class="d-flex">-->
+<!--                            <div>RESERVATION CODE: <span th:text="${reservation.code}"></span>  &ensp;|&ensp; TIME CREATED:-->
+<!--                                <span th:text="${reservation.timeCreated}"></span>-->
+<!--                            </div>-->
+<!--                            <a class="link-underline link-underline-opacity-0 ms-auto" href=""> <i class="fa-solid fa-ticket"></i> E-ticket</a>-->
+<!--                        </div>-->
+<!--                        <hr>-->
+<!--                        <div class="item-container mb-3">-->
+<!--                            <div class="item-content">-->
+<!--                                <div th:each="ticket: ${reservation.tickets}">-->
+<!--                                    <div-->
+<!--                                            class="flight-item selected d-flex align-content-center"-->
+<!--                                    >-->
+<!--                                        <div th:if="${ticket.seatDetail.flightPlane.flight.flightAirline=='Vietjet Air'}" class="icon mx-3">-->
+<!--                                            <img-->
+<!--                                                    style="height:50px; width: auto"-->
+<!--                                                src="/images/vietjet-logo.png"-->
+<!--                                                alt=""-->
+<!--                                                srcset=""-->
+<!--                                            />-->
+<!--                                        </div>-->
+<!--                                        <div th:if="${ticket.seatDetail.flightPlane.flight.flightAirline=='Vietnam Airlines'}" class="icon mx-3">-->
+<!--                                            <img-->
+<!--                                                    style="height:50px; width: auto"-->
+<!--                                                src="/images/vna-logo.png"-->
+<!--                                                alt=""-->
+<!--                                                srcset=""-->
+<!--                                            />-->
+<!--                                        </div>-->
+<!--                                        <div>-->
+<!--                                            <div class="text-secondary text-smaller">-->
+<!--                                               <span th:text="${ticket.seatDetail.flightPlane.departureDay}"></span>-->
+<!--                                            </div>-->
+<!--                                            <div class="">-->
+<!--                                                <span th:text="${ticket.seatDetail.flightPlane.flight.departureAirport.city}"></span>-->
+<!--                                                →-->
+<!--                                                <span th:text="${ticket.seatDetail.flightPlane.flight.arrivalAirport.city}"></span>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div id="chosen-departure-flight" class="flight-chosen">-->
+<!--                                        <div class="d-flex mb-2">-->
+<!--                                            <div th:if="${ticket.seatDetail.flightPlane.flight.flightAirline=='Vietjet Air'}" class="logo me-2">-->
+<!--                                                <img src="/images/vietjet-logo.png" alt="" />-->
+<!--                                            </div>-->
+<!--                                            <div th:if="${ticket.seatDetail.flightPlane.flight.flightAirline=='Vietnam Airlines'}" class="logo me-2">-->
+<!--                                                <img src="/images/vna-logo.png" alt="" />-->
+<!--                                            </div>-->
+<!--                                            <div>-->
+<!--                                                <div class="fw-bold">Vietnam Airlines</div>-->
+<!--                                                <div class="text-secondary">-->
+<!--                                                    <span th:text="${ticket.seatDetail.flightPlane.plane.planeName}"></span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="d-flex justify-content-between align-items-center">-->
+<!--                                            <div>-->
+<!--                                                <div class="fw-bold">-->
+<!--                                                    <span th:text="${ticket.seatDetail.flightPlane.flight.departureAirport.airportCode}"></span>-->
+<!--                                                </div>-->
+<!--                                                <div class="text-secondary">-->
+<!--                                                    <span th:text="${ticket.seatDetail.flightPlane.flight.departureAirport.airportName}"></span>-->
+<!--                                                </div>-->
+<!--                                                <div class="text-larger fw-bold">-->
+<!--                                                    <span th:text="${ticket.seatDetail.flightPlane.departureTime}"></span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="text-secondary">•</div>-->
+<!--                                            <div-->
+<!--                                                    class="d-flex flex-column align-items-center"-->
+<!--                                            >-->
+<!--                                                <i-->
+<!--                                                        class="fa-solid fa-plane text-secondary"-->
+<!--                                                ></i>-->
+<!--&lt;!&ndash;                                            <div class="text-secondary">2h 30m</div>&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                            <div class="text-secondary">•</div>-->
+
+<!--                                            <div class="text-end">-->
+<!--                                                <div class="fw-bold">-->
+<!--                                                    <span th:text="${ticket.seatDetail.flightPlane.flight.arrivalAirport.airportCode}"></span>-->
+<!--                                                </div>-->
+<!--                                                <div class="text-secondary">-->
+<!--                                                    <span th:text="${ticket.seatDetail.flightPlane.flight.arrivalAirport.airportName}"></span>-->
+<!--                                                </div>-->
+<!--                                                <div class="text-larger fw-bold">-->
+<!--                                                    <span th:text="${ticket.seatDetail.flightPlane.arrivalTime}"></span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <hr />-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <hr>-->
+<!--                        <div class="d-flex justify-content-end align-items-center">-->
+<!--                            <div class="me-2">TOTAL: </div>-->
+<!--                            <div class="text-danger text-larger fw-bold">-->
+<!--                                <span th:text="${#strings.replace(#strings.replace(#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT'), '.00', ''), ',', '.')} + 'VND'">-->
+
+<!--                                </span>-->
+<!--&lt;!&ndash;                                //5.000.000 VND&ndash;&gt;-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
         </main>

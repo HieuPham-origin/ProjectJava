@@ -83,16 +83,16 @@
             <h1>E-ticket</h1>
         </div>
         <hr>
-        <div class="content p-3">
-            <p>Dear <b th:text="${reservation.contactName}">Nguyen Van A</b></p>
-            <p>FreeFlight would like to confirm that your flight ticket has been reserved at <b th:text="${reservation.timeCreated}">16:20 - 22/11/2023</b></p>
+        <div th:object="${reservation}" class="content p-3">
+            <p>Dear <b th:text="*{reservation.contactName}">Nguyen Van A</b></p>
+            <p>FreeFlight would like to confirm that your flight ticket has been reserved at <b th:text="*{reservation.timeCreated}">16:20 - 22/11/2023</b></p>
             <div class="bg-primary-subtle d-flex flex-column align-items-center m-auto border border-1 border-light-subtle rounded p-3 mb-3" style="width: 400px;">
                 <div>RESERVATION CODE</div>
-                <h2 th:text="${reservation.code}" class="my-3">ABCXYZ</h2>
+                <h2 th:text="*{reservation.code}" class="my-3">ABCXYZ</h2>
                 <div class="text-secondary">Show this code to the check-in officer</div>
             </div>
             <h4>TICKET INFORMATION</h4>
-            <div th:object="${reservation.tickets.get(0).seatDetail.flightPlane}" class="item-container mb-3">
+            <div class="item-container mb-3">
                 <div class="item-content">
                     <div
                             class="flight-item selected d-flex align-content-center"
@@ -105,30 +105,30 @@
                             />
                         </div>
                         <div>
-                            <div th:text="*{#temporals.format(departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
+                            <div th:text="*{#temporals.format(flightPlane1.departureTime, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                                 Thu, 06 Jul 2003
                             </div>
-                            <div th:text="*{flight.departureAirport.city + ' → ' + flight.arrivalAirport.city}" class="">Ho Chi Minh City → Hanoi</div>
+                            <div th:text="*{flightPlane1.flight.departureAirport.city + ' → ' + flightPlane1.flight.arrivalAirport.city}" class="">Ho Chi Minh City → Hanoi</div>
                         </div>
                     </div>
                     <div id="chosen-departure-flight" class="flight-chosen">
                         <div class="d-flex mb-2">
                             <div class="logo me-2">
-                                <img th:if="*{flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
-                                <img th:if="*{flight.flightAirline.equals('Vietjet Air')}" src="/images/vietjet-logo.png" alt="" />
+                                <img th:if="*{flightPlane1.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
+                                <img th:if="*{flightPlane1.flight.flightAirline.equals('Vietjet Air')}" src="/images/vietjet-logo.png" alt="" />
                             </div>
                             <div>
                                 <div class="fw-bold">Vietnam Airlines</div>
-                                <div th:text="${reservation.tickets[0].seatDetail.flightPlane  + ' • ' + reservation.tickets[0].ticketClass.className}" class="text-secondary">
+                                <div th:text="*{flightPlane1.plane.planeName  + ' • ' + reservation.tickets[0].ticketClass.className}" class="text-secondary">
                                     VN6420 • Eco
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <div th:text="*{flight.departureAirport.airportCode}" class="fw-bold">SGN</div>
-                                <div th:text="*{flight.departureAirport.airportName}" class="text-secondary">Tan Son Nhat Airport</div>
-                                <div  class="text-larger fw-bold">09:00</div>
+                                <div th:text="*{flightPlane1.flight.departureAirport.airportCode}" class="fw-bold">SGN</div>
+                                <div th:text="*{flightPlane1.flight.departureAirport.airportName}" class="text-secondary">Tan Son Nhat Airport</div>
+                                <div th:text="*{flightPlane1.departureTime.toString().substring(0, 5)}" class="text-larger fw-bold">09:00</div>
                             </div>
                             <div class="text-secondary">•</div>
                             <div
@@ -137,19 +137,19 @@
                                 <i
                                         class="fa-solid fa-plane text-secondary"
                                 ></i>
-                                <div class="text-secondary">2h 30m</div>
+                                <div th:text="*{duration1}" class="text-secondary">2h 30m</div>
                             </div>
                             <div class="text-secondary">•</div>
 
                             <div class="text-end">
-                                <div class="fw-bold">HAN</div>
-                                <div class="text-secondary">Noi Bai Airport</div>
-                                <div class="text-larger fw-bold">11:30</div>
+                                <div th:text="*{flightPlane1.flight.arrivalAirport.airportCode}" class="fw-bold">HAN</div>
+                                <div th:text="*{flightPlane1.flight.arrivalAirport.airportName}" class="text-secondary">Noi Bai Airport</div>
+                                <div th:text="*{flightPlane1.arrivalTime.toString().substring(0, 5)}"  class="text-larger fw-bold">11:30</div>
                             </div>
                         </div>
                     </div>
-                    <hr />
-                    <div class="flight-item d-flex align-content-center">
+                    <hr th:if="*{isTwoWay()}" />
+                    <div th:if="*{isTwoWay()}" class="flight-item d-flex align-content-center">
                         <div class="icon mx-3">
                             <img
                                     src="/images/flight-destination.png"
@@ -158,31 +158,30 @@
                             />
                         </div>
                         <div>
-                            <div class="text-secondary text-smaller">
+                            <div th:text="*{#temporals.format(flightPlane2.departureTime, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                                 Thu, 06 Jul 2003
                             </div>
-                            <div class="">Hanoi → Ho Chi Minh City</div>
+                            <div th:text="*{flightPlane2.flight.departureAirport.city + ' → ' + flightPlane2.flight.arrivalAirport.city}" class="">Ho Chi Minh City → Hanoi</div>
                         </div>
                     </div>
-                    <div id="chosen-departure-flight" class="flight-chosen">
+                    <div th:if="*{isTwoWay()}" id="chosen-departure-flight" class="flight-chosen">
                         <div class="d-flex mb-2">
                             <div class="logo me-2">
-                                <img src="/images/vna-logo.png" alt="" />
+                                <img th:if="*{flightPlane2.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
+                                <img th:if="*{flightPlane2.flight.flightAirline.equals('Vietjet Air')}" src="/images/vietjet-logo.png" alt="" />
                             </div>
                             <div>
                                 <div class="fw-bold">Vietnam Airlines</div>
-                                <div class="text-secondary">
+                                <div th:text="*{flightPlane2.plane.planeName  + ' • ' + reservation.tickets[numberOfPassengers/2].ticketClass.className}" class="text-secondary">
                                     VN6420 • Eco
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <div class="fw-bold">SGN</div>
-                                <div class="text-secondary">Tan Son Nhat Airport</div>
-                                <div class="text-larger fw-bold">09:00</div>
+                                <div th:text="*{flightPlane2.flight.departureAirport.airportCode}" class="fw-bold">SGN</div>
+                                <div th:text="*{flightPlane2.flight.departureAirport.airportName}" class="text-secondary">Tan Son Nhat Airport</div>
+                                <div th:text="*{flightPlane2.departureTime.toString().substring(0, 5)}" class="text-larger fw-bold">09:00</div>
                             </div>
                             <div class="text-secondary">•</div>
                             <div
@@ -191,14 +190,14 @@
                                 <i
                                         class="fa-solid fa-plane text-secondary"
                                 ></i>
-                                <div class="text-secondary">2h 30m</div>
+                                <div th:text="*{duration2}" class="text-secondary">2h 30m</div>
                             </div>
                             <div class="text-secondary">•</div>
 
                             <div class="text-end">
-                                <div class="fw-bold">HAN</div>
-                                <div class="text-secondary">Noi Bai Airport</div>
-                                <div class="text-larger fw-bold">11:30</div>
+                                <div th:text="*{flightPlane2.flight.arrivalAirport.airportCode}" class="fw-bold">HAN</div>
+                                <div th:text="*{flightPlane2.flight.arrivalAirport.airportName}" class="text-secondary">Noi Bai Airport</div>
+                                <div th:text="*{flightPlane2.arrivalTime.toString().substring(0, 5)}"  class="text-larger fw-bold">11:30</div>
                             </div>
                         </div>
                     </div>
@@ -214,23 +213,32 @@
                 <th>Facilities</th>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Nguyen Van A</td>
-                    <td>3B</td>
-                    <td>ASDZXC</td>
+                <tr th:each="passenger, iStat : *{passengers}">
+                    <td th:text="${iStat.index + 1}">1</td>
+                    <td th:text="${passenger.name}">Nguyen Van A</td>
                     <td>
-                        20kg Baggage to HCM City
-                        <br>
-                        10kg Baggage to Ha Noi
+                        <span th:text="${passenger.getSeat1()}"></span>
+                        <br th:if="*{isTwoWay()}">
+                        <span th:if="*{isTwoWay()}" th:text="${passenger.getSeat2()}"></span>
                     </td>
+                    <td>
+                        <span th:text="${passenger.getTicket1Id()}"></span>
+                        <br th:if="*{isTwoWay()}">
+                        <span th:if="*{isTwoWay()}" th:text="${passenger.getTicket2Id()}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${passenger.getBaggage1()}"></span>
+                        <br th:if="*{isTwoWay()}">
+                        <span th:if="*{isTwoWay()}" th:text="${passenger.getBaggage2()}"></span>
+                    </td>
+
                 </tr>
                 </tbody>
             </table>
             <h4>PAYMENT</h4>
             <div class="bg-info-subtle d-flex flex-column align-items-center m-auto border border-1 border-light-subtle rounded p-3 mb-3" style="width: 400px;">
                 <div>TOTAL AMOUNT</div>
-                <h2 class="my-3">5.434.000₫</h2>
+                <h2 th:text="*{#numbers.formatDecimal(reservation.total, 0, 'POINT', 0, 'POINT') + '₫'}" class="my-3">5.434.000₫</h2>
             </div>
             <h4>NOTICE</h4>
             <p><i class="bi bi-passport text-larger me-2"></i>Show your ID/Passport and ticket at check-in counter.</p>

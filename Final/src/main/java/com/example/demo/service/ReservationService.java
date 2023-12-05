@@ -3,7 +3,9 @@ package com.example.demo.service;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Reservation;
 
+import java.util.List;
+
 public interface ReservationService {
     Reservation create(Reservation reservation);
-    Reservation findByAccount(Account account);
+    List<Reservation> findByAccount(Account account);
 }

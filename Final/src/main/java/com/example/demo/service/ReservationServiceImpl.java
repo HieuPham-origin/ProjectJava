@@ -6,6 +6,7 @@ import com.example.demo.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -23,7 +24,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation findByAccount(Account account) {
+    public List<Reservation> findByAccount(Account account) {
         return this.reservationRepository.findByAccount(account);
     }
 
