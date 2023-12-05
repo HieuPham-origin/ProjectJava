@@ -124,7 +124,7 @@ CREATE TABLE `Ticket`(
     `total_price` INT NOT NULL,
     `tax` INT,
     `service_id` INT,
-    `baggage_id` INT,d
+    `baggage_id` INT,
     `status` VARCHAR(255),
     `passenger_id` INT NOT NULL,
     `reservation_id` INT NOT NULL,
