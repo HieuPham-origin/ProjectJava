@@ -187,7 +187,7 @@ public class SearchController {
 
         }
         if (sortByPrice!=null){
-           return new SearchModel(ticketClassList, sortFlightsByDuration(intersectionList, sortByPrice));
+           return new SearchModel(ticketClassList, sortFlightByPrice(intersectionList, sortByPrice));
             //return sortFlightByPrice(intersectionList, sortByPrice);
         }
         return new SearchModel(ticketClassList, intersectionList);
