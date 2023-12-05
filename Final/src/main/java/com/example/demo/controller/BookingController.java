@@ -403,7 +403,7 @@ public class BookingController {
         reservation.setContactName(bookingDetail.getContactDetail().getLastName() + ' ' + bookingDetail.getContactDetail().getLastName());
         reservation.setContactPhone(bookingDetail.getContactDetail().getPhoneNumber());
         reservation = reservationService.create(reservation);
-        model.addAttribute("reservation", reservation);
+        model.addAttribute("reservation", new ReservationDTO(reservation));
         return "booking-complete";
     }
 
