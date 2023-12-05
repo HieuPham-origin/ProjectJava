@@ -41,42 +41,51 @@ public class BookingController {
     @GetMapping(value = {"", "/"})
     public String booking(HttpServletRequest req, Model model) {
         HttpSession session = req.getSession();
-        String isReturn = session.getAttribute("isReturn").toString();
-        if (isReturn.equals("true")){
-            String flight1Id = session.getAttribute("flight1Id").toString();
-            String flight2Id = session.getAttribute("flight2Id").toString();
-            int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
-            int flight2TicketClassId = Integer.parseInt(session.getAttribute("flight2TicketClassId").toString());
-            FlightPlane flight1 = flightPlaneService.findById(Integer.parseInt(flight1Id));
-            FlightPlane flight2 = flightPlaneService.findById(Integer.parseInt(flight2Id));
-            model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
-            model.addAttribute("flight2", new FlightDTO(flight2,flight2TicketClassId));
-            model.addAttribute("isReturn", isReturn);
-        } else {
-            String flight1Id = session.getAttribute("flight1Id").toString();
-            int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
-            FlightPlane flight1 = flightPlaneService.findById(Integer.parseInt(flight1Id));
-            model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
-            model.addAttribute("isReturn", isReturn);
-        }
+
+        if (session.getAttribute("flight1Id") == null || session.getAttribute("ticketClass1Id") == null)
+            return "redirect:/";
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
+
+        FlightPlane flight1 = flightPlaneService.findById((int) session.getAttribute("flight1Id"));
+        FlightPlane flight2 = isReturn ? flightPlaneService.findById((int) session.getAttribute("flight2Id")) : null;
+        List<Baggage> baggages = baggageService.getAllBaggages();
+        TicketClass ticketClass1 = ticketClassService.getById((int) session.getAttribute("ticketClass1Id"));
+        TicketClass ticketClass2 = isReturn ? ticketClassService.getById((int) session.getAttribute("ticketClass2Id")) : null;
+
         BookingDetail form = new BookingDetail();
         List<PassengerDTO> passengerDTOS = new ArrayList<>();
-        PassengerDTO passengerDTO = new PassengerDTO();
-        passengerDTO.setType("adult");
-        passengerDTOS.add(passengerDTO);
-        passengerDTO = new PassengerDTO();
+        String[] passengerInfos = ((String) session.getAttribute("passengerNumInfo")).split("/");
+        int adult = Integer.parseInt(passengerInfos[0]);
+        int child = Integer.parseInt(passengerInfos[1]);
+        int infant = Integer.parseInt(passengerInfos[2]);
 
-        passengerDTO.setType("child");
-        passengerDTOS.add(passengerDTO);
-        passengerDTO = new PassengerDTO();
-        passengerDTO.setType("infant");
-        passengerDTOS.add(passengerDTO);
+        for (int i = 0; i < adult; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("adult");
+            passengerDTOS.add(passengerDTO);
+        }
+
+        for (int i = 0; i < child; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("child");
+            passengerDTOS.add(passengerDTO);
+        }
+
+        for (int i = 0; i < infant; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("infant");
+            passengerDTOS.add(passengerDTO);
+        }
         form.setPassengerDTOS(passengerDTOS);
 
         model.addAttribute("form", form);
-
-
-
+        model.addAttribute("flight1", new FlightDTO(flight1));
+        model.addAttribute("ticketClass1", ticketClass1);
+        if (isReturn) {
+            model.addAttribute("flight2", new FlightDTO(flight2));
+            model.addAttribute("ticketClass2", ticketClass2);
+        }
+        model.addAttribute("isReturn", isReturn);
         return "booking";
     }
 
@@ -193,12 +202,9 @@ public class BookingController {
         model.addAttribute("seats1", new SeatContainer(seatDetails1));
         model.addAttribute("seats2", new SeatContainer(seatDetails2));
         model.addAttribute("bookingDetail", bookingDetail);
-
-        int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
-        int flight2TicketClassId = Integer.parseInt(session.getAttribute("flight2TicketClassId").toString());
-        model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
+        model.addAttribute("flight1", new FlightDTO(flight1));
         if (isReturn)
-            model.addAttribute("flight2", new FlightDTO(flight2,flight2TicketClassId));
+            model.addAttribute("flight2", new FlightDTO(flight2));
         model.addAttribute("ticketClass1", ticketClass1);
         if (isReturn)
             model.addAttribute("ticketClass2", ticketClass2);
@@ -212,7 +218,7 @@ public class BookingController {
         HttpSession session = req.getSession();
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
 
         BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
 
@@ -239,7 +245,7 @@ public class BookingController {
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
 
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
 
 
         BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
@@ -271,7 +277,7 @@ public class BookingController {
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
 
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
         FlightPlane flightPlane1 = flightPlaneService.getFlightPlaneById((int)session.getAttribute("flight1Id"));
         FlightPlane flightPlane2 = isReturn ? flightPlaneService.getFlightPlaneById((int) session.getAttribute("flight2Id")) : null;
 
@@ -380,7 +386,11 @@ public class BookingController {
         }
         reservation.setTimeCreated(new Date());
         reservation.setTotal(total);
-        reservationService.create(reservation);
+        reservation.setContactEmail(bookingDetail.getContactDetail().getEmail());
+        reservation.setContactName(bookingDetail.getContactDetail().getLastName() + ' ' + bookingDetail.getContactDetail().getLastName());
+        reservation.setContactPhone(bookingDetail.getContactDetail().getPhoneNumber());
+        reservation = reservationService.create(reservation);
+        model.addAttribute("reservation", reservation);
         return "booking-complete";
     }
 

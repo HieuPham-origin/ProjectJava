@@ -449,7 +449,7 @@ INSERT INTO `Service` (`service_name`, `price`, `description`) VALUES
 -- Tạo dữ liệu cho bảng Passenger
 INSERT INTO `Passenger` (`first_name`, `last_name`, `gender`, `date_of_birth`, `phone_number`, `email`, `address`, `country`, `type`)
 VALUES
-('David', 'Luis', 'Male', '2003-11-20', '357-456-0798', 'passenger@gmail.com', '19, TDTU', 'VN', 1),
+('David', 'Luis', 'Male', '2003-11-20', '357-456-0798', 'passenger@gmail.com', '19 TDTU', 'VN', 1),
 ('John', 'Doe', 'Male', '2000-01-01', '123-456-7890', 'john.doe@email.com', '123 Main St', 'USA', 1),
 ('Jane', 'Smith', 'Female', '2002-11-01', '987-654-3210', 'jane.smith@email.com', '456 Oak St', 'Canada', 2),
 ('Mike', 'Johnson', 'Male', '2003-10-11', '555-123-4567', 'mike.johnson@email.com', '789 Elm St', 'UK', 3),
@@ -473,8 +473,7 @@ VALUES
 
 -- Tạo dữ liệu cho bảng Account
 INSERT INTO `Account` (`username`, `password`, `role`) VALUES 
-('admin@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'ADMIN'),
-('passenger@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'USER');
+('admin@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'ADMIN');
 INSERT INTO `Account` (`username`, `password`, `role`)
 SELECT `email`, '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'USER' FROM `Passenger`;
 -- password: 123456
@@ -572,3 +571,39 @@ END //
 DELIMITER ;
 
 CALL InsertFlightPlaneCombination();
+
+-- Tạo dữ liệu cho bảng SeatDetail
+DELIMITER //
+
+CREATE PROCEDURE InsertSeatDetailData()
+BEGIN
+  DECLARE flight_plane_id_var INT;
+  DECLARE seat_id_var INT;
+  DECLARE done INT DEFAULT FALSE;
+
+  -- Lấy danh sách các flight_plane
+  DECLARE flight_plane_cursor CURSOR FOR SELECT `id` FROM `Flight_Plane`;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN flight_plane_cursor;
+
+  read_loop: LOOP
+    FETCH flight_plane_cursor INTO flight_plane_id_var;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+
+    -- Lấy số lượng seat hiện có
+    SET @num_seats = (SELECT COUNT(*) FROM `Seat`);
+
+    -- Thêm dữ liệu vào bảng SeatDetail
+    INSERT INTO `SeatDetail` (`is_taken`, `flight_plane_id`, `seat_id`)
+    VALUES (0, flight_plane_id_var, FLOOR(1 + RAND() * @num_seats));
+  END LOOP;
+
+  CLOSE flight_plane_cursor;
+END //
+
+DELIMITER ;
+
+CALL InsertSeatDetailData();

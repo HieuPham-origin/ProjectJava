@@ -182,13 +182,16 @@ public class SearchController {
 
         List<TicketClass> ticketClassList = this.ticketClassService.findAll();
 
+        if(sortByDuration != null && sortByPrice != null) {
+            return new SearchModel(ticketClassList, sortFlightByPriceAndDuration(intersectionList, sortByPrice, sortByDuration));
+        }
+
         if (sortByDuration!=null){
            return new SearchModel(ticketClassList, sortFlightsByDuration(intersectionList, sortByDuration));
 
         }
         if (sortByPrice!=null){
-           return new SearchModel(ticketClassList, sortFlightsByDuration(intersectionList, sortByPrice));
-            //return sortFlightByPrice(intersectionList, sortByPrice);
+            return new SearchModel(ticketClassList, sortFlightByPrice(intersectionList, sortByPrice));
         }
         return new SearchModel(ticketClassList, intersectionList);
         //return intersectionList;
@@ -224,6 +227,48 @@ public class SearchController {
         }
         return sortedFlightPlanes;
     }
+
+    public static List<FlightPlane> sortFlightByPriceAndDuration(List<FlightPlane> flightPlanes, String priceSortOrder, String durationSortOrder) {
+        List<FlightPlane> sortedFlightPlanes = new ArrayList<>(flightPlanes);
+
+        // Define the custom comparator based on the sort orders, with duration as the primary sorting criterion
+        Comparator<FlightPlane> customComparator = Comparator.comparingLong(FlightPlane::getDuration)
+                .thenComparing(Comparator.comparingInt(FlightPlane::getPriceForSort));
+
+        // Check the priceSortOrder input and adjust the sorting order accordingly
+        if (priceSortOrder.equalsIgnoreCase("desc")) {
+            customComparator = customComparator.thenComparing(Comparator.comparingInt(FlightPlane::getPriceForSort).reversed());
+        }
+
+        // Check the durationSortOrder input and adjust the sorting order accordingly
+        if (durationSortOrder.equalsIgnoreCase("desc")) {
+            customComparator = customComparator.reversed();
+        }
+
+        // Sort the flightPlanes list using the custom comparator
+        sortedFlightPlanes.sort(customComparator);
+
+        return sortedFlightPlanes;
+    }
+
+
+
+//    public static List<FlightPlane> sortFlightByPrice(List<FlightPlane> originalFlightPlanes, String orderBy) {
+//        List<FlightPlane> sortedFlightPlanes = new ArrayLis<>(originalFlightPlanes);
+//
+//        // Define the price comparator
+//        Comparator<FlightPlane> priceComparator = Comparator.comparingInt(FlightPlane::getPriceForSort);
+//
+//        // Sort the flightPlanes list based on the price
+//        sortedFlightPlanes.sort(priceComparator);
+//
+//        // Check the orderBy input and adjust the sorting order accordingly
+//        if (orderBy.equalsIgnoreCase("desc")) {
+//            Collections.reverse(sortedFlightPlanes);
+//        }
+//
+//        return sortedFlightPlanes;
+//    }
 
     public static List<FlightPlane> getByFilterDeparture(List<FlightPlane> flightPlaneList, Time start, Time end) {
         List<FlightPlane> result = new ArrayList<>();

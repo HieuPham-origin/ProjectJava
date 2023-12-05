@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.net.http.HttpRequest;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -44,29 +43,27 @@ public class HomeController {
                                            @RequestParam("arrivalFlightId") String arrivalFlightId,
                                            @RequestParam("departureTicketClassId") int departureTicketClassId,
                                            @RequestParam("arrivalTicketClassId") int arrivalTicketClassId,
-                                           @RequestParam("passengerNumInfo") String passengerNumInfo,
-                                           HttpServletRequest httpRequest
+                                           @RequestParam("passengerNumInfo") String passengerNumInfo
                                            ){
-        httpRequest.getSession().setAttribute("isReturn",true);
-        httpRequest.getSession().setAttribute("flight1Id",departureFlightId);
-        httpRequest.getSession().setAttribute("flight2Id",arrivalFlightId);
-        httpRequest.getSession().setAttribute("flight1TicketClassId",departureTicketClassId);
-        httpRequest.getSession().setAttribute("flight2TicketClassId",arrivalTicketClassId);
-        System.out.println(passengerNumInfo);
+        httpSession.setAttribute("isReturn",true);
+        httpSession.setAttribute("flight1Id", Integer.parseInt(departureFlightId));
+        httpSession.setAttribute("flight2Id", Integer.parseInt(arrivalFlightId));
+        httpSession.setAttribute("ticketClass1Id",departureTicketClassId);
+        httpSession.setAttribute("ticketClass2Id",arrivalTicketClassId);
+        httpSession.setAttribute("passengerNumInfo",passengerNumInfo);
         return "success";
     }
 
     @PostMapping("/sendDataSessionForNotReturn")
     @ResponseBody
     public String sendDataSessionForNotReturn(@RequestParam("departureFlightId") String departureFlightId,
-                                              @RequestParam("departureTicketClassId") int departureTicketClassId,
-                                              @RequestParam("passengerNumInfo") String passengerNumInfo,
-                                              HttpServletRequest httpRequest
+                                           @RequestParam("departureTicketClassId") int departureTicketClassId,
+                                              @RequestParam("passengerNumInfo") String passengerNumInfo
     ){
-        httpRequest.getSession().setAttribute("isReturn",false);
-        httpRequest.getSession().setAttribute("flight1Id",departureFlightId);
-        httpRequest.getSession().setAttribute("flight1TicketClassId",departureTicketClassId);
-        System.out.println(passengerNumInfo);
+        httpSession.setAttribute("isReturn",false);
+        httpSession.setAttribute("flight1Id", Integer.parseInt(departureFlightId));
+        httpSession.setAttribute("ticketClass1Id",departureTicketClassId);
+        httpSession.setAttribute("passengerNumInfo",passengerNumInfo);
         return "success";
     }
 }

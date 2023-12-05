@@ -22,22 +22,24 @@ public class SeatServiceImpl implements SeatService {
     @Autowired
     PlaneRepository planeRepository;
     @Override
-    public void initSeat(FlightPlane flightPlane, int capacity) {
+    public void initSeats(Plane plane) {
         String columns = "ABCDEF";
-        List<Seat> seats = new ArrayList<>();
-        List<SeatDetail> seatDetails = new ArrayList<>();
-        Plane plane = planeRepository.findById(flightPlane.getPlane().getPlaneId()).orElse(null);
-        for (int i = 1; i <= capacity / 6; i++) {
+        for (int i = 1; i <= plane.getCapacity() / 6; i++) {
             for (int col = 0; col < 6; col ++) {
                 String seatNumber = String.valueOf(i) + columns.charAt(col);
                 Seat seat = new Seat();
                 seat.setPlane(plane);
                 seat.setSeatNumber(seatNumber);
-                seats.add(seat);
                 seatRepository.save(seat);
             }
         }
-        for (Seat seat : seats) {
+    }
+
+    @Override
+    public void initSeatDetails(FlightPlane flightPlane)
+    {
+        List<SeatDetail> seatDetails = new ArrayList<>();
+        for (Seat seat : seatRepository.getAllByPlane(flightPlane.getPlane())) {
             SeatDetail seatDetail = new SeatDetail();
             seatDetail.setSeat(seat);
             seatDetail.setTaken(false);
