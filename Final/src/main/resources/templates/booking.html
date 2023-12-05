@@ -51,7 +51,7 @@
 <!-- Navbar -->
 
 <main class="p-5 row">
-    <div class="col-lg-8">
+    <form th:action="@{/booking}" th:object="${form}" method="post"  class="col-lg-8">
         <nav style="--bs-breadcrumb-divider: '-';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active"><i class="bi bi-1-circle-fill me-2"></i>Book</li>
@@ -68,6 +68,7 @@
             <div class="row gx-2">
                 <div class="form-floating col-6 mb-3">
                     <input
+                            th:field="*{contactDetail.lastName}"
                             type="text"
                             class="form-control"
                             id="input-contact-last-name"
@@ -81,6 +82,7 @@
                 </div>
                 <div class="form-floating col-6 mb-3">
                     <input
+                            th:field="*{contactDetail.firstName}"
                             type="text"
                             class="form-control"
                             id="input-contact-first-name"
@@ -94,7 +96,8 @@
                 </div>
                 <div class="form-floating col-6 mb-3">
                     <input
-                            type="text"
+                            th:field="*{contactDetail.phoneNumber}"
+                            type="number"
                             class="form-control"
                             id="input-contact-phone"
                             placeholder=""
@@ -107,6 +110,7 @@
                 </div>
                 <div class="form-floating col-6 mb-3">
                     <input
+                            th:field="*{contactDetail.email}"
                             type="text"
                             class="form-control"
                             id="input-contact-email"
@@ -119,30 +123,33 @@
             </div>
         </div>
         <h4>Traveler details</h4>
-        <div class="item-container mb-3">
-            <div class="fw-bold text-large">Adult 1</div>
+        <div th:each="passenger, iStat : *{passengerDTOS}" class="item-container mb-3">
+            <div th:text="${#strings.capitalize(passenger.type) + ' ' + (iStat.index+1)}" class="fw-bold text-large">Adult 1</div>
             <hr />
             <div class="row gx-2">
+                <input type="hidden" th:field="*{passengerDTOS[__${iStat.index}__].type}" th:value="${passenger.type}">
                 <div class="form-floating col-6 mb-3">
                     <input
                             type="text"
                             class="form-control"
-                            id="input-last-name-1"
+                            th:field="*{passengerDTOS[__${iStat.index}__].lastName}"
+                            th:id="${'input-last-name-' + iStat.index}"
                             placeholder=""
                             required
                     />
-                    <label for="input-last-name-1">Last Name</label>
+                    <label th:for="${'input-last-name-' + iStat.index}">Last Name</label>
                     <div class="form-text">e.g. Nguyen</div>
                 </div>
                 <div class="form-floating col-6 mb-3">
                     <input
                             type="text"
                             class="form-control"
-                            id="input-first-name-1"
+                            th:field="*{passengerDTOS[__${iStat.index}__].firstName}"
+                            th:id="${'input-first-name-' + iStat.index}"
                             placeholder=""
                             required
                     />
-                    <label for="input-first-name-1"
+                    <label th:for="${'input-first-name-' + iStat.index}"
                     >Middle & First Name</label
                     >
                     <div class="form-text">e.g. Van A</div>
@@ -151,79 +158,32 @@
                     <input
                             type="date"
                             class="form-control"
-                            id="input-birth-1"
+                            th:field="*{passengerDTOS[__${iStat.index}__].dateOfBirth}"
+                            th:id="${'input-birth-name-' + iStat.index}"
                             placeholder=""
                             required
                     />
-                    <label for="input-birth-1">Date of birth</label>
+                    <label th:for="${'input-birth-name-' + iStat.index}">Date of birth</label>
                 </div>
                 <div class="form-floating col-6 mb-3">
                     <select
                             class="form-select select-nationality"
-                            id="input-nationality-1"
+                            th:id="${'input-nationality-name-' + iStat.index}"
+                            th:field="*{passengerDTOS[__${iStat.index}__].nationality}"
                             placeholder=""
                             required
                     ></select>
-                    <label for="input-nationality-1">Nationality</label>
-                </div>
-            </div>
-        </div>
-        <div class="item-container mb-3">
-            <div class="fw-bold text-large">Child 1</div>
-            <hr />
-            <div class="row gx-2">
-                <div class="form-floating col-6 mb-3">
-                    <input
-                            type="text"
-                            class="form-control"
-                            id="input-last-name-1"
-                            placeholder=""
-                            required
-                    />
-                    <label for="input-last-name-1">Last Name</label>
-                    <div class="form-text">e.g. Nguyen</div>
-                </div>
-                <div class="form-floating col-6 mb-3">
-                    <input
-                            type="text"
-                            class="form-control"
-                            id="input-first-name-1"
-                            placeholder=""
-                            required
-                    />
-                    <label for="input-first-name-1"
-                    >Middle & First Name</label
-                    >
-                    <div class="form-text">e.g. Van A</div>
-                </div>
-                <div class="form-floating col-6 mb-3">
-                    <input
-                            type="date"
-                            class="form-control"
-                            id="input-birth-1"
-                            placeholder=""
-                            required
-                    />
-                    <label for="input-birth-1">Date of birth</label>
-                </div>
-                <div class="form-floating col-6 mb-3">
-                    <select
-                            class="form-select select-nationality"
-                            id="input-nationality-1"
-                            placeholder=""
-                            required
-                    ></select>
-                    <label for="input-nationality-1">Nationality</label>
+                    <label th:for="${'input-nationality-name-' + iStat.index}">Nationality</label>
                 </div>
             </div>
         </div>
         <div class="d-flex justify-content-end">
-            <button class="btn-primary btn" style="border-radius: 12px !important;">
+            <button class="btn-primary btn" style="border-radius: 12px !important;" type="submit">
                 CONTINUE TO REVIEW
             </button>
         </div>
 
-    </div>
+    </form>
     <div class="col-lg-4">
         <h2>Your flights</h2>
         <div class="item-container mb-3">
@@ -233,31 +193,32 @@
                 >
                     <div class="icon mx-3">
                         <img
-                                src="images/flight-departure.png"
+                                src="/images/flight-departure.png"
                                 alt=""
                                 srcset=""
                         />
                     </div>
-                    <div>
-                        <div class="text-secondary text-smaller">
+                    <div th:object="${flight1}">
+                        <div th:text="*{#dates.format(flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                             Thu, 06 Jul 2003
                         </div>
-                        <div class="">Ho Chi Minh City → Hanoi</div>
+                        <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
                     </div>
                 </div>
-                <div id="chosen-departure-flight" class="flight-chosen">
+                <div th:object="${flight1}" id="chosen-departure-flight" class="flight-chosen">
                     <div class="d-flex mb-2">
                         <div class="logo me-2">
-                            <img src="images/vna-logo.png" alt="" />
+                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vietjet-logo.png" alt="" />
+                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vna-logo.png" alt="" />
                         </div>
                         <div>
-                            <div class="fw-bold">Vietnam Airlines</div>
-                            <div class="text-secondary">
+                            <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
+                            <div th:text="*{flightPlane.plane.planeName}" class="text-secondary">
                                 VN6420 • Eco
                             </div>
                         </div>
                         <div class="ms-auto">
-                                    <span class="text-primary fw-bold"
+                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                             <span class="text-secondary"> / pax</span>
@@ -266,8 +227,8 @@
 
                     <div class="d-flex justify-content-between">
                         <div>
-                            <div class="fw-bold">SGN</div>
-                            <div class="text-secondary">09:00</div>
+                            <div th:text="*{flightPlane.flight.departureAirport.airportCode}" class="fw-bold">SGN</div>
+                            <div th:text="*{flightPlane.departureTime.toString().substring(0, 5)}" class="text-secondary">09:00</div>
                         </div>
                         <div class="text-secondary">•</div>
                         <div
@@ -276,13 +237,13 @@
                             <i
                                     class="fa-solid fa-plane text-secondary"
                             ></i>
-                            <div class="text-secondary">2h 30m</div>
+                            <div th:text="*{duration}" class="text-secondary">2h 30m</div>
                         </div>
-                        <div class="text-secondary">•</div>
+                        <div  class="text-secondary">•</div>
 
                         <div class="text-end">
-                            <div class="fw-bold">HAN</div>
-                            <div class="text-secondary">11:30</div>
+                            <div th:text="*{flightPlane.flight.arrivalAirport.airportCode}" class="fw-bold">HAN</div>
+                            <div th:text="*{flightPlane.arrivalTime.toString().substring(0, 5)}" class="text-secondary">11:30</div>
                         </div>
                     </div>
                 </div>
@@ -290,31 +251,32 @@
                 <div class="flight-item d-flex align-content-center">
                     <div class="icon mx-3">
                         <img
-                                src="images/flight-destination.png"
+                                src="/images/flight-destination.png"
                                 alt=""
                                 srcset=""
                         />
                     </div>
-                    <div>
-                        <div class="text-secondary text-smaller">
+                    <div th:object="${flight2}">
+                        <div th:text="*{#dates.format(flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                             Thu, 06 Jul 2003
                         </div>
-                        <div class="">Hanoi → Ho Chi Minh City</div>
+                        <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
                     </div>
                 </div>
-                <div id="chosen-departure-flight" class="flight-chosen">
+                <div th:object="${flight2}" id="chosen-departure-flight" class="flight-chosen">
                     <div class="d-flex mb-2">
                         <div class="logo me-2">
-                            <img src="images/vna-logo.png" alt="" />
+                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vietjet-logo.png" alt="" />
+                            <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vna-logo.png" alt="" />
                         </div>
                         <div>
-                            <div class="fw-bold">Vietnam Airlines</div>
-                            <div class="text-secondary">
+                            <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
+                            <div th:text="*{flightPlane.plane.planeName}" class="text-secondary">
                                 VN6420 • Eco
                             </div>
                         </div>
                         <div class="ms-auto">
-                                    <span class="text-primary fw-bold"
+                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                             <span class="text-secondary"> / pax</span>
@@ -323,8 +285,8 @@
 
                     <div class="d-flex justify-content-between">
                         <div>
-                            <div class="fw-bold">SGN</div>
-                            <div class="text-secondary">09:00</div>
+                            <div th:text="*{flightPlane.flight.departureAirport.airportCode}" class="fw-bold">SGN</div>
+                            <div th:text="*{flightPlane.departureTime.toString().substring(0, 5)}" class="text-secondary">09:00</div>
                         </div>
                         <div class="text-secondary">•</div>
                         <div
@@ -333,13 +295,13 @@
                             <i
                                     class="fa-solid fa-plane text-secondary"
                             ></i>
-                            <div class="text-secondary">2h 30m</div>
+                            <div th:text="*{duration}" class="text-secondary">2h 30m</div>
                         </div>
                         <div class="text-secondary">•</div>
 
                         <div class="text-end">
-                            <div class="fw-bold">HAN</div>
-                            <div class="text-secondary">11:30</div>
+                            <div th:text="*{flightPlane.flight.arrivalAirport.airportCode}" class="fw-bold">HAN</div>
+                            <div th:text="*{flightPlane.arrivalTime.toString().substring(0, 5)}" class="text-secondary">11:30</div>
                         </div>
                     </div>
                 </div>
@@ -348,7 +310,7 @@
                     <div class="d-flex">
                         Subtotal
                         <div class="ms-auto">
-                                    <span class="text-primary fw-bold"
+                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice + flight2.flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                             <span class="text-secondary"> / pax</span>
@@ -358,7 +320,7 @@
                         Total for 1 pax
                         <div class="ms-auto">
                                     <span
-                                            class="text-primary fw-bold text-large"
+                                            class="text-primary fw-bold text-large" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * form.passengerDTOS.size() + flight2.flightPlane.flight.flightPrice * form.passengerDTOS.size(), 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                         </div>

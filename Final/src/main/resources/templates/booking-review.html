@@ -64,87 +64,73 @@
                   </nav>
                 <h2>Your booking</h2>
                 <h4>Contact details</h4>
-                <div class="item-container mb-3">
+                <div th:object="${bookingDetail}" class="item-container mb-3">
                     <div class="fw-bold text-large">Contact details</div>
                     <hr />
                     <div class="row gx-2">
                         <div class="col-6 mb-3">
                             <div class="text-secondary">Contact name</div>
-                            <div class="">Nguyen Van A</div>
+                            <div th:text="*{contactDetail.lastName + ' ' + contactDetail.firstName}" class="">Nguyen Van A</div>
                         </div>
                         <div class="col-6 mb-3">
                             <div class="text-secondary">Phone number</div>
-                            <div class="">0923456789</div>
+                            <div th:text="*{contactDetail.phoneNumber}" class="">0923456789</div>
                         </div>
                         <div class="col-6 mb-3">
                             <div class="text-secondary">Email</div>
-                            <div class="">name@example.com</div>
+                            <div th:text="*{contactDetail.email}" class="">name@example.com</div>
                         </div>
                     </div>
                 </div>
                 <h4>Traveler details</h4>
-                <div class="item-container mb-3">
-                    <div class="fw-bold text-large">Adult 1</div>
+                <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="item-container mb-3">
+                    <div th:text="${#strings.capitalize(passenger.type) + ' ' + (iStat.index+1)}" class="fw-bold text-large">Adult 1</div>
                     <hr />
                     <div class="row gx-2">
                         <div class="col-6 mb-3">
                             <div class="text-secondary">Traveler name</div>
-                            <div class="">Nguyen Van B</div>
+                            <div th:text="${passenger.lastName + ' ' + passenger.firstName}">Nguyen Van B</div>
                         </div>
                         <div class="col-6 mb-3">
                             <div class="text-secondary">Date of birth</div>
-                            <div class="">01/01/2003</div>
+                            <div th:text="${#dates.format(passenger.dateOfBirth, 'dd/MM/yyyy')}">01/01/2003</div>
                         </div>
                         <div class="col-6 mb-3">
                             <div class="text-secondary">Nationality</div>
-                            <div class="">Viet Nam</div>
+                            <div th:text="${passenger.nationality}">Viet Nam</div>
                         </div>
                     </div>
                 </div>
-                <div class="item-container mb-3">
-                    <div class="fw-bold text-large">Child 1</div>
-                    <hr />
-                    <div class="row gx-2">
-                        <div class="col-6 mb-3">
-                            <div class="text-secondary">Traveler name</div>
-                            <div class="">Nguyen Van B</div>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <div class="text-secondary">Date of birth</div>
-                            <div class="">01/01/2003</div>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <div class="text-secondary">Nationality</div>
-                            <div class="">Viet Nam</div>
-                        </div>
-                    </div>
-                </div>
-                <h4>Flight facilities</h4>
+                <h4 id="scroll-here">Flight facilities</h4>
                 <div class="item-container mb-3">
                     <div class="d-flex">
                         <div class="fw-bold text-large"><i class="fa-solid fa-suitcase me-2 text-primary"></i>Baggage</div>
                         <a href="" class="ms-auto link-underline link-underline-opacity-0" data-bs-toggle="modal" data-bs-target="#modal-baggage">Select baggage</a>
                     </div>
                     <hr />
-                    <div class="row gx-2">
-                        <div class="text-secondary">
+                    <div th:object="${bookingDetail}" class="row gx-2">
+                        <div th:if="${!bookingDetail.hasExtraBaggage1 && !bookingDetail.hasExtraBaggage1}" class="text-secondary">
                             Why cram your stuff in a carry-on? Add baggage to lighten your load.
                         </div>
-                        <!-- <div class="d-none">
-                            <div class="fw-bold">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
-                            <div class="d-flex">
-                                <div class="text-secondary">Nguyen Van A</div>
-                                <div class="ms-auto">20kg - 200.000 VND</div>
+                        <div>
+                            <div th:if="${bookingDetail.hasExtraBaggage1}">
+                                <div th:text="${'1. ' + flight1.flightPlane.flight.departureAirport.city + ' (' + flight1.flightPlane.flight.departureAirport.airportCode + ') → ' + flight1.flightPlane.flight.arrivalAirport.city + ' (' + flight1.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
+                                <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
+                                    <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
+                                    <div th:if="${bookingDetail.baggageIds1[iStat.index] == 0}" class="ms-auto">No extra baggage</div>
+                                    <div th:if="${bookingDetail.baggageIds1[iStat.index] != 0}" th:text="${baggageList1[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList1[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
+                                </div>
+                            </div>
+                            <hr th:if="${bookingDetail.hasExtraBaggage1 && bookingDetail.hasExtraBaggage2}">
+                            <div th:if="${bookingDetail.hasExtraBaggage2}">
+                                <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
+                                <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
+                                    <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
+                                    <div th:if="${bookingDetail.baggageIds2[iStat.index] == 0}" class="ms-auto">No extra baggage</div>
+                                    <div th:if="${bookingDetail.baggageIds2[iStat.index] != 0}" th:text="${baggageList2[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList2[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        <div>
-                            <div class="fw-bold">2. Ha Noi (HAN) → Ho Chi Minh City (SGN)</div>
-                            <div class="d-flex">
-                                <div class="text-secondary">Nguyen Van A</div>
-                                <div class="ms-auto">20kg - 200.000 VND</div>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
                 <div class="item-container mb-3">
@@ -207,36 +193,37 @@
                 <div class="item-container mb-3">
                     <div class="item-content">
                         <div
-                            class="flight-item selected d-flex align-content-center"
+                                class="flight-item selected d-flex align-content-center"
                         >
                             <div class="icon mx-3">
                                 <img
-                                    src="/images/flight-departure.png"
-                                    alt=""
-                                    srcset=""
+                                        src="/images/flight-departure.png"
+                                        alt=""
+                                        srcset=""
                                 />
                             </div>
-                            <div>
-                                <div class="text-secondary text-smaller">
+                            <div th:object="${flight1}">
+                                <div th:text="*{#dates.format(flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                                     Thu, 06 Jul 2003
                                 </div>
-                                <div class="">Ho Chi Minh City → Hanoi</div>
+                                <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
                             </div>
                         </div>
-                        <div id="chosen-departure-flight" class="flight-chosen">
+                        <div th:object="${flight1}" id="chosen-departure-flight" class="flight-chosen">
                             <div class="d-flex mb-2">
                                 <div class="logo me-2">
-                                    <img src="/images/vna-logo.png" alt="" />
+                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vietjet-logo.png" alt="" />
+                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vna-logo.png" alt="" />
                                 </div>
                                 <div>
-                                    <div class="fw-bold">Vietnam Airlines</div>
-                                    <div class="text-secondary">
+                                    <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
+                                    <div th:text="*{flightPlane.plane.planeName}" class="text-secondary">
                                         VN6420 • Eco
                                     </div>
                                 </div>
                                 <div class="ms-auto">
-                                    <span class="text-primary fw-bold"
-                                        >3.999.000₫</span
+                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    >3.999.000₫</span
                                     >
                                     <span class="text-secondary"> / pax</span>
                                 </div>
@@ -244,23 +231,23 @@
 
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <div class="fw-bold">SGN</div>
-                                    <div class="text-secondary">09:00</div>
+                                    <div th:text="*{flightPlane.flight.departureAirport.airportCode}" class="fw-bold">SGN</div>
+                                    <div th:text="*{flightPlane.departureTime.toString().substring(0, 5)}" class="text-secondary">09:00</div>
                                 </div>
                                 <div class="text-secondary">•</div>
                                 <div
-                                    class="d-flex flex-column align-items-center"
+                                        class="d-flex flex-column align-items-center"
                                 >
                                     <i
-                                        class="fa-solid fa-plane text-secondary"
+                                            class="fa-solid fa-plane text-secondary"
                                     ></i>
-                                    <div class="text-secondary">2h 30m</div>
+                                    <div th:text="*{duration}" class="text-secondary">2h 30m</div>
                                 </div>
-                                <div class="text-secondary">•</div>
+                                <div  class="text-secondary">•</div>
 
                                 <div class="text-end">
-                                    <div class="fw-bold">HAN</div>
-                                    <div class="text-secondary">11:30</div>
+                                    <div th:text="*{flightPlane.flight.arrivalAirport.airportCode}" class="fw-bold">HAN</div>
+                                    <div th:text="*{flightPlane.arrivalTime.toString().substring(0, 5)}" class="text-secondary">11:30</div>
                                 </div>
                             </div>
                         </div>
@@ -268,32 +255,33 @@
                         <div class="flight-item d-flex align-content-center">
                             <div class="icon mx-3">
                                 <img
-                                    src="/images/flight-destination.png"
-                                    alt=""
-                                    srcset=""
+                                        src="/images/flight-destination.png"
+                                        alt=""
+                                        srcset=""
                                 />
                             </div>
-                            <div>
-                                <div class="text-secondary text-smaller">
+                            <div th:object="${flight2}">
+                                <div th:text="*{#dates.format(flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                                     Thu, 06 Jul 2003
                                 </div>
-                                <div class="">Hanoi → Ho Chi Minh City</div>
+                                <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
                             </div>
                         </div>
-                        <div id="chosen-departure-flight" class="flight-chosen">
+                        <div th:object="${flight2}" id="chosen-departure-flight" class="flight-chosen">
                             <div class="d-flex mb-2">
                                 <div class="logo me-2">
-                                    <img src="/images/vna-logo.png" alt="" />
+                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vietjet-logo.png" alt="" />
+                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vna-logo.png" alt="" />
                                 </div>
                                 <div>
-                                    <div class="fw-bold">Vietnam Airlines</div>
-                                    <div class="text-secondary">
+                                    <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
+                                    <div th:text="*{flightPlane.plane.planeName}" class="text-secondary">
                                         VN6420 • Eco
                                     </div>
                                 </div>
                                 <div class="ms-auto">
-                                    <span class="text-primary fw-bold"
-                                        >3.999.000₫</span
+                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    >3.999.000₫</span
                                     >
                                     <span class="text-secondary"> / pax</span>
                                 </div>
@@ -301,23 +289,23 @@
 
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <div class="fw-bold">SGN</div>
-                                    <div class="text-secondary">09:00</div>
+                                    <div th:text="*{flightPlane.flight.departureAirport.airportCode}" class="fw-bold">SGN</div>
+                                    <div th:text="*{flightPlane.departureTime.toString().substring(0, 5)}" class="text-secondary">09:00</div>
                                 </div>
                                 <div class="text-secondary">•</div>
                                 <div
-                                    class="d-flex flex-column align-items-center"
+                                        class="d-flex flex-column align-items-center"
                                 >
                                     <i
-                                        class="fa-solid fa-plane text-secondary"
+                                            class="fa-solid fa-plane text-secondary"
                                     ></i>
-                                    <div class="text-secondary">2h 30m</div>
+                                    <div th:text="*{duration}" class="text-secondary">2h 30m</div>
                                 </div>
                                 <div class="text-secondary">•</div>
-                                
+
                                 <div class="text-end">
-                                    <div class="fw-bold">HAN</div>
-                                    <div class="text-secondary">11:30</div>
+                                    <div th:text="*{flightPlane.flight.arrivalAirport.airportCode}" class="fw-bold">HAN</div>
+                                    <div th:text="*{flightPlane.arrivalTime.toString().substring(0, 5)}" class="text-secondary">11:30</div>
                                 </div>
                             </div>
                         </div>
@@ -326,8 +314,8 @@
                             <div class="d-flex">
                                 Subtotal
                                 <div class="ms-auto">
-                                    <span class="text-primary fw-bold"
-                                        >3.999.000₫</span
+                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice + flight2.flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    >3.999.000₫</span
                                     >
                                     <span class="text-secondary"> / pax</span>
                                 </div>
@@ -336,8 +324,8 @@
                                 Total for 1 pax
                                 <div class="ms-auto">
                                     <span
-                                        class="text-primary fw-bold text-large"
-                                        >3.999.000₫</span
+                                            class="text-primary fw-bold text-large" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size() + flight2.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size(), 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    >3.999.000₫</span
                                     >
                                 </div>
                             </div>
@@ -345,19 +333,20 @@
                     </div>
                 </div>
             </div>
+
         </main>
         <!-- Main -->
 
         <div id="modal-baggage" class="modal fade " tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-              <div class="modal-content">
+              <form th:action="@{/booking/review/baggage}" method="post" class="modal-content">
                 <div class="modal-body row gx-0">
                     <div class="sidebar col-4">
                         <div class="fw-bold text-large p-3"><i class="fa-solid fa-suitcase me-2"></i>Baggage</div>
                         <div class="fw-bold my-3 px-3">Select flight</div>
                         <div id="baggage-flight-1" class="select-baggage-item select-item selected" data-flight="1">
-                            <div class="select-item-title">
-                                1. Ho Chi Minh City (SGN) → Ha Noi (HAN)
+                            <div class="select-item-title" th:text="${'1. ' + flight1.flightPlane.flight.departureAirport.city + ' (' + flight1.flightPlane.flight.departureAirport.airportCode + ') → ' + flight1.flightPlane.flight.arrivalAirport.city + ' (' + flight1.flightPlane.flight.arrivalAirport.airportCode + ')'}">
+                            1. Ho Chi Minh City (SGN) → Ha Noi (HAN)
                             </div>
                             <div class="d-flex text-secondary">
                                 <div class="weight">0 kg</div>
@@ -365,7 +354,7 @@
                             </div>
                         </div>
                         <div id="baggage-flight-2" class="select-baggage-item select-item" data-flight="2">
-                            <div class="select-item-title">
+                            <div class="select-item-title" th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}">
                                 2. Ha Noi (HAN) → Ho Chi Minh City (SGN)
                             </div>
                             <div class="d-flex text-secondary">
@@ -375,105 +364,37 @@
                         </div>
                     </div>
                     <div class="col-8 bg-light">
-                        <div class="select-baggage-container" data-flight="1">
-                            <div class="fw-bold text-large p-3" id="baggage-selected-flight">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
-                            <div class="item-container mx-3 mb-3">
-                                <div class="text-secondary fw-bold">Passenger 1 of 2</div>
-                                <div class="fw-bold text-large">Nguyen Van A</div>
+                        <div th:object="${bookingDetail}" class="select-baggage-container" data-flight="1">
+                            <div th:text="${'1. ' + flight1.flightPlane.flight.departureAirport.city + ' (' + flight1.flightPlane.flight.departureAirport.airportCode + ') → ' + flight1.flightPlane.flight.arrivalAirport.city + ' (' + flight1.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold text-large p-3">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
+                            <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="item-container mx-3 mb-3">
+                                <div th:text="${'Passenger ' + (iStat.index + 1) + ' of ' + bookingDetail.passengerDTOS.size()}" class="text-secondary fw-bold">Passenger 1 of 2</div>
+                                <div th:tex="${passenger.lastName + ' ' + passenger.firstName}" class="fw-bold text-large">Nguyen Van A</div>
                                 <hr>
                                 <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-1-passenger-1" class="form-check-input me-3" checked value="0" data-price="0">
+                                    <input type="radio" th:field="*{baggageIds1[__${iStat.index}__]}" class="form-check-input me-3" checked value="0" data-price="0" data-weight="0">
                                     No extra baggage
                                 </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-1-passenger-1" class="form-check-input me-3" value="20" data-price="200000">
-                                    +20kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-1-passenger-1" class="form-check-input me-3" value="30" data-price="300000">
-                                    +30kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">300.000 ₫</div>
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-1-passenger-1" class="form-check-input me-3" value="40" data-price="400000">
-                                    +40kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">400.000 ₫</div>
-                                </label>
-                            </div>
-                            <div class="item-container mx-3 mb-3">
-                                <div class="text-secondary fw-bold">Passenger 2 of 2</div>
-                                <div class="fw-bold text-large">Nguyen Van B</div>
-                                <hr>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-1-passenger-2" class="form-check-input me-3" checked value="0" data-price="0">
-                                    No extra baggage
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-1-passenger-2" class="form-check-input me-3" value="20" data-price="200000">
-                                    +20kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-1-passenger-2" class="form-check-input me-3" value="30" data-price="300000">
-                                    +30kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">300.000 ₫</div>
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-1-passenger-2" class="form-check-input me-3" value="40" data-price="400000">
-                                    +40kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">400.000 ₫</div>
+                                <label th:each="baggage, iStat2 : ${baggages}" class="form-check-label d-flex mb-2">
+                                    <input type="radio" th:field="*{baggageIds1[__${iStat.index}__]}" class="form-check-input me-3" th:value="${baggage.baggageId}" th:attr="data-price=${baggage.price},data-weight=${baggage.weight}">
+                                    <span th:text="${'+' + baggage.weight + 'kg'}">+20kg</span>
+                                    <div th:text="${#numbers.formatDecimal(baggage.price, 0, 'POINT', 0, 'POINT') + '₫'}" class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
                                 </label>
                             </div>
                         </div>
-                        <div class="select-baggage-container d-none" data-flight="2">
-                            <div class="fw-bold text-large p-3" id="baggage-selected-flight">2. Ha Noi (HAN) → Ho Chi Minh City (SGN)</div>
-                            <div class="item-container mx-3 mb-3">
-                                <div class="text-secondary fw-bold">Passenger 1 of 2</div>
-                                <div class="fw-bold text-large">Nguyen Van A</div>
+                        <div th:object="${bookingDetail}" class="select-baggage-container d-none" data-flight="2">
+                            <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold text-large p-3">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
+                            <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="item-container mx-3 mb-3">
+                                <div th:text="${'Passenger ' + (iStat.index + 1) + ' of ' + bookingDetail.passengerDTOS.size()}" class="text-secondary fw-bold">Passenger 1 of 2</div>
+                                <div th:tex="${passenger.lastName + ' ' + passenger.firstName}" class="fw-bold text-large">Nguyen Van A</div>
                                 <hr>
                                 <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-2-passenger-1" class="form-check-input me-3" checked value="0" data-price="0">
+                                    <input type="radio" th:field="*{baggageIds2[__${iStat.index}__]}" class="form-check-input me-3" checked value="0" data-price="0" data-weight="0">
                                     No extra baggage
                                 </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-2-passenger-1" class="form-check-input me-3" value="20" data-price="200000">
-                                    +20kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-2-passenger-1" class="form-check-input me-3" value="30" data-price="300000">
-                                    +30kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">300.000 ₫</div>
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-2-passenger-1" class="form-check-input me-3" value="40" data-price="400000">
-                                    +40kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">400.000 ₫</div>
-                                </label>
-                            </div>
-                            <div class="item-container mx-3 mb-3">
-                                <div class="text-secondary fw-bold">Passenger 2 of 2</div>
-                                <div class="fw-bold text-large">Nguyen Van B</div>
-                                <hr>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-2-passenger-2" class="form-check-input me-3" checked value="0" data-price="0">
-                                    No extra baggage
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-2-passenger-2" class="form-check-input me-3" value="20" data-price="200000">
-                                    +20kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-2-passenger-2" class="form-check-input me-3" value="30" data-price="300000">
-                                    +30kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">300.000 ₫</div>
-                                </label>
-                                <label class="form-check-label d-flex mb-2">
-                                    <input type="radio" name="baggage-flight-2-passenger-2" class="form-check-input me-3" value="40" data-price="400000">
-                                    +40kg
-                                    <div class="baggage-price ms-auto text-danger fw-bold">400.000 ₫</div>
+                                <label th:each="baggage, iStat2 : ${baggages}" class="form-check-label d-flex mb-2">
+                                    <input type="radio" th:field="*{baggageIds2[__${iStat.index}__]}" class="form-check-input me-3" th:value="${baggage.baggageId}" th:attr="data-price=${baggage.price},data-weight=${baggage.weight}">
+                                    <span th:text="${'+' + baggage.weight + 'kg'}">+20kg</span>
+                                    <div th:text="${#numbers.formatDecimal(baggage.price, 0, 'POINT', 0, 'POINT') + '₫'}" class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
                                 </label>
                             </div>
                         </div>
@@ -486,10 +407,10 @@
                     </div>
                     <div class="col-8 d-flex">
                         <button type="button" class="btn btn-secondary me-2 ms-auto" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Done</button>
+                        <button type="submit" class="btn btn-primary">Done</button>
                     </div>
                 </div>
-              </div>
+              </form>
             </div>
         </div>
         <div id="modal-seat" class="modal fade " tabindex="-1">
@@ -499,13 +420,13 @@
                     <div class="sidebar col-4">
                         <div class="fw-bold text-large p-3"><i class="fa-solid fa-couch me-2"></i>Seat number</div>
                         <div class="fw-bold my-3 px-3">Select flight</div>
-                        <div id="baggage-flight-1" class="select-flight-item select-item selected" data-flight="1">
-                            <div class="select-item-title">
+                        <div class="select-flight-item select-item selected" data-flight="1">
+                            <div th:text="${'1. ' + flight1.flightPlane.flight.departureAirport.city + ' (' + flight1.flightPlane.flight.departureAirport.airportCode + ') → ' + flight1.flightPlane.flight.arrivalAirport.city + ' (' + flight1.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="select-item-title">
                                 1. Ho Chi Minh City (SGN) → Ha Noi (HAN)
                             </div>
                         </div>
-                        <div id="baggage-flight-2" class="select-flight-item select-item" data-flight="2">
-                            <div class="select-item-title">
+                        <div class="select-flight-item select-item" data-flight="2">
+                            <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}"  class="select-item-title">
                                 2. Ha Noi (HAN) → Ho Chi Minh City (SGN)
                             </div>
                         </div>
