@@ -6,6 +6,7 @@ import com.example.demo.entity.Plane;
 import com.example.demo.service.FlightPlaneService;
 import com.example.demo.service.FlightService;
 import com.example.demo.service.PlaneService;
+import com.example.demo.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,8 @@ public class FlightPlaneController {
     private FlightService flightService;
     @Autowired
     private PlaneService planeService;
+    @Autowired
+    private SeatService seatService;
     @GetMapping("/flightPlane")
     public String showFlightPlane(Model model){
         List<FlightPlane> flightPlanes = flightPlaneService.getAllFlightPlanes();
@@ -72,6 +75,7 @@ public class FlightPlaneController {
         flightPlane.setArrivalTime(arrivalTime);
 
         flightPlaneService.save(flightPlane);
+        seatService.initSeatDetails(flightPlane);
         return "redirect:/Admin/flightPlane";
     }
 
