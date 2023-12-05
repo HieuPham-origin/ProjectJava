@@ -211,7 +211,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">ADMIN</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -245,7 +245,9 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    <div th:if="(${errorMessage != null} )" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;" th:text="${errorMessage}">
+                        <span style="margin-left: 15px;color: white;font-weight: bold;float: right;font-size: 22px;line-height: 20px;cursor: pointer;transition: 0.3s;" onclick="this.parentElement.style.display='none';" >&times;</span>
+                    </div>
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Passengers Management</h1>
 

@@ -211,7 +211,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">ADMIN</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -245,7 +245,9 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    <div th:if="(${errorMessage != null} )" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;" th:text="${errorMessage}">
+                        <span style="margin-left: 15px;color: white;font-weight: bold;float: right;font-size: 22px;line-height: 20px;cursor: pointer;transition: 0.3s;" onclick="this.parentElement.style.display='none';" >&times;</span>
+                    </div>
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800" >Planes Management</h1>
 
@@ -264,7 +266,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form id="addPlaneForm" method="post" th:action="@{/Admin/plane/save}">
+                                        <form id="addPlaneForm" method="post" th:action="@{/Admin/plane/save}" onsubmit="return validateForm()">
                                             <div class="modal-body">
                                                 <!-- Form Fields -->
 
@@ -430,6 +432,24 @@
 
     <!-- Link JavaScript của DataTables -->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script>
+        function validateForm() {
+            var capacityInput = document.getElementById("capacity");
+            var capacity = capacityInput.value;
+
+            // Regular expression to match a valid number
+            var numberRegex = /^[0-9]+$/;
+
+            if (!numberRegex.test(capacity)) {
+                alert("Invalid capacity: Please enter a valid number");
+                capacityInput.focus();
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable();

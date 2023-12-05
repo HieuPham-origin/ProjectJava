@@ -16,4 +16,6 @@ public interface AirportService {
     void delete(int id);
     Airport update(int id, Airport airport);
     Airport getAirportByAirPortCode(String airportCode);
+
+    boolean existByAirportCode(String airportCode);
 }

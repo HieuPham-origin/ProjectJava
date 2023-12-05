@@ -214,7 +214,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">ADMIN</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -249,6 +249,9 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <div th:if="(${errorMessage != null} )" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;" th:text="${errorMessage}">
+                        <span style="margin-left: 15px;color: white;font-weight: bold;float: right;font-size: 22px;line-height: 20px;cursor: pointer;transition: 0.3s;" onclick="this.parentElement.style.display='none';" >&times;</span>
+                    </div>
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Flight Manager</h1>
 
@@ -256,8 +259,12 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 15px">Flights</h6>
+
                             <button class="btn btn-primary" id="addAirportButton" onclick="openForm()">Add Flight</button>
                             <!-- Modal -->
+
+
+
                             <!-- Modal -->
                             <div id="addFlightModal" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
                                 <div class="modal-dialog" role="document">
@@ -268,7 +275,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form id="addFlightForm" method="post" th:action="@{/Admin/flight/save}">
+                                        <form id="addFlightForm" method="post" th:action="@{/Admin/flight/save}" onsubmit="return validateForm()">
                                             <div class="modal-body">
                                                 <!-- Form Fields -->
                                                 <div class="form-group">
@@ -427,6 +434,25 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function validateForm() {
+            var flightPriceInput = document.getElementById("flightPrice");
+            var flightPrice = flightPriceInput.value;
+
+            // Regular expression to match a valid number
+            var numberRegex = /^[0-9]+([.,][0-9]+)?$/;
+
+            if (!numberRegex.test(flightPrice)) {
+                alert("Invalid price: Please enter a valid number");
+                flightPriceInput.focus();
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+    </script>
+
     <script>
         function openForm() {
             $('#addFlightModal').modal('show');
