@@ -52,6 +52,16 @@
         <!-- Navbar -->
 
         <main class="p-5" style="background-image: none;">
+            <div th:if="(${errorMessage != null} )" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;" >
+                <div style="display: inline-block" th:text="${errorMessage}"></div>
+                <span style="margin-left: 15px;color: white;font-weight: bold;float: right;font-size: 22px;line-height: 20px;cursor: pointer;transition: 0.3s;" onclick="this.parentElement.style.display='none';" >&times;</span>
+            </div>
+
+            <div th:if="${resultMessage != null}" style="padding: 20px; background-color: #3e39f5; color: white; margin-bottom: 15px;" >
+                <div style="display: inline-block" th:text="${resultMessage}"></div>
+                <span style="margin-left: 15px;color: white;font-weight: bold;float: right;font-size: 22px;line-height: 20px;cursor: pointer;transition: 0.3s;" onclick="this.parentElement.style.display='none';" >&times;</span>
+            </div>
+
             <h1>Manage account</h1>
             <hr>
             <div class="row">

@@ -19,11 +19,6 @@ CREATE TABLE `Airport`(
     `airport_code` VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE `Payment_Format`(
-    `payment_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `payment_name` VARCHAR(255) NOT NULL
-);
-
 
 CREATE TABLE `Account`(
     `account_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -130,13 +125,11 @@ CREATE TABLE `Ticket`(
     `service_id` INT NOT NULL,
     `baggage_id` INT NOT NULL,
     `status` VARCHAR(255) NOT NULL,
-    `payment_id` INT NOT NULL,
     `reservation_id` INT NOT NULL,
     `day_order` DATETIME NOT NULL,
     `day_pay` DATETIME NOT NULL,
     FOREIGN KEY(`baggage_id`) REFERENCES `Baggage`(`baggage_id`),
     FOREIGN KEY(`service_id`) REFERENCES `Service`(`service_id`),
-    FOREIGN KEY(`payment_id`) REFERENCES `Payment_Format`(`payment_id`),
     FOREIGN KEY(`reservation_id`) REFERENCES `Reservation`(`id`),
     FOREIGN KEY(`class_id`) REFERENCES `Ticket_class`(`class_id`),
     FOREIGN KEY(`seat_detail_id`) REFERENCES `SeatDetail`(`id`)
@@ -235,11 +228,6 @@ INSERT INTO `Airport` (`airport_name`, `city`, `country`, `status`, `airport_cod
 ('O. R. Tambo International Airport', 'Johannesburg', 'South Africa', 'Active', 'JNB'),
 ('Doha Hamad International Airport', 'Doha', 'Qatar', 'Active', 'DHIA');
 
-
-INSERT INTO `Payment_Format` (`payment_name`) VALUES
-('Credit Card'),
-('PayPal'),
-('Collect on Delivery');
 
 
 INSERT INTO `Plane` (`plane_name`, `status`, `capacity`) VALUES

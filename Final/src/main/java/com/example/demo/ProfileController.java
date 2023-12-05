@@ -1,11 +1,13 @@
 package com.example.demo;
 
+import com.example.demo.entity.Account;
 import com.example.demo.entity.FlightPlane;
 import com.example.demo.entity.Passenger;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.PassengerService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,12 +51,60 @@ public class ProfileController {
 
         Passenger newUser = passengerService.updatePassenger(user);
         session.setAttribute("sessionPassenger", newUser);
+        redirectAttributes.addFlashAttribute("resultMessage", "User information updated!");
         return "redirect:/profile";
     }
 
     @GetMapping("/password")
-    public String password() {
+    public String password(HttpSession session, Model model) {
+        Passenger user = (Passenger) session.getAttribute("sessionPassenger");
+        if (user == null) {
+            return "redirect:/login";
+        }
+        Account account = (Account) session.getAttribute("sessionAccount");
+        if (account == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("account", account);
         return "profile-password";
+    }
+
+    @PostMapping("/password/update/{id}")
+    public String updatePassword(@PathVariable("id") Integer accountId,
+                                 @RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 RedirectAttributes redirectAttributes,
+                                 HttpSession session) {
+
+        Account account = (Account) session.getAttribute("sessionAccount");
+        if (account == null) {
+            return "redirect:/login";
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        // Check if the current password matches the one in the database
+        if (!passwordEncoder.matches(currentPassword, account.getPassword())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid current password");
+            return "redirect:/profile/password";
+        }
+
+
+        // Check if the new password and confirm password match
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "New password and confirm password do not match");
+            return "redirect:/profile/password";
+        }
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        account.setPassword(hashedPassword);
+
+        // Update the password
+        accountService.updateAccount(account);
+        redirectAttributes.addFlashAttribute("resultMessage", "Password updated successfully");
+
+        return "redirect:/profile/password";
     }
 
     @GetMapping("/reservations")
