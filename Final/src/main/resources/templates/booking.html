@@ -199,7 +199,7 @@
                         />
                     </div>
                     <div th:object="${flight1}">
-                        <div th:text="*{#dates.format(flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
+                        <div th:text="*{#temporals.format(flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                             Thu, 06 Jul 2003
                         </div>
                         <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
@@ -257,7 +257,7 @@
                         />
                     </div>
                     <div th:object="${flight2}">
-                        <div th:text="*{#dates.format(flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
+                        <div th:text="*{#temporals.format(flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                             Thu, 06 Jul 2003
                         </div>
                         <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
