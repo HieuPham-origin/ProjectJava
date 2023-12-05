@@ -41,24 +41,15 @@ public class BookingController {
     @GetMapping(value = {"", "/"})
     public String booking(HttpServletRequest req, Model model) {
         HttpSession session = req.getSession();
-//        if (session.getAttribute("bookingDetail") == null)
-//            return "redirect:/booking";
-        // test
-
-
-//        seatService.initSeat(flightPlaneService.getFlightPlaneById(1), 100);
-//        seatService.initSeat(flightPlaneService.getFlightPlaneById(2), 100);
-//        seatService.initSeat(flightPlaneService.getFlightPlaneById(3), 100);
 
         session.setAttribute("flight1Id", 1);
         session.setAttribute("flight2Id", 3);
         session.setAttribute("isReturn", false);
         session.setAttribute("ticketClass1Id", 2);
         session.setAttribute("ticketClass2Id", 3);
+
         FlightPlane flight1 = flightPlaneService.findById(1);
         FlightPlane flight2 = flightPlaneService.findById(3);
-
-
 
         BookingDetail form = new BookingDetail();
         List<PassengerDTO> passengerDTOS = new ArrayList<>();

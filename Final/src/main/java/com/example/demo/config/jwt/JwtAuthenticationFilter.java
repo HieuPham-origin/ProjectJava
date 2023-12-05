@@ -38,22 +38,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                logger.warn("Unable to get JWT Token");
+//                logger.warn("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
-                logger.warn("JWT Token has expired");
+//                logger.warn("JWT Token has expired");
             }
         } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+//            logger.warn("JWT Token does not begin with Bearer String");
         }
 
-        logger.info("Request received with token: " + jwtToken);
+//        logger.info("Request received with token: " + jwtToken);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.accountService.loadUserByUsername(username);
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
 
                 // Log chi tiết về quá trình xác thực thành công
-                logger.info("User " + username + " successfully authenticated");
+//                logger.info("User " + username + " successfully authenticated");
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
@@ -62,11 +62,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             } else {
                 // Log khi token không hợp lệ
-                logger.warn("Invalid token for user " + username);
+//                logger.warn("Invalid token for user " + username);
             }
         } else {
             // Log khi không có thông tin về người dùng hoặc đã được xác thực trước đó
-            logger.warn("No valid user information or user already authenticated");
+//            logger.warn("No valid user information or user already authenticated");
         }
 
         filterChain.doFilter(request, response);

@@ -28,5 +28,6 @@ public class TicketClass {
 
     @Column(name = "cabin_baggage")
     private int cabinBaggage;
+
 }
 

@@ -27,8 +27,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateAccount(Account account, Integer accountId) {
-        return null;
+    public Account updateAccount(Account account) {
+        return accountRepository.save(account);
     }
 
     @Override
@@ -56,6 +56,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean emailExist(String username) {
         return accountRepository.existsByUsername(username);
     }
+
 
 
     @Override

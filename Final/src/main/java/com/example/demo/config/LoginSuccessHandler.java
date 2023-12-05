@@ -44,9 +44,6 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
         String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        System.out.println(jwt);
-        System.out.println(accountDetails.getAccount().getUsername());
-
         response.setStatus(HttpServletResponse.SC_OK);
 
         Account account = accountDetails.getAccount();
@@ -60,10 +57,10 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         session.setAttribute("jwtToken", jwt);
 
         if (role.equals("ADMIN")) {
-
             session.setAttribute("admin", account);
             response.sendRedirect("/Admin/airport");
         } else {
+            session.setAttribute("sessionAccount", account);
             session.setAttribute("sessionPassenger", passenger);
             response.sendRedirect("/index");
         }

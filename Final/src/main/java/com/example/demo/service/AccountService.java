@@ -10,7 +10,7 @@ public interface AccountService extends UserDetailsService {
 
     List<Account> fetchAllAccount();
 
-    Account updateAccount(Account account, Integer accountId);
+    Account updateAccount(Account account);
 
     void deleteAccount(Integer accountId);
 

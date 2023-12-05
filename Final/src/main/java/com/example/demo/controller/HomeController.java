@@ -34,7 +34,6 @@ public class HomeController {
     @GetMapping("/index")
     public String index(Model model){
         List<Airport> airports = airportService.getAllAirports();
-        System.out.println(airports.size());
         model.addAttribute("airportList",airports);
         return "index";
     }
@@ -45,10 +44,6 @@ public class HomeController {
                                            @RequestParam("departureTicketClassId") int departureTicketClassId,
                                            @RequestParam("arrivalTicketClassId") int arrivalTicketClassId
                                            ){
-        System.out.println(departureFlightId);
-        System.out.println(arrivalFlightId);
-        System.out.println(departureTicketClassId);
-        System.out.println(arrivalTicketClassId);
         httpSession.setAttribute("isReturn","true");
         httpSession.setAttribute("flight1Id",departureFlightId);
         httpSession.setAttribute("flight2Id",arrivalFlightId);
@@ -62,8 +57,6 @@ public class HomeController {
     public String sendDataSessionForNotReturn(@RequestParam("departureFlightId") String departureFlightId,
                                            @RequestParam("departureTicketClassId") int departureTicketClassId
     ){
-        System.out.println(departureFlightId);
-        System.out.println(departureTicketClassId);
         httpSession.setAttribute("isReturn","false");
         httpSession.setAttribute("flight1Id",departureFlightId);
         httpSession.setAttribute("flight1TicketClassId",departureTicketClassId);

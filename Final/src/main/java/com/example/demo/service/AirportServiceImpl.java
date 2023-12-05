@@ -32,8 +32,6 @@ public class AirportServiceImpl implements AirportService{
         }
     }
 
-
-
     @Override
     public List<Airport> getAirportsByKeySearch(String keySearch) {
         List<Airport> airports = getAllAirports();

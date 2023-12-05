@@ -220,7 +220,8 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <div th:if="(${errorMessage != null} )" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;" th:text="${errorMessage}">
+                    <div th:if="(${errorMessage != null} )" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;" >
+                        <div style="display: inline-block" th:text="${errorMessage}"></div>
                         <span style="margin-left: 15px;color: white;font-weight: bold;float: right;font-size: 22px;line-height: 20px;cursor: pointer;transition: 0.3s;" onclick="this.parentElement.style.display='none';" >&times;</span>
                     </div>
                     <!-- Page Heading -->
