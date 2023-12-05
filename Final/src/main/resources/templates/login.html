@@ -43,7 +43,7 @@
     </head>
     <body>
         <!-- Navbar -->
-        <div th:replace="./fragments/header :: header"> </div>
+        <div th:replace="/fragments/header :: header(user=${session.sessionPassenger}, page='login')"> </div>
         <!-- Navbar -->
         <main
             class="d-flex align-items-center flex-column justify-content-center"

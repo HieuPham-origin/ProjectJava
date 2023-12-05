@@ -19,12 +19,12 @@
                 >
                     <!-- Link -->
                     <li class="nav-item">
-                        <a class="nav-link text-secondary ms-3" href="/"
+                        <a class="nav-link text-secondary ms-3" href="/" th:class="${page == 'flight'} ? 'nav-link text-primary ms-3' : 'nav-link text-secondary ms-3'"
                         >Flights</a
                         >
                     </li>
                     <li class="nav-item">
-                        <a th:href="@{/login}" class="nav-link text-secondary ms-3" href="/"
+                        <a th:href="@{/login}" href="/" th:class="${page == 'login'} ? 'nav-link text-primary ms-3' : 'nav-link text-secondary ms-3'"
                         >Log in</a
                         >
                     </li>
@@ -41,16 +41,26 @@
                         th:unless="${user == null}"
                         class="navbar-nav ms-auto mb-2 mb-lg-0 font-nunito d-flex align-items-center"
                 >
+                    <li class="nav-item">
+                        <a  href="/flight" th:class="${page == 'flight'} ? 'nav-link text-primary ms-3' : 'nav-link text-secondary ms-3'"
+                        >
+                            Flights
+                        </a
+                        >
+                    </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-secondary ms-3" href="/" th:text="${user.lastName}"
-                        ></a
+                        <a  href="/profile" th:class="${page == 'profile'} ? 'nav-link text-primary ms-3' : 'nav-link text-secondary ms-3'"
+                        >
+                            Profile
+                        </a
                         >
                     </li>
                     <!-- Link -->
                     <li class="nav-item">
-                        <a class="nav-link text-secondary ms-3" href="/logout"
-                        >Logout</a
+                        <a  href="/logout"
+                            class="nav-link btn btn-primary text-light px-3 py-2 ms-3"
+                        >Log out</a
                         >
                     </li>
 
