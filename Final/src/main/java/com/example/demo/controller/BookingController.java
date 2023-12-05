@@ -5,9 +5,8 @@ import com.example.demo.entity.Baggage;
 import com.example.demo.entity.FlightPlane;
 import com.example.demo.entity.Seat;
 import com.example.demo.entity.SeatDetail;
-import com.example.demo.service.BaggageService;
-import com.example.demo.service.FlightPlaneService;
-import com.example.demo.service.SeatService;
+import com.example.demo.repository.ReservationRepository;
+import com.example.demo.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -31,6 +30,10 @@ public class BookingController {
     BaggageService baggageService;
     @Autowired
     SeatService seatService;
+    @Autowired
+    ReservationService reservationService;
+    @Autowired
+    TicketService ticketService;
     @GetMapping(value = {"", "/"})
     public String booking(HttpServletRequest req, Model model) {
         HttpSession session = req.getSession();
@@ -230,6 +233,9 @@ public class BookingController {
         HttpSession session = req.getSession();
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
+
+        BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
+
 
 
         return "booking-complete";
