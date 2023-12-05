@@ -44,6 +44,7 @@ public class HomeController {
                                            @RequestParam("arrivalFlightId") String arrivalFlightId,
                                            @RequestParam("departureTicketClassId") int departureTicketClassId,
                                            @RequestParam("arrivalTicketClassId") int arrivalTicketClassId,
+                                           @RequestParam("passengerNumInfo") String passengerNumInfo,
                                            HttpServletRequest httpRequest
                                            ){
         httpRequest.getSession().setAttribute("isReturn",true);
@@ -51,6 +52,7 @@ public class HomeController {
         httpRequest.getSession().setAttribute("flight2Id",arrivalFlightId);
         httpRequest.getSession().setAttribute("flight1TicketClassId",departureTicketClassId);
         httpRequest.getSession().setAttribute("flight2TicketClassId",arrivalTicketClassId);
+        System.out.println(passengerNumInfo);
         return "success";
     }
 
@@ -58,11 +60,13 @@ public class HomeController {
     @ResponseBody
     public String sendDataSessionForNotReturn(@RequestParam("departureFlightId") String departureFlightId,
                                               @RequestParam("departureTicketClassId") int departureTicketClassId,
+                                              @RequestParam("passengerNumInfo") String passengerNumInfo,
                                               HttpServletRequest httpRequest
     ){
         httpRequest.getSession().setAttribute("isReturn",false);
         httpRequest.getSession().setAttribute("flight1Id",departureFlightId);
         httpRequest.getSession().setAttribute("flight1TicketClassId",departureTicketClassId);
+        System.out.println(passengerNumInfo);
         return "success";
     }
 }
