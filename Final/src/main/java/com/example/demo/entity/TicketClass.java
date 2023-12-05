@@ -29,7 +29,5 @@ public class TicketClass {
     @Column(name = "baggage")
     private int baggage;
 
-    @Column(name = "price")
-    private int price;
 }
 

@@ -73,8 +73,14 @@ public class AccountController {
 
         }
         else {
+            String email = passenger.getEmail();
+            Account userAccount = accountService.getAccountByUsername(email);
+            if (userAccount == null) {
+                return "redirect:/login";
+            }
             model.addAttribute("passenger", passenger);
             session.setAttribute("sessionPassenger", passenger);
+            session.setAttribute("sessionAccount", userAccount);
             return "redirect:/index";
         }
     }
