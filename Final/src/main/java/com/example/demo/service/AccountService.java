@@ -1,10 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Account;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface AccountService {
+public interface AccountService extends UserDetailsService {
     Account saveAccount(Account account);
 
     List<Account> fetchAllAccount();
