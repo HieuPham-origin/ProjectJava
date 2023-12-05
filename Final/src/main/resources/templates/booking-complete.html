@@ -92,7 +92,7 @@
                 <div class="text-secondary">Show this code to the check-in officer</div>
             </div>
             <h4>TICKET INFORMATION</h4>
-            <div  class="item-container mb-3">
+            <div th:object="${reservation.tickets[0].seatDetail.flightPlane}" class="item-container mb-3">
                 <div class="item-content">
                     <div
                             class="flight-item selected d-flex align-content-center"
@@ -105,10 +105,10 @@
                             />
                         </div>
                         <div>
-                            <div th:text="*{#temporals.format(reservation.tickets[0].seatDetail.flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
+                            <div th:text="*{#temporals.format(departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                                 Thu, 06 Jul 2003
                             </div>
-                            <div th:text="${}" class="">Ho Chi Minh City → Hanoi</div>
+                            <div th:text="*{flight.departureAirport.city + ' → ' + flight.arrivalAirport.city}" class="">Ho Chi Minh City → Hanoi</div>
                         </div>
                     </div>
                     <div id="chosen-departure-flight" class="flight-chosen">
