@@ -40,7 +40,7 @@ function getSubTime(start, end){
 $('.flight-item').click(function(){
     $('#flight-all-container').html("")
     var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    var dateText = new Date($(this).find('.dateDepartureText').text());
+    //var dateText = new Date($(this).find('.dateDepartureText').text());
     $.ajax({
         url: "/search/searchTicket",
         type: "post",
@@ -188,11 +188,7 @@ $('.flight-item').click(function(){
                                                 ${e.flight.flightAirline}
                                             </div>
                                             <div class="text-large fw-bold">
-<<<<<<< HEAD
-
-=======
                                                 ${e.plane.planeName}
->>>>>>> 267f7d41060fa6f6c2ff7cf233edf6a145a6696c
                                             </div>
                                             <div
                                                 class="text-small text-secondary"
@@ -293,11 +289,8 @@ $(document).on('click','.btn-bookFlight', function(){
                         </div>
                         <div>
                             <div class="fw-bold">${data.flight.flightAirline}</div>
-<<<<<<< HEAD
                             <div class="text-secondary">${data.plane.planeName} • </div>
-=======
                             <div class="text-secondary">${data.plane.planeName}</div>
->>>>>>> 267f7d41060fa6f6c2ff7cf233edf6a145a6696c
                         </div>
                         <div class="ms-auto">
                             <input type="hidden" id="${idPrice}-normal" value="${data.flight.flightPrice}">
@@ -408,7 +401,6 @@ $('#btn-continue-booking').click(function(){
     var arrivalHasChildDiv =  $('#chosen-arrival-flight').find('div').length > 0;
     if (isChecked){
         if (departureHasChildDiv && arrivalHasChildDiv){
-            //Move to another page
             var inputDepartureFlightId = $("#input-each-price-departure-flightId").val();
             var inputArrivalFlightId = $("#input-each-price-arrival-flightId").val();
             var inputDepartureFlightIdTotalMoney = parseInt($("#input-each-price-departure").val());

@@ -34,6 +34,7 @@ public class HomeController {
     @GetMapping("/index")
     public String index(Model model){
         List<Airport> airports = airportService.getAllAirports();
+        System.out.println(airports.size());
         model.addAttribute("airportList",airports);
         return "index";
     }

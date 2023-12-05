@@ -123,15 +123,18 @@ public class SearchController {
         List<Flight> flights = flightService.getFlightsByDepartureAndDestination(airportDeparture.getAirportId(), airportDestination.getAirportId());
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<FlightPlane> result = new ArrayList<>();
+        System.out.println("1");
         for (Flight flight: flights) {
             List<FlightPlane> flightPlaneList = flightPlaneService.findByFlight(flight);
             for (FlightPlane flightPlane: flightPlaneList){
-                String indexDateDeparture = outputFormat.format(flightPlane.getDepartureDay());
+                Date date = convertToLocalDateToDate(flightPlane.getDepartureDay());
+                String indexDateDeparture = outputFormat.format(date);
                 if (dateDeparture.equals(indexDateDeparture)){
                     result.add(flightPlane);
                 }
             }
         }
+        System.out.println("1");
 
         // get list filter airline
         List<FlightPlane> resultFilterAirline = new ArrayList<>();
@@ -225,7 +228,9 @@ public class SearchController {
     public static List<FlightPlane> getByFilterDeparture(List<FlightPlane> flightPlaneList, Time start, Time end) {
         List<FlightPlane> result = new ArrayList<>();
         for (FlightPlane flightPlane : flightPlaneList) {
-            if (flightPlane.getDepartureTime().after(start) && flightPlane.getDepartureTime().before(end)) {
+            Time timeDeparture = Time.valueOf(flightPlane.getDepartureTime());
+
+            if (timeDeparture.after(start) && timeDeparture.before(end)) {
                 result.add(flightPlane);
             }
         }
@@ -235,8 +240,9 @@ public class SearchController {
     public static List<FlightPlane> getByFilterArrival(List<FlightPlane> flightPlaneList, Time start, Time end) {
         List<FlightPlane> result = new ArrayList<>();
         for (FlightPlane flightPlane : flightPlaneList) {
-            System.out.println(flightPlane.getArrivalTime().toString());
-            if (flightPlane.getArrivalTime().after(start) && flightPlane.getArrivalTime().before(end)) {
+
+            Time timeArrival = Time.valueOf(flightPlane.getArrivalTime());
+            if (timeArrival.after(start) && timeArrival.before(end)) {
 
                 result.add(flightPlane);
             }
@@ -253,5 +259,8 @@ public class SearchController {
             numbers.add(number);
         }
         return numbers.stream().mapToInt(Integer::intValue).sum();
+    }
+    private static Date convertToLocalDateToDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }
