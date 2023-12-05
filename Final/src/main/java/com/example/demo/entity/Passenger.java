@@ -32,7 +32,7 @@ public class Passenger {
     @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = true)
     private String email;
 
     @Column(name = "address", nullable = true)
