@@ -60,10 +60,6 @@ public class Ticket {
     private Baggage baggage;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_id", referencedColumnName = "payment_id", insertable = false, updatable = false)
-    private PaymentFormat paymentFormat;
-
-    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "reservation_id", referencedColumnName = "id")
     private Reservation reservation;
 }
