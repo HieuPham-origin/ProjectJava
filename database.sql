@@ -92,8 +92,7 @@ CREATE TABLE `Seat`(
     FOREIGN KEY(`plane_id`) REFERENCES `Plane`(`plane_id`)
 );
 
--- No data
-CREATE TABLE `SeatDetail`(
+CREATE TABLE `Seat_Detail`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `is_taken` BOOLEAN NOT NULL,
     `flight_plane_id` INT NOT NULL,
@@ -135,7 +134,7 @@ CREATE TABLE `Ticket`(
     FOREIGN KEY(`passenger_id`) REFERENCES `Passenger`(`passenger_id`),
     FOREIGN KEY(`reservation_id`) REFERENCES `Reservation`(`id`),
     FOREIGN KEY(`class_id`) REFERENCES `Ticket_class`(`class_id`),
-    FOREIGN KEY(`seat_detail_id`) REFERENCES `SeatDetail`(`id`)
+    FOREIGN KEY(`seat_detail_id`) REFERENCES `Seat_Detail`(`id`)
 );
 
 -- No data
@@ -167,6 +166,7 @@ INSERT INTO `Airport` (`airport_name`, `city`, `country`, `status`, `airport_cod
 ('Tan Son Nhat Airport', 'Ho Chi Minh', 'Vietnam', 'Active', 'TSN'),
 ('Da Nang Airport', 'Da Nang', 'Vietnam', 'Active', 'DN'),
 ('Hai Phong Airport', 'Hai Phong', 'Vietnam', 'Active', 'HP'),
+('Vienna International Airport', 'Vienna', 'Austria', 'Active', 'VIE'),
 ('John F. Kennedy International Airport', 'New York', 'United States', 'Active', 'JFK'),
 ('Heathrow Airport', 'London', 'United Kingdom', 'Active', 'LHR'),
 ('Charles de Gaulle Airport', 'Paris', 'France', 'Active', 'CDG'),
@@ -178,81 +178,27 @@ INSERT INTO `Airport` (`airport_name`, `city`, `country`, `status`, `airport_cod
 ('Frankfurt Airport', 'Frankfurt', 'Germany', 'Active', 'FRA'),
 ('Sydney Airport', 'Sydney', 'Australia', 'Active', 'SYD'),
 ('Hamad International Airport', 'Doha', 'Qatar', 'Active', 'DOH'),
-('O''Hare International Airport', 'Chicago', 'United States', 'Active', 'ORD'),
-('Adolfo Suárez Madrid–Barajas Airport', 'Madrid', 'Spain', 'Active', 'MAD'),
 ('Hong Kong International Airport', 'Hong Kong', 'China', 'Active', 'HKG'),
 ('Leonardo da Vinci–Fiumicino Airport', 'Rome', 'Italy', 'Active', 'FCO'),
-('Denver International Airport', 'Denver', 'United States', 'Active', 'DEN'),
 ('Tokyo Haneda Airport', 'Tokyo', 'Japan', 'Active', 'HND'),
-('Amsterdam Airport Schiphol', 'Amsterdam', 'Netherlands', 'Active', 'AMS'),
-('Toronto Pearson International Airport', 'Toronto', 'Canada', 'Active', 'YYZ'),
-('San Francisco International Airport', 'San Francisco', 'United States', 'Active', 'SFO'),
-('Munich Airport', 'Munich', 'Germany', 'Active', 'MUC'),
-('Indira Gandhi International Airport', 'Delhi', 'India', 'Active', 'DEL'),
-('Dallas/Fort Worth International Airport', 'Dallas', 'United States', 'Active', 'DFW'),
-('Guangzhou Baiyun International Airport', 'Guangzhou', 'China', 'Active', 'CAN'),
-('Seattle-Tacoma International Airport', 'Seattle', 'United States', 'Active', 'SEA'),
-('Kuala Lumpur International Airport', 'Kuala Lumpur', 'Malaysia', 'Active', 'KUL'),
-('Hartsfield-Jackson Atlanta International Airport', 'Atlanta', 'United States', 'Active', 'ATL'),
-('Zurich Airport', 'Zurich', 'Switzerland', 'Active', 'ZRH'),
-('Barcelona–El Prat Airport', 'Barcelona', 'Spain', 'Active', 'BCN'),
-('San Diego International Airport', 'San Diego', 'United States', 'Active', 'SAN'),
-('Chhatrapati Shivaji Maharaj International Airport', 'Mumbai', 'India', 'Active', 'BOM'),
-('Minneapolis-Saint Paul International Airport', 'Minneapolis', 'United States', 'Active', 'MSP'),
-('Dublin Airport', 'Dublin', 'Ireland', 'Active', 'DUB'),
-('Ben Gurion Airport', 'Tel Aviv', 'Israel', 'Active', 'TLV'),
-('Charlotte Douglas International Airport', 'Charlotte', 'United States', 'Active', 'CLT'),
-('Vienna International Airport', 'Vienna', 'Austria', 'Active', 'VIE'),
-('Istanbul Airport', 'Istanbul', 'Turkey', 'Active', 'IST'),
-('Phoenix Sky Harbor International Airport', 'Phoenix', 'United States', 'Active', 'PHX'),
-('Brussels Airport', 'Brussels', 'Belgium', 'Active', 'BRU'),
-('McCarran International Airport', 'Las Vegas', 'United States', 'Active', 'LAS'),
-('Miami International Airport', 'Miami', 'United States', 'Active', 'MIA'),
-('Rajiv Gandhi International Airport', 'Hyderabad', 'India', 'Active', 'HYD'),
-('Detroit Metropolitan Airport', 'Detroit', 'United States', 'Active', 'DTW'),
-('Auckland Airport', 'Auckland', 'New Zealand', 'Active', 'AKL'),
-('Fiumicino Airport', 'Rome', 'Italy', 'Active', 'FCO'),
-('Osaka Kansai International Airport', 'Osaka', 'Japan', 'Active', 'KIX'),
-('Perth Airport', 'Perth', 'Australia', 'Active', 'PER'),
-('Düsseldorf Airport', 'Düsseldorf', 'Germany', 'Active', 'DUS'),
-('Helsinki-Vantaa Airport', 'Helsinki', 'Finland', 'Active', 'HEL'),
-('Cairo International Airport', 'Cairo', 'Egypt', 'Active', 'CAI'),
-('Jorge Chávez International Airport', 'Lima', 'Peru', 'Active', 'LIM'),
-('Tocumen International Airport', 'Panama City', 'Panama', 'Active', 'PTY'),
-('Eleftherios Venizelos International Airport', 'Athens', 'Greece', 'Active', 'ATH'),
-('Abu Dhabi International Airport', 'Abu Dhabi', 'United Arab Emirates', 'Active', 'AUH'),
-('Sheremetyevo International Airport', 'Moscow', 'Russia', 'Active', 'SVO'),
-('Suvarnabhumi Airport', 'Bangkok', 'Thailand', 'Active', 'BKK'),
-('Kempegowda International Airport', 'Bangalore', 'India', 'Active', 'BLR'),
-('Copenhagen Airport', 'Copenhagen', 'Denmark', 'Active', 'CPH'),
-('Ninoy Aquino International Airport', 'Manila', 'Philippines', 'Active', 'MNL'),
-('Jomo Kenyatta International Airport', 'Nairobi', 'Kenya', 'Active', 'NBO'),
-('Kingsford Smith Airport', 'Sydney', 'Australia', 'Active', 'SYD'),
-('Marrakesh Menara Airport', 'Marrakesh', 'Morocco', 'Active', 'RAK'),
-('Brisbane Airport', 'Brisbane', 'Australia', 'Active', 'BNE'),
-('Changi Airport', 'Singapore', 'Singapore', 'Active', 'SIN'),
-('Malpensa Airport', 'Milan', 'Italy', 'Active', 'MXP'),
-('Vienna International Airport', 'Vienna', 'Austria', 'Active', 'VIE'),
-('Sheremetyevo International Airport', 'Moscow', 'Russia', 'Active', 'SVO'),
-('O. R. Tambo International Airport', 'Johannesburg', 'South Africa', 'Active', 'JNB'),
-('Doha Hamad International Airport', 'Doha', 'Qatar', 'Active', 'DHIA');
+('Amsterdam Airport Schiphol', 'Amsterdam', 'Netherlands', 'Active', 'AMS');
 
 -- Tạo dữ liệu cho bảng Plane
 INSERT INTO `Plane` (`plane_name`, `status`, `capacity`) VALUES
 ('Boeing 737', 'Active', 150),
 ('Airbus A320', 'Active', 140),
-('Boeing 747', 'Active', 300),
-('Airbus A380', 'Active', 500),
+('Boeing 747', 'Active', 250),
+('Airbus A380', 'Active', 250),
 ('Embraer E190', 'Active', 100),
 ('Bombardier CRJ-900', 'Active', 100),
-('Boeing 777', 'Active', 350),
+('Boeing 777', 'Active', 250),
 ('Airbus A330', 'Active', 250),
 ('Boeing 757', 'Active', 200),
-('Airbus A350', 'Active', 300),
+('Airbus A350', 'Active', 250),
 ('Boeing 767', 'Active', 220),
 ('Embraer E145', 'Active', 150),
 ('Bombardier Q400', 'Active', 170),
-('Boeing 787', 'Active', 270),
+('Boeing 787', 'Active', 250),
 ('Airbus A319', 'Active', 120),
 ('Boeing 717', 'Active', 100),
 ('Airbus A321', 'Active', 200),
@@ -260,35 +206,15 @@ INSERT INTO `Plane` (`plane_name`, `status`, `capacity`) VALUES
 ('Embraer E170', 'Active', 180),
 ('Bombardier CRJ-200', 'Active', 160),
 ('Boeing 737 MAX', 'Active', 170),
-('Airbus A330neo', 'Active', 280),
+('Airbus A330neo', 'Active', 250),
 ('Boeing 757-300', 'Active', 230),
 ('Airbus A321XLR', 'Active', 220),
 ('Boeing 767-400ER', 'Active', 240),
 ('Embraer E195', 'Active', 110),
 ('Bombardier CRJ-1000', 'Active', 120),
-('Boeing 777X', 'Active', 400),
 ('Airbus A330-800neo', 'Active', 230),
 ('Boeing 737-800', 'Active', 160),
-('Airbus A220', 'Active', 130),
-('Boeing 737-900ER', 'Active', 180),
-('Airbus A321neo', 'Active', 240),
-('Boeing 757-200', 'Active', 210),
-('Embraer E175', 'Active', 170),
-('Bombardier CRJ-700', 'Active', 180),
-('Boeing 737-700', 'Active', 140),
-('Airbus A318', 'Active', 100),
-('Boeing 767-300ER', 'Active', 250),
-('Airbus A340', 'Active', 300),
-('Boeing 737-600', 'Active', 120),
-('Airbus A310', 'Active', 180),
-('Boeing 757-100', 'Active', 150),
-('Embraer E135', 'Active', 140),
-('Bombardier CRJ-500', 'Active', 150),
-('Boeing 747-8', 'Active', 250),
-('Airbus A330-200', 'Active', 220),
-('Boeing 737-700ER', 'Active', 150),
-('Airbus A321LR', 'Active', 200),
-('Boeing 737-800ER', 'Active', 200);
+('Boeing 737-900ER', 'Active', 160);
 
 -- Tạo dữ liệu cho bảng Seat
 DELIMITER $$
@@ -383,25 +309,7 @@ INSERT INTO `Baggage` (`baggage_name`, `weight`, `price`) VALUES
 ('Special Baggage - Telescope', 12, 30),
 ('Special Baggage - Wedding Dress', 8, 20),
 ('Special Baggage - Surfboard', 20, 35),
-('Special Baggage - Skis and Poles', 15, 30),
-('Special Baggage - Kayak', 40, 60),
-('Special Baggage - Archery Equipment', 10, 25),
-('Special Baggage - Bike Box', 35, 50),
-('Special Baggage - Scuba Diving Tank', 18, 35),
-('Special Baggage - Artwork', 10, 25),
-('Special Baggage - Golf Clubs', 15, 30),
-('Special Baggage - Motorcycle Helmet', 3, 15),
-('Special Baggage - Paraglider', 25, 40),
-('Special Baggage - Kiteboard Bag', 20, 35),
-('Special Baggage - Electric Scooter', 15, 30),
-('Special Baggage - Antiques', 10, 25),
-('Special Baggage - Game Console', 5, 15),
-('Special Baggage - Telescope', 12, 30),
-('Special Baggage - Skateboard', 7, 20),
-('Special Baggage - Drone', 4, 15),
-('Special Baggage - Picnic Set', 10, 20),
-('Special Baggage - Fishing Rod', 5, 15),
-('Special Baggage - Beach Gear', 15, 30);
+('Special Baggage - Skis and Poles', 15, 30);
 
 -- Tạo dữ liệu cho bảng Service
 INSERT INTO `Service` (`service_name`, `price`, `description`) VALUES
@@ -434,17 +342,7 @@ INSERT INTO `Service` (`service_name`, `price`, `description`) VALUES
 ('Mobile Charging Service', 10, 'Stay powered up with mobile charging services at the airport'),
 ('City Tour Assistance', 25, 'Explore the destination with guided city tour assistance'),
 ('Concierge Service', 28, 'Experience personalized concierge services for a seamless journey'),
-('Private Jet Charter', 200, 'Travel in ultimate luxury with a private jet charter service'),
-('Celebratory Package', 60, 'Celebrate special occasions with a customized in-flight package'),
-('Catering Upgrade', 35, 'Upgrade your in-flight dining experience with premium catering'),
-('Meeting Room Reservation', 20, 'Book a meeting room for business discussions at the airport'),
-('Airport Yoga Studio Access', 15, 'Relax and rejuvenate with access to an airport yoga studio'),
-('Personal Shopper Service', 30, 'Receive assistance from a personal shopper for duty-free shopping'),
-('Bag Wrapping Service', 8, 'Secure your luggage with professional bag wrapping services'),
-('Customs Assistance', 12, 'Receive guidance and assistance through the customs process'),
-('Currency Exchange Assistance', 15, 'Get assistance with currency exchange at the airport'),
-('Mobile Boarding Pass', 5, 'Go paperless with a mobile boarding pass on your smartphone'),
-('Carry-On Essentials Kit', 10, 'Stay refreshed and comfortable with a carry-on essentials kit');
+('Private Jet Charter', 200, 'Travel in ultimate luxury with a private jet charter service');
 
 -- Tạo dữ liệu cho bảng Passenger
 INSERT INTO `Passenger` (`first_name`, `last_name`, `gender`, `date_of_birth`, `phone_number`, `email`, `address`, `country`, `type`)
@@ -485,7 +383,9 @@ BEGIN
   DECLARE i INT DEFAULT 1;
   DECLARE random_value INT;
 
-  WHILE i <= 72 DO
+  SELECT COUNT(*) INTO @num_airports FROM Airport;
+
+  WHILE i < @num_airports DO
     -- Sinh số ngẫu nhiên từ 1 đến 10
     SET random_value = FLOOR(1 + RAND() * 10);
 
@@ -507,7 +407,9 @@ BEGIN
   DECLARE i INT DEFAULT 1;
   DECLARE random_value INT;
 
-  WHILE i <= 72 DO
+  SELECT COUNT(*) INTO @num_airports FROM Airport;
+
+  WHILE i < @num_airports DO
     -- Sinh số ngẫu nhiên từ 1 đến 10
     SET random_value = FLOOR(1 + RAND() * 10);
 
@@ -524,6 +426,98 @@ DELIMITER ;
 CALL GenerateFlightDataRepeat();
 
 -- Tạo dữ liệu cho bảng Flight_Plane
+-- DELIMITER //
+
+-- CREATE PROCEDURE InsertFlightPlaneCombination()
+-- BEGIN
+--   DECLARE flight_id_var INT DEFAULT 1;
+--   DECLARE plane_id_var INT;
+
+--   SELECT COUNT(*) INTO @num_flights FROM Flight;
+
+--   -- Bắt đầu vòng lặp cho mỗi Flight
+--   WHILE flight_id_var <= @num_flights DO
+  
+--     SELECT COUNT(*) INTO @num_planes FROM Plane;
+--     SET plane_id_var = 1;
+
+--     -- Bắt đầu vòng lặp cho mỗi Plane
+--     WHILE plane_id_var <= @num_planes DO
+--       SET @current_date = CURRENT_DATE;
+      
+--       -- Random departure day between current date and current date + 3 days
+--       SET @departure_day = @current_date + INTERVAL FLOOR(RAND() * 3) DAY;
+--       -- Random arrival day between departure day and departure day + 2 days
+--       SET @arrival_day = @departure_day + INTERVAL FLOOR(RAND() * 2) DAY;
+
+--       SET @departure_time_sec = FLOOR(RAND() * 86400);
+--       SET @arrival_time_sec = FLOOR(RAND() * 86400);
+
+--       -- Kiểm tra điều kiện departure_time phải nhỏ hơn arrival_time
+--       WHILE @departure_time_sec >= @arrival_time_sec DO
+--         SET @departure_time_sec = FLOOR(RAND() * 86400);
+--         SET @arrival_time_sec = FLOOR(RAND() * 86400);
+--       END WHILE;
+
+--       -- Insert dữ liệu vào bảng Flight_Plane
+--       INSERT INTO `Flight_Plane` (`flight_id`, `plane_id`, `departure_time`, `arrival_time`, `departure_day`, `arrival_day`)
+--       VALUES (flight_id_var, plane_id_var, SEC_TO_TIME(@departure_time_sec), SEC_TO_TIME(@arrival_time_sec), @departure_day, @arrival_day);
+
+--       SET plane_id_var = plane_id_var + 1;
+--     END WHILE;
+
+--     SET flight_id_var = flight_id_var + 1;
+--   END WHILE;
+-- END //
+
+-- DELIMITER ;
+
+-- DELIMITER //
+
+-- CREATE PROCEDURE InsertFlightPlaneCombination()
+-- BEGIN
+--   DECLARE flight_id_var INT DEFAULT 1;
+--   DECLARE plane_id_var INT;
+
+--   SELECT COUNT(*) INTO @num_flights FROM Flight;
+--   SELECT COUNT(*) INTO @num_planes FROM Plane;
+
+--   -- Bắt đầu vòng lặp cho mỗi Flight
+--   WHILE flight_id_var <= @num_flights DO
+
+--     SET plane_id_var = ((flight_id_var - 1) * 10 % @num_planes) + 1;
+
+--     -- Bắt đầu vòng lặp cho mỗi Plane (chỉ lấy 10 plane_id)
+--     WHILE plane_id_var <= @num_planes AND plane_id_var <= (flight_id_var * 10) % @num_planes + 10 DO
+--       SET @current_date = CURRENT_DATE;
+
+--       -- Random departure day between current date and current date + 3 days
+--       SET @departure_day = @current_date + INTERVAL FLOOR(RAND() * 3) DAY;
+--       -- Random arrival day between departure day and departure day + 2 days
+--       SET @arrival_day = @departure_day + INTERVAL FLOOR(RAND() * 2) DAY;
+
+--       SET @departure_time_sec = FLOOR(RAND() * 86400);
+--       SET @arrival_time_sec = FLOOR(RAND() * 86400);
+
+--       -- Kiểm tra điều kiện departure_time phải nhỏ hơn arrival_time
+--       WHILE @departure_time_sec >= @arrival_time_sec DO
+--         SET @departure_time_sec = FLOOR(RAND() * 86400);
+--         SET @arrival_time_sec = FLOOR(RAND() * 86400);
+--       END WHILE;
+
+--       -- Insert dữ liệu vào bảng Flight_Plane
+--       INSERT INTO `Flight_Plane` (`flight_id`, `plane_id`, `departure_time`, `arrival_time`, `departure_day`, `arrival_day`)
+--       VALUES (flight_id_var, plane_id_var, SEC_TO_TIME(@departure_time_sec), SEC_TO_TIME(@arrival_time_sec), @departure_day, @arrival_day);
+
+--       SET plane_id_var = plane_id_var + 1;
+--     END WHILE;
+
+--     SET flight_id_var = flight_id_var + 1;
+--   END WHILE;
+-- END //
+
+-- DELIMITER ;
+
 DELIMITER //
 
 CREATE PROCEDURE InsertFlightPlaneCombination()
@@ -532,19 +526,19 @@ BEGIN
   DECLARE plane_id_var INT;
 
   SELECT COUNT(*) INTO @num_flights FROM Flight;
+  SELECT COUNT(*) INTO @num_planes FROM Plane;
 
   -- Bắt đầu vòng lặp cho mỗi Flight
   WHILE flight_id_var <= @num_flights DO
-  
-    SELECT COUNT(*) INTO @num_planes FROM Plane;
-    SET plane_id_var = 1;
 
-    -- Bắt đầu vòng lặp cho mỗi Plane
-    WHILE plane_id_var <= @num_planes DO
+    SET plane_id_var = ((flight_id_var - 1) * 10 % @num_planes) + 1;
+
+    -- Bắt đầu vòng lặp cho mỗi Plane (chỉ lấy 10 plane_id)
+    WHILE plane_id_var <= @num_planes AND plane_id_var <= ((flight_id_var - 1) * 10 % @num_planes) + 10 DO
       SET @current_date = CURRENT_DATE;
-      
-      -- Random departure day between current date and current date + 3 days
-      SET @departure_day = @current_date + INTERVAL FLOOR(RAND() * 3) DAY;
+
+      -- Random departure day between current date and current date + 2 days
+      SET @departure_day = @current_date + INTERVAL FLOOR(RAND() * 2) DAY;
       -- Random arrival day between departure day and departure day + 2 days
       SET @arrival_day = @departure_day + INTERVAL FLOOR(RAND() * 2) DAY;
 
@@ -572,38 +566,80 @@ DELIMITER ;
 
 CALL InsertFlightPlaneCombination();
 
--- Tạo dữ liệu cho bảng SeatDetail
-DELIMITER //
+-- Tạo dữ liệu cho bảng Seat_Detail
+-- DELIMITER //
 
-CREATE PROCEDURE InsertSeatDetailData()
-BEGIN
-  DECLARE flight_plane_id_var INT;
-  DECLARE seat_id_var INT;
-  DECLARE done INT DEFAULT FALSE;
+-- CREATE PROCEDURE InsertSeatDetailData()
+-- BEGIN
+--   DECLARE flight_plane_id_var INT;
+--   DECLARE seat_id_var INT;
+--   DECLARE done INT DEFAULT FALSE;
 
-  -- Lấy danh sách các flight_plane
-  DECLARE flight_plane_cursor CURSOR FOR SELECT `id` FROM `Flight_Plane`;
-  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+--   -- Lấy danh sách các flight_plane
+--   DECLARE flight_plane_cursor CURSOR FOR SELECT `id` FROM `Flight_Plane`;
+--   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-  OPEN flight_plane_cursor;
+--   OPEN flight_plane_cursor;
 
-  read_loop: LOOP
-    FETCH flight_plane_cursor INTO flight_plane_id_var;
-    IF done THEN
-      LEAVE read_loop;
-    END IF;
+--   read_loop: LOOP
+--     FETCH flight_plane_cursor INTO flight_plane_id_var;
+--     IF done THEN
+--       LEAVE read_loop;
+--     END IF;
 
-    -- Lấy số lượng seat hiện có
-    SET @num_seats = (SELECT COUNT(*) FROM `Seat`);
+--     -- Lấy số lượng seat hiện có
+--     SET @num_seats = (SELECT COUNT(*) FROM `Seat`);
 
-    -- Thêm dữ liệu vào bảng SeatDetail
-    INSERT INTO `SeatDetail` (`is_taken`, `flight_plane_id`, `seat_id`)
-    VALUES (0, flight_plane_id_var, FLOOR(1 + RAND() * @num_seats));
-  END LOOP;
+--     -- Thêm dữ liệu vào bảng Seat_Detail
+--     INSERT INTO `SeatDetail` (`is_taken`, `flight_plane_id`, `seat_id`)
+--     VALUES (0, flight_plane_id_var, FLOOR(1 + RAND() * @num_seats));
+--   END LOOP;
 
-  CLOSE flight_plane_cursor;
-END //
+--   CLOSE flight_plane_cursor;
+-- END //
 
-DELIMITER ;
+-- DELIMITER ;
 
-CALL InsertSeatDetailData();
+-- DELIMITER //
+
+-- CREATE PROCEDURE InsertSeatDetailData()
+-- BEGIN
+--   DECLARE flight_plane_id_var INT;
+--   DECLARE plane_id_var INT;
+--   DECLARE capacity_var INT;
+--   DECLARE i INT;
+
+--   -- Lấy danh sách các flight_plane
+--   DECLARE flight_plane_cursor CURSOR FOR SELECT `id`, `plane_id` FROM `Flight_Plane`;
+
+--   OPEN flight_plane_cursor;
+
+--   read_loop: LOOP
+--     FETCH flight_plane_cursor INTO flight_plane_id_var, plane_id_var;
+--     IF flight_plane_id_var IS NULL THEN
+--       LEAVE read_loop;
+--     END IF;
+
+--     -- Lấy số lượng seat của plane tương ứng
+--     SET capacity_var = (SELECT `capacity` FROM `Plane` WHERE `plane_id` = plane_id_var);
+
+--     -- Thêm dữ liệu vào bảng Seat_Detail
+--     SET i = 1;
+--     WHILE i <= capacity_var DO
+--       INSERT INTO `Seat_Detail` (`is_taken`, `flight_plane_id`, `seat_id`)
+--       VALUES (0, flight_plane_id_var, i);
+--       SET i = i + 1;
+--     END WHILE;
+
+--   END LOOP;
+
+--   CLOSE flight_plane_cursor;
+-- END //
+
+-- DELIMITER ;
+INSERT INTO Seat_Detail (is_taken, flight_plane_id, seat_id)
+SELECT 0, fp.id, s.seat_id
+FROM Flight_Plane fp
+JOIN Seat s ON s.plane_id = fp.plane_id;
+
+-- CALL InsertSeatDetailData();
