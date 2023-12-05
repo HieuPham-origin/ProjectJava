@@ -25,7 +25,6 @@ public class Ticket {
     @Column(name = "tax")
     private int tax;
 
-
     @Column(name = "status")
     private String status;
 
