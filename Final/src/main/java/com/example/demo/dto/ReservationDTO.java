@@ -23,42 +23,17 @@ public class ReservationDTO {
 
 
     public ReservationDTO(Reservation reservation) {
-        if (reservation.getTickets().size() % 2 != 0) {
-            numberOfPassengers = 1;
-            isTwoWay = false;
+        isTwoWay = reservation.getIsTwoway();
+        if (isTwoWay) {
+            numberOfPassengers = reservation.getTickets().size()/2;
             flightPlane1 = reservation.getTickets().get(0).getSeatDetail().getFlightPlane();
+            flightPlane2 = reservation.getTickets().get(numberOfPassengers).getSeatDetail().getFlightPlane();
         }
         else {
-            if (reservation.getTickets().size() == 2) {
-                if (reservation.getTickets().get(0).getPassenger().equals(reservation.getTickets().get(1).getPassenger())) {
-                    isTwoWay = true;
-                    numberOfPassengers = 1;
-                    flightPlane1 = reservation.getTickets().get(0).getSeatDetail().getFlightPlane();
-                    flightPlane2 = reservation.getTickets().get(1).getSeatDetail().getFlightPlane();
-                }
-                else {
-                    isTwoWay = false;
-                    numberOfPassengers = 2;
-                    flightPlane1 = reservation.getTickets().get(0).getSeatDetail().getFlightPlane();
-
-                }
-            }
-            else {
-                Passenger first = reservation.getTickets().get(0).getPassenger();
-                Passenger middle = reservation.getTickets().get(reservation.getTickets().size() / 2).getPassenger();
-                if (first.equals(middle)) {
-                    isTwoWay = true;
-                    numberOfPassengers = reservation.getTickets().size() / 2;
-                    flightPlane1 = reservation.getTickets().get(0).getSeatDetail().getFlightPlane();
-                    flightPlane2 = reservation.getTickets().get(reservation.getTickets().size() / 2).getSeatDetail().getFlightPlane();
-                }
-                else {
-                    isTwoWay = false;
-                    numberOfPassengers = reservation.getTickets().size() / 2;
-                    flightPlane1 = reservation.getTickets().get(0).getSeatDetail().getFlightPlane();
-                }
-            }
+            flightPlane1 = reservation.getTickets().get(0).getSeatDetail().getFlightPlane();
+            numberOfPassengers = reservation.getTickets().size();
         }
+
         Duration duration = Duration.between(flightPlane1.getDepartureTime(), flightPlane1.getArrivalTime());
         this.duration1 = duration.toHours() + "h " + duration.toMinutesPart() + "m";
         if (isTwoWay) {
@@ -71,19 +46,28 @@ public class ReservationDTO {
     }
 
     private void updatePassengers() {
-        for (int i = 0; i < numberOfPassengers; i++) {
-            ReservationPassengerDTO passenger = new ReservationPassengerDTO();
-            passenger.setName(reservation.getTickets().get(0).getPassenger().getLastName() + ' ' + reservation.getTickets().get(0).getPassenger().getFirstName());
-            passenger.setSeat1(reservation.getTickets().get(0).getSeatDetail().getSeat().getSeatNumber());
-            passenger.setTicket1Id(reservation.getTickets().get(0).getTicketId());
-            passenger.setBaggage1(reservation.getTickets().get(0).getBaggage() == null ? "No extra baggage" : reservation.getTickets().get(0).getBaggage().getBaggageName() + " - " + reservation.getTickets().get(0).getBaggage().getWeight());
-            if (isTwoWay) {
+        if (isTwoWay) {
+            for (int i = 0; i < numberOfPassengers; i++) {
+                ReservationPassengerDTO passenger = new ReservationPassengerDTO();
+                passenger.setName(reservation.getTickets().get(i).getPassenger().getLastName() + ' ' + reservation.getTickets().get(i).getPassenger().getFirstName());
+                passenger.setSeat1(reservation.getTickets().get(i).getSeatDetail().getSeat().getSeatNumber());
+                passenger.setTicket1Id(reservation.getTickets().get(i).getTicketId());
+                passenger.setBaggage1(reservation.getTickets().get(i).getBaggage() == null ? "No extra baggage" : reservation.getTickets().get(i).getBaggage().getBaggageName() + " - " + reservation.getTickets().get(i).getBaggage().getWeight());
                 passenger.setSeat2(reservation.getTickets().get(numberOfPassengers).getSeatDetail().getSeat().getSeatNumber());
                 passenger.setTicket2Id(reservation.getTickets().get(numberOfPassengers).getTicketId());
-                passenger.setBaggage2(reservation.getTickets().get(numberOfPassengers).getBaggage() == null ? "No extra baggage" : reservation.getTickets().get(0).getBaggage().getBaggageName() + " - " + reservation.getTickets().get(0).getBaggage().getWeight());
+                passenger.setBaggage2(reservation.getTickets().get(numberOfPassengers).getBaggage() == null ? "No extra baggage" : reservation.getTickets().get(i).getBaggage().getBaggageName() + " - " + reservation.getTickets().get(i).getBaggage().getWeight());
+                passengers.add(passenger);
             }
-            passengers.add(passenger);
-
+        }
+        else {
+            for (int i = 0; i < numberOfPassengers; i++) {
+                ReservationPassengerDTO passenger = new ReservationPassengerDTO();
+                passenger.setName(reservation.getTickets().get(i).getPassenger().getLastName() + ' ' + reservation.getTickets().get(i).getPassenger().getFirstName());
+                passenger.setSeat1(reservation.getTickets().get(i).getSeatDetail().getSeat().getSeatNumber());
+                passenger.setTicket1Id(reservation.getTickets().get(i).getTicketId());
+                passenger.setBaggage1(reservation.getTickets().get(i).getBaggage() == null ? "No extra baggage" : reservation.getTickets().get(i).getBaggage().getBaggageName() + " - " + reservation.getTickets().get(i).getBaggage().getWeight());
+                passengers.add(passenger);
+            }
         }
     }
 }

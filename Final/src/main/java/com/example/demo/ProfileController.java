@@ -130,6 +130,6 @@ public class ProfileController {
     public String getReservations(@PathVariable("id") Integer reservationId, Model model){
         Reservation reservation = reservationService.findById(reservationId);
         model.addAttribute("reservation", new ReservationDTO(reservation));
-        return "booking-complete";
+        return "eticket";
     }
 }

@@ -104,7 +104,7 @@ public class BookingController {
             return "redirect:/booking";
 
         boolean isReturn = (boolean) session.getAttribute("isReturn");
-
+        System.out.println("2");
         BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
         FlightPlane flight1 = flightPlaneService.findById((int) session.getAttribute("flight1Id"));
         FlightPlane flight2 = isReturn ? flightPlaneService.findById((int) session.getAttribute("flight2Id")) : null;
@@ -116,7 +116,7 @@ public class BookingController {
         total += flight1.getFlight().getFlightPrice() * bookingDetail.getPassengerDTOS().size() * ticketClass1.getRate();
         if (isReturn)
             total += flight2.getFlight().getFlightPrice() * bookingDetail.getPassengerDTOS().size() * ticketClass2.getRate();
-
+        System.out.println("3");
         if (!bookingDetail.isHasExtraBaggage1() && !bookingDetail.isHasExtraBaggage2()) {
             bookingDetail.setBaggageIds1(new ArrayList<>());
             bookingDetail.setBaggageIds2(new ArrayList<>());
@@ -160,7 +160,7 @@ public class BookingController {
             model.addAttribute("baggage1Sum", baggage1Sum);
             model.addAttribute("baggage2Sum", baggage2Sum);
         }
-
+        System.out.println(4);
         if (!bookingDetail.isHasChosenSeat1() && !bookingDetail.isHasChosenSeat2()) {
             bookingDetail.setSeatDetailIds1(new ArrayList<>());
             bookingDetail.setSeatDetailIds2(new ArrayList<>());
@@ -173,7 +173,7 @@ public class BookingController {
         else {
             List<SeatDetail> chosenSeats1 = new ArrayList<>();
             for (int id : bookingDetail.getSeatDetailIds1()) {
-                System.out.println(id);
+                System.out.println("ASD " + id);
                 if (id != 0)
                     chosenSeats1.add(seatService.getSeatDetailById(id));
                 else
@@ -194,7 +194,7 @@ public class BookingController {
             model.addAttribute("chosenSeats1", chosenSeats1);
         }
 
-
+        System.out.println("5");
         List<SeatDetail> seatDetails1 = seatService.getSeatDetailsByFlightPlane(flight1);
         List<SeatDetail> seatDetails2 = seatService.getSeatDetailsByFlightPlane(flight2);
 
@@ -210,6 +210,7 @@ public class BookingController {
             model.addAttribute("ticketClass2", ticketClass2);
         model.addAttribute("baggages", baggages);
         model.addAttribute("isReturn", (boolean) session.getAttribute("isReturn"));
+        System.out.println("6");
         return "booking-review";
     }
 
@@ -310,12 +311,13 @@ public class BookingController {
                     if (bookingDetail.getSeatDetailIds1().contains(s.getId())) continue;
                     if (s.isTaken()) continue;
                     seatDetail = s;
+                    break;
                 }
             }
             else
                 seatDetail = seatService.getSeatDetailById(bookingDetail.getSeatDetailIds1().get(i));
             if (seatDetail == null) {
-                // continue
+                // continue;
             }
             ticket.setSeatDetail(seatDetail);
             ticket.setDayOrder(new Date());
@@ -339,7 +341,6 @@ public class BookingController {
 
             total += ticketTotal;
         }
-        System.out.println("2");
 
         if (isReturn) {
             for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
@@ -362,6 +363,7 @@ public class BookingController {
                         if (bookingDetail.getSeatDetailIds2().contains(s.getId())) continue;
                         if (s.isTaken()) continue;
                         seatDetail = s;
+                        break;
                     }
                 }
                 else
@@ -390,7 +392,6 @@ public class BookingController {
                 total += ticketTotal;
             }
         }
-        System.out.println("3");
 
         if (session.getAttribute("sessionAccount") != null) { // book with account
             Account account = (Account) session.getAttribute("sessionAccount");
@@ -398,7 +399,10 @@ public class BookingController {
         }
         reservation.setTimeCreated(new Date());
         reservation.setTotal(total);
-        System.out.println(total);
+        if (isReturn)
+            reservation.setIsTwoway(true);
+        else
+            reservation.setIsTwoway(false);
         reservation.setContactEmail(bookingDetail.getContactDetail().getEmail());
         reservation.setContactName(bookingDetail.getContactDetail().getLastName() + ' ' + bookingDetail.getContactDetail().getLastName());
         reservation.setContactPhone(bookingDetail.getContactDetail().getPhoneNumber());
