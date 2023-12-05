@@ -1,24 +1,13 @@
 DROP DATABASE IF EXISTS Booking_Flight_Service;
 CREATE DATABASE Booking_Flight_Service;
 USE Booking_Flight_Service;
-CREATE TABLE `Promotion`(
-    `promotion_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `promotion_name` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `start_time` DATETIME NOT NULL,
-    `end_time` DATETIME NOT NULL,
-    `discount` INT NOT NULL,
-    `code` VARCHAR(255) NOT NULL,
-    `url_image` VARCHAR(255) NOT NULL
-);
 
 CREATE TABLE `Ticket_class`(
     `class_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `class_name` VARCHAR(255) NOT NULL,
     `rate` INT NOT NULL,
     `cabin_baggage` INT NOT NULL,
-    `baggage` INT NOT NULL,
-    `price` INT NOT NULL
+    `baggage` INT NOT NULL
 );
 
 CREATE TABLE `Airport`(
@@ -43,6 +32,14 @@ CREATE TABLE `Account`(
     `role` VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE `Reservation`(
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `code` VARCHAR(255) NOT NULL,
+    `time_created` VARCHAR(255) NOT NULL,
+    `account_id` INT NOT NULL,
+    FOREIGN KEY(`account_id`) REFERENCES `Account`(`account_id`)
+);
+
 CREATE TABLE `Plane`(
     `plane_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `plane_name` VARCHAR(255) NOT NULL,
@@ -50,6 +47,7 @@ CREATE TABLE `Plane`(
     `capacity` INT NOT NULL
 );
 
+-- **
 CREATE TABLE `Baggage`(
     `baggage_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `baggage_name` VARCHAR(255) NOT NULL,
@@ -69,62 +67,13 @@ CREATE TABLE `Customer_type`(
     `type_name` VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE `Seat`(
-    `seat_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `seat_status` VARCHAR(255) NOT NULL,
-    `plane_id` INT NOT NULL,
-    FOREIGN KEY(`plane_id`) REFERENCES `Plane`(`plane_id`)
-);
-
-CREATE TABLE `Passenger` (
-    `passenger_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `first_name` VARCHAR(255) NOT NULL,
-    `last_name` VARCHAR(255) NOT NULL,
-    `gender` VARCHAR(255),
-    `phone_number` VARCHAR(255),
-    `email` VARCHAR(255) NOT NULL,
-    `address` VARCHAR(255),
-    `country` VARCHAR(255),
-    `type` INT,
-    FOREIGN KEY (`type`) REFERENCES `Customer_type` (`type_id`)
-);
-
-CREATE TABLE `Ticket`(
-    `ticket_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `seat_id` INT NOT NULL,
-    `class_id` INT NOT NULL,
-    `total_price` INT NOT NULL,
-    `tax` INT NOT NULL,
-    `service_id` INT NOT NULL,
-    `baggage_id` INT NOT NULL,
-    `status` VARCHAR(255) NOT NULL,
-    `payment_id` INT NOT NULL,
-    `day_order` DATETIME NOT NULL,
-    `day_pay` DATETIME NOT NULL,
-    FOREIGN KEY(`baggage_id`) REFERENCES `Baggage`(`baggage_id`),
-    FOREIGN KEY(`service_id`) REFERENCES `Service`(`service_id`),
-    FOREIGN KEY(`payment_id`) REFERENCES `Payment_Format`(`payment_id`),
-    FOREIGN KEY(`class_id`) REFERENCES `Ticket_class`(`class_id`),
-    FOREIGN KEY(`seat_id`) REFERENCES `Seat`(`seat_id`)
-);
-
-CREATE TABLE `Ticket_Detail`(
-    `type_id` INT NOT NULL,
-    `ticket_id` INT NOT NULL,
-    `price` INT NOT NULL,
-    PRIMARY KEY (`type_id`, `ticket_id`),
-    FOREIGN KEY(`type_id`) REFERENCES `Customer_Type`(`type_id`),
-    FOREIGN KEY(`ticket_id`) REFERENCES `Ticket`(`ticket_id`)
-
-);
-
 CREATE TABLE `Flight`(
     `flight_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `departure_airport_id` INT NOT NULL,
     `arrival_airport_id` INT NOT NULL,
     `status` VARCHAR(50) NOT NULL,
     `flight_airline` VARCHAR(50) NOT NULL,
-    `flight_price` DOUBLE  NOT NULL,
+    `flight_price` INT NOT NULL,
     FOREIGN KEY(`departure_airport_id`) REFERENCES `Airport`(`airport_id`),
     FOREIGN KEY(`arrival_airport_id`) REFERENCES `Airport`(`airport_id`)
 );
@@ -141,36 +90,78 @@ CREATE TABLE `Flight_Plane`(
     FOREIGN KEY(`plane_id`) REFERENCES `Plane`(`plane_id`)
 );
 
+-- ***
+CREATE TABLE `Seat`(
+    `seat_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `seat_number` VARCHAR(255) NOT NULL,
+    `plane_id` INT NOT NULL,
+    FOREIGN KEY(`plane_id`) REFERENCES `Plane`(`plane_id`)
+);
+
+CREATE TABLE `SeatDetail`(
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `is_taken` BOOLEAN NOT NULL,
+    `flight_plane_id` INT NOT NULL,
+    `seat_id` INT NOT NULL,
+    FOREIGN KEY(`flight_plane_id`) REFERENCES `Flight_Plane`(`id`),
+    FOREIGN KEY(`seat_id`) REFERENCES `Seat`(`seat_id`)
+);
+
+CREATE TABLE `Passenger` (
+    `passenger_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `first_name` VARCHAR(255) NOT NULL,
+    `last_name` VARCHAR(255) NOT NULL,
+    `gender` VARCHAR(255),
+    `phone_number` VARCHAR(255),
+    `email` VARCHAR(255) NOT NULL,
+    `address` VARCHAR(255),
+    `country` VARCHAR(255),
+    `type` INT,
+    FOREIGN KEY (`type`) REFERENCES `Customer_type` (`type_id`)
+);
+
+--  **
+CREATE TABLE `Ticket`(
+    `ticket_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `seat_detail_id` INT NOT NULL,
+    `class_id` INT NOT NULL,
+    `total_price` INT NOT NULL,
+    `tax` INT NOT NULL,
+    `service_id` INT NOT NULL,
+    `baggage_id` INT NOT NULL,
+    `status` VARCHAR(255) NOT NULL,
+    `payment_id` INT NOT NULL,
+    `reservation_id` INT NOT NULL,
+    `day_order` DATETIME NOT NULL,
+    `day_pay` DATETIME NOT NULL,
+    FOREIGN KEY(`baggage_id`) REFERENCES `Baggage`(`baggage_id`),
+    FOREIGN KEY(`service_id`) REFERENCES `Service`(`service_id`),
+    FOREIGN KEY(`payment_id`) REFERENCES `Payment_Format`(`payment_id`),
+    FOREIGN KEY(`reservation_id`) REFERENCES `Reservation`(`id`),
+    FOREIGN KEY(`class_id`) REFERENCES `Ticket_class`(`class_id`),
+    FOREIGN KEY(`seat_detail_id`) REFERENCES `SeatDetail`(`id`)
+);
+
+CREATE TABLE `Ticket_Detail`(
+    `type_id` INT NOT NULL,
+    `ticket_id` INT NOT NULL,
+    `price` INT NOT NULL,
+    PRIMARY KEY (`type_id`, `ticket_id`),
+    FOREIGN KEY(`type_id`) REFERENCES `Customer_Type`(`type_id`),
+    FOREIGN KEY(`ticket_id`) REFERENCES `Ticket`(`ticket_id`)
+);
+
 INSERT INTO `Customer_type` (`type_name`) VALUES
 ('adult'),
 ('child'),
 ('infant');
 
 
-INSERT INTO `Promotion` (`promotion_name`, `description`, `start_time`, `end_time`, `discount`, `code`, `url_image`) VALUES
-('Holiday Sale', 'Enjoy special discounts during the holiday season', '2023-12-01 00:00:00', '2023-12-31 23:59:59', 10, 'HOLIDAY10', ''),
-('Back to School Promo', 'Get ready for school with amazing discounts', '2023-08-01 00:00:00', '2023-09-15 23:59:59', 15, 'SCHOOL15', ''),
-('Summer Clearance', 'Beat the heat with hot discounts on summer items', '2023-06-01 00:00:00', '2023-06-30 23:59:59', 20, 'SUMMER20', ''),
-('New Year New Deals', 'Start the year with great savings', '2024-01-01 00:00:00', '2024-01-31 23:59:59', 12, 'NEWYEAR12', ''),
-('Valentine is Day Special', 'Celebrate love with special promotions', '2024-02-01 00:00:00', '2024-02-14 23:59:59', 14, 'LOVE14', ''),
-('Spring Fling Sale', 'Welcome spring with fantastic discounts', '2023-03-01 00:00:00', '2023-03-31 23:59:59', 18, 'SPRING18', ''),
-('Black Friday Extravaganza', 'Don''t miss out on the biggest sale of the year', '2023-11-24 00:00:00', '2023-11-24 23:59:59', 25, 'BLACKFRIDAY25', ''),
-('Cyber Monday Madness', 'Get crazy discounts on online purchases', '2023-11-27 00:00:00', '2023-11-27 23:59:59', 30, 'CYBER30', ''),
-('Easter Eggstravaganza', 'Hop into savings with our Easter deals', '2024-04-01 00:00:00', '2024-04-15 23:59:59', 15, 'EASTER15', ''),
-('Fall Savings Festival', 'Enjoy the colors of fall with amazing discounts', '2023-09-01 00:00:00', '2023-10-31 23:59:59', 22, 'FALL22', ''),
-('Mother is Day Special', 'Show your love with special gifts for Mom', '2024-05-01 00:00:00', '2024-05-14 23:59:59', 18, 'MOM18', ''),
-('Tech Bonanza', 'Upgrade your gadgets with unbeatable tech deals', '2023-07-01 00:00:00', '2023-07-15 23:59:59', 15, 'TECH15', ''),
-('Customer Appreciation Week', 'Thank you for being our valued customer', '2023-10-15 00:00:00', '2023-10-21 23:59:59', 10, 'THANKYOU10', ''),
-('Winter Wonderland Sale', 'Embrace the winter chill with hot discounts', '2024-01-15 00:00:00', '2024-02-15 23:59:59', 20, 'WINTER20', ''),
-('Fitness Frenzy', 'Get fit with great deals on fitness equipment', '2023-04-01 00:00:00', '2023-04-30 23:59:59', 15, 'FITNESS15', ''),
-('Cinco de Mayo Celebration', 'Celebrate Cinco de Mayo with special discounts', '2023-05-01 00:00:00', '2023-05-05 23:59:59', 12, 'CINCO12', ''),
-('Gaming Galore', 'Level up your gaming experience with amazing deals', '2023-08-15 00:00:00', '2023-08-31 23:59:59', 18, 'GAMING18', ''),
-('Summer of Savings', 'Beat the heat with cool discounts', '2023-06-15 00:00:00', '2023-07-15 23:59:59', 25, 'SUMMER25', ''),
-('St. Patrick is Day Spectacular', 'Find your pot of gold with our St. Patrick''s Day deals', '2024-03-01 00:00:00', '2024-03-17 23:59:59', 17, 'PATRICK17', ''),
-('Techtoberfest', 'Celebrate tech innovations with great discounts', '2023-10-01 00:00:00', '2023-10-31 23:59:59', 20, 'TECHTOBER20', ''),
-('Halloween Spooktacular', 'Get spooktacular deals this Halloween', '2023-10-25 00:00:00', '2023-10-31 23:59:59', 15, 'SPOOKY15', ''),
-('Thanksgiving Harvest Sale', 'Celebrate Thanksgiving with bountiful savings', '2023-11-01 00:00:00', '2023-11-30 23:59:59', 18, 'THANKS18', ''),
-('Fashion Frenzy', 'Upgrade your wardrobe with stylish deals', '2023-09-15 00:00:00', '2023-09-30 23:59:59', 22, 'FASHION22', '');
+INSERT INTO Ticket_class (class_name, rate, cabin_baggage, baggage)
+VALUES
+    ('Economy', 1, 20, 7),
+    ('Business', 2, 25, 9),
+    ('First Class', 3, 30, 10);
 
 
 INSERT INTO `Airport` (`airport_name`, `city`, `country`, `status`, `airport_code`) VALUES
@@ -428,36 +419,36 @@ SELECT `email`, '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 
 
 
 INSERT INTO `Flight` (`departure_airport_id`, `arrival_airport_id`, `status`, `flight_airline`, `flight_price`) VALUES
-(1, 2, 'Active', 'Airline A', 150.50),
-(2, 3, 'Active', 'Airline B', 200.00),
-(3, 4, 'Active', 'Airline C', 180.25),
-(4, 5, 'Active', 'Airline D', 220.75),
-(5, 1, 'Active', 'Airline E', 130.00),
-(1, 3, 'Active', 'Airline F', 190.00),
-(2, 4, 'Active', 'Airline G', 210.50),
-(3, 5, 'Active', 'Airline H', 160.75),
-(4, 1, 'Active', 'Airline I', 240.25),
-(5, 2, 'Active', 'Airline J', 170.00),
-(1, 4, 'Active', 'Airline K', 200.00),
-(2, 5, 'Active', 'Airline L', 230.50),
-(3, 1, 'Active', 'Airline M', 170.75),
-(4, 2, 'Active', 'Airline N', 250.25),
-(5, 3, 'Active', 'Airline O', 180.00),
-(1, 5, 'Active', 'Airline P', 220.00),
-(2, 1, 'Active', 'Airline Q', 190.50),
-(3, 2, 'Active', 'Airline R', 180.75),
-(4, 3, 'Active', 'Airline S', 260.25),
-(5, 4, 'Active', 'Airline T', 190.00),
-(1, 3, 'Active', 'Airline U', 210.00),
-(2, 4, 'Active', 'Airline V', 240.50),
-(3, 5, 'Active', 'Airline W', 190.75),
-(4, 1, 'Active', 'Airline X', 270.25),
-(5, 2, 'Active', 'Airline Y', 200.00),
-(1, 4, 'Active', 'Airline Z', 230.00);
+(1, 2, 'Active', 'Vietjet Air', 150),
+(2, 3, 'Active', 'Vietnam AirLines', 150),
+(3, 4, 'Active', 'Vietjet Air', 150),
+(4, 5, 'Active', 'Vietjet Air', 150),
+(5, 1, 'Active', 'Vietnam AirLines', 150),
+(1, 3, 'Active', 'Vietjet Air', 150),
+(2, 4, 'Active', 'Vietnam AirLines', 150),
+(3, 5, 'Active', 'Vietjet Air', 150),
+(4, 1, 'Active', 'Vietnam AirLines', 150),
+(5, 2, 'Active', 'Vietjet Air', 150),
+(1, 4, 'Active', 'Vietnam AirLines', 150),
+(2, 5, 'Active', 'Vietjet Air', 150),
+(3, 1, 'Active', 'Vietnam AirLines', 150),
+(4, 2, 'Active', 'Vietjet Air', 150),
+(5, 3, 'Active', 'Vietnam AirLines', 150),
+(1, 5, 'Active', 'Vietjet Air', 150),
+(2, 1, 'Active', 'Vietnam AirLines', 150),
+(3, 2, 'Active', 'Vietjet Air', 150),
+(4, 3, 'Active', 'Vietnam AirLines', 150),
+(5, 4, 'Active', 'Vietjet Air', 150),
+(1, 3, 'Active', 'Vietnam AirLines', 150),
+(2, 4, 'Active', 'Vietjet Air', 150),
+(3, 5, 'Active', 'Vietnam AirLines', 150),
+(4, 1, 'Active', 'Vietjet Air', 150),
+(5, 2, 'Active', 'Vietnam AirLines', 150),
+(1, 4, 'Active', 'Vietjet Air', 150);
 
 
 -- Đặt biến cho số lượng dòng dữ liệu muốn thêm
-SET @num_rows = 30;
+SET @num_rows = 50;
 
 -- Sử dụng vòng lặp để thêm dữ liệu ngẫu nhiên
 DELIMITER //
