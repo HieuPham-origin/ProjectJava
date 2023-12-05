@@ -19,7 +19,6 @@ CREATE TABLE `Airport`(
     `airport_code` VARCHAR(255) NOT NULL
 );
 
-
 CREATE TABLE `Account`(
     `account_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `username` VARCHAR(255) NOT NULL,
@@ -32,6 +31,7 @@ CREATE TABLE `Reservation`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `code` VARCHAR(255) NOT NULL,
     `time_created` VARCHAR(255) NOT NULL,
+    `total` INT,
     `account_id` INT NOT NULL,
     FOREIGN KEY(`account_id`) REFERENCES `Account`(`account_id`)
 );
@@ -107,6 +107,7 @@ CREATE TABLE `Passenger` (
     `first_name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
     `gender` VARCHAR(255),
+    `date_of_birth` DATETIME,
     `phone_number` VARCHAR(255),
     `email` VARCHAR(255) NOT NULL,
     `address` VARCHAR(255),
@@ -125,11 +126,13 @@ CREATE TABLE `Ticket`(
     `service_id` INT NOT NULL,
     `baggage_id` INT NOT NULL,
     `status` VARCHAR(255) NOT NULL,
+    `passenger_id` INT NOT NULL,
     `reservation_id` INT NOT NULL,
     `day_order` DATETIME NOT NULL,
     `day_pay` DATETIME NOT NULL,
     FOREIGN KEY(`baggage_id`) REFERENCES `Baggage`(`baggage_id`),
     FOREIGN KEY(`service_id`) REFERENCES `Service`(`service_id`),
+    FOREIGN KEY(`passenger_id`) REFERENCES `Passenger`(`passenger_id`),
     FOREIGN KEY(`reservation_id`) REFERENCES `Reservation`(`id`),
     FOREIGN KEY(`class_id`) REFERENCES `Ticket_class`(`class_id`),
     FOREIGN KEY(`seat_detail_id`) REFERENCES `SeatDetail`(`id`)
@@ -444,28 +447,29 @@ INSERT INTO `Service` (`service_name`, `price`, `description`) VALUES
 ('Carry-On Essentials Kit', 10, 'Stay refreshed and comfortable with a carry-on essentials kit');
 
 -- Tạo dữ liệu cho bảng Passenger
-INSERT INTO `Passenger` (`first_name`, `last_name`, `gender`, `phone_number`, `email`, `address`, `country`, `type`)
+INSERT INTO `Passenger` (`first_name`, `last_name`, `gender`, `date_of_birth`, `phone_number`, `email`, `address`, `country`, `type`)
 VALUES
-('John', 'Doe', 'Male', '123-456-7890', 'john.doe@email.com', '123 Main St', 'USA', 1),
-('Jane', 'Smith', 'Female', '987-654-3210', 'jane.smith@email.com', '456 Oak St', 'Canada', 2),
-('Mike', 'Johnson', 'Male', '555-123-4567', 'mike.johnson@email.com', '789 Elm St', 'UK', 3),
-('Emily', 'Davis', 'Female', '111-222-3333', 'emily.davis@email.com', '101 Pine St', 'Australia', 1),
-('Robert', 'Brown', 'Male', '999-888-7777', 'robert.brown@email.com', '202 Cedar St', 'Germany', 2),
-('Linda', 'Miller', 'Female', '444-555-6666', 'linda.miller@email.com', '303 Birch St', 'France', 3),
-('David', 'Wilson', 'Male', '777-666-5555', 'david.wilson@email.com', '404 Maple St', 'Italy', 1),
-('Sophia', 'Moore', 'Female', '333-444-5555', 'sophia.moore@email.com', '505 Pine St', 'Spain', 2),
-('Daniel', 'Taylor', 'Male', '222-333-4444', 'daniel.taylor@email.com', '606 Oak St', 'Japan', 3),
-('Olivia', 'Anderson', 'Female', '666-777-8888', 'olivia.anderson@email.com', '707 Elm St', 'China', 1),
-('William', 'Clark', 'Male', '444-333-2222', 'william.clark@email.com', '808 Cedar St', 'Brazil', 2),
-('Ava', 'Hill', 'Female', '888-999-0000', 'ava.hill@email.com', '909 Maple St', 'Mexico', 3),
-('James', 'Wright', 'Male', '123-987-4560', 'james.wright@email.com', '111 Pine St', 'India', 1),
-('Emma', 'Turner', 'Female', '321-654-0987', 'emma.turner@email.com', '222 Oak St', 'South Africa', 2),
-('Benjamin', 'Garcia', 'Male', '555-777-9999', 'benjamin.garcia@email.com', '333 Elm St', 'Russia', 3),
-('Mia', 'Fisher', 'Female', '111-222-3333', 'mia.fisher@email.com', '444 Cedar St', 'Argentina', 1),
-('Alexander', 'Hernandez', 'Male', '999-888-7777', 'alexander.hernandez@email.com', '555 Maple St', 'Chile', 2),
-('Sofia', 'Martinez', 'Female', '777-666-5555', 'sofia.martinez@email.com', '666 Pine St', 'Colombia', 3),
-('Ethan', 'Lopez', 'Male', '333-444-5555', 'ethan.lopez@email.com', '777 Oak St', 'Peru', 1),
-('Amelia', 'Rodriguez', 'Female', '222-333-4444', 'amelia.rodriguez@email.com', '888 Elm St', 'Venezuela', 2);
+('David', 'Luis', 'Male', '2003-11-20', '357-456-0798', 'passenger@gmail.com', '19, TDTU', 'VN', 1),
+('John', 'Doe', 'Male', '2000-01-01', '123-456-7890', 'john.doe@email.com', '123 Main St', 'USA', 1),
+('Jane', 'Smith', 'Female', '2002-11-01', '987-654-3210', 'jane.smith@email.com', '456 Oak St', 'Canada', 2),
+('Mike', 'Johnson', 'Male', '2003-10-11', '555-123-4567', 'mike.johnson@email.com', '789 Elm St', 'UK', 3),
+('Emily', 'Davis', 'Female', '2002-03-14', '111-222-3333', 'emily.davis@email.com', '101 Pine St', 'Australia', 1),
+('Robert', 'Brown', 'Male', '2000-02-01', '999-888-7777', 'robert.brown@email.com', '202 Cedar St', 'Germany', 2),
+('Linda', 'Miller', 'Female', '2000-11-05', '444-555-6666', 'linda.miller@email.com', '303 Birch St', 'France', 3),
+('David', 'Wilson', 'Male', '2003-10-12', '777-666-5555', 'david.wilson@email.com', '404 Maple St', 'Italy', 1),
+('Sophia', 'Moore', 'Female', '1999-12-11', '333-444-5555', 'sophia.moore@email.com', '505 Pine St', 'Spain', 2),
+('Daniel', 'Taylor', 'Male', '2000-09-08', '222-333-4444', 'daniel.taylor@email.com', '606 Oak St', 'Japan', 3),
+('Olivia', 'Anderson', 'Female', '2003-12-11', '666-777-8888', 'olivia.anderson@email.com', '707 Elm St', 'China', 1),
+('William', 'Clark', 'Male', '2003-11-27', '444-333-2222', 'william.clark@email.com', '808 Cedar St', 'Brazil', 2),
+('Ava', 'Hill', 'Female', '2000-08-23', '888-999-0000', 'ava.hill@email.com', '909 Maple St', 'Mexico', 3),
+('James', 'Wright', 'Male', '2002-12-11', '123-987-4560', 'james.wright@email.com', '111 Pine St', 'India', 1),
+('Emma', 'Turner', 'Female', '2003-11-22', '321-654-0987', 'emma.turner@email.com', '222 Oak St', 'South Africa', 2),
+('Benjamin', 'Garcia', 'Male', '2004-06-15', '555-777-9999', 'benjamin.garcia@email.com', '333 Elm St', 'Russia', 3),
+('Mia', 'Fisher', 'Female', '2000-07-11', '111-222-3333', 'mia.fisher@email.com', '444 Cedar St', 'Argentina', 1),
+('Alexander', 'Hernandez', 'Male', '2003-08-21', '999-888-7777', 'alexander.hernandez@email.com', '555 Maple St', 'Chile', 2),
+('Sofia', 'Martinez', 'Female', '2004-09-21', '777-666-5555', 'sofia.martinez@email.com', '666 Pine St', 'Colombia', 3),
+('Ethan', 'Lopez', 'Male', '2002-11-30', '333-444-5555', 'ethan.lopez@email.com', '777 Oak St', 'Peru', 1),
+('Amelia', 'Rodriguez', 'Female', '2002-12-16', '222-333-4444', 'amelia.rodriguez@email.com', '888 Elm St', 'Venezuela', 2);
 
 -- Tạo dữ liệu cho bảng Account
 INSERT INTO `Account` (`username`, `password`, `role`) VALUES 
