@@ -288,43 +288,66 @@ INSERT INTO `Plane` (`plane_name`, `status`, `capacity`) VALUES
 ('Boeing 737-800ER', 'Active', 200);
 
 -- Tạo dữ liệu cho bảng Seat
-DELIMITER //
-
-CREATE PROCEDURE InsertSeatData()
+DELIMITER $$
+CREATE PROCEDURE InsertSeats()
 BEGIN
   DECLARE plane_id_var INT;
   DECLARE capacity_var INT;
-  DECLARE i INT DEFAULT 1;
-  DECLARE done INT DEFAULT FALSE;
+  DECLARE row_number_var INT DEFAULT 1;
+  DECLARE seat_number_var VARCHAR(255);
+  DECLARE seat_count INT;
 
-  -- Lấy danh sách các máy bay
-  DECLARE plane_cursor CURSOR FOR SELECT `plane_id`, `capacity` FROM `Plane`;
-  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+  -- Cursor to iterate over the planes
+  DECLARE plane_cursor CURSOR FOR
+    SELECT plane_id, capacity
+    FROM Plane;
+
+  -- Cursor to generate seat numbers
+  DECLARE seat_cursor CURSOR FOR
+    SELECT CONCAT(FLOOR((row_number_var - 1) / 6) + 1, CHAR(65 + ((row_number_var - 1) % 6))) AS seat_number;
+
+  -- Declare handlers for exceptions
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET @done = TRUE;
 
   OPEN plane_cursor;
 
-  read_loop: LOOP
+  -- Loop over planes
+  plane_loop: LOOP
     FETCH plane_cursor INTO plane_id_var, capacity_var;
-    IF done THEN
-      LEAVE read_loop;
+
+    IF (@done) THEN
+      LEAVE plane_loop;
     END IF;
 
-    -- Thêm dữ liệu vào bảng Seat
-    WHILE i <= capacity_var DO
-      INSERT INTO `Seat` (`seat_number`, `plane_id`)
-      VALUES (CONCAT('Seat ', i), plane_id_var);
-      SET i = i + 1;
-    END WHILE;
+    SET seat_count = 0;
+    SET row_number_var = 1;
 
-    SET i = 1;
-  END LOOP;
+    -- Loop to insert seats
+    seat_loop: LOOP
+      IF (seat_count = capacity_var) THEN
+        LEAVE seat_loop;
+      END IF;
+
+      OPEN seat_cursor;
+      FETCH seat_cursor INTO seat_number_var;
+
+      -- Insert seat
+      INSERT INTO Seat (seat_number, plane_id)
+      VALUES (seat_number_var, plane_id_var);
+
+      CLOSE seat_cursor;
+
+      SET seat_count = seat_count + 1;
+      SET row_number_var = row_number_var + 1;
+    END LOOP seat_loop;
+  END LOOP plane_loop;
 
   CLOSE plane_cursor;
-END //
-
+END$$
 DELIMITER ;
 
-CALL InsertSeatData();
+-- Call the stored procedure to insert seats
+CALL InsertSeats();
 
 -- Tạo dữ liệu cho bảng Baggage
 INSERT INTO `Baggage` (`baggage_name`, `weight`, `price`) VALUES
@@ -486,7 +509,7 @@ BEGIN
     SET random_value = FLOOR(1 + RAND() * 10);
 
     INSERT INTO `Flight` (`departure_airport_id`, `arrival_airport_id`, `status`, `flight_airline`, `flight_price`) VALUES
-    (i, i + 1, 'Active', 'Vietname Airlines', 150 + random_value * 10),
+    (i, i + 1, 'Active', 'Vietnam Airlines', 150 + random_value * 10),
     (i + 1, i, 'Active', 'Vietjet Air', 150 + random_value * 10);
 
     SET i = i + 1;
@@ -517,10 +540,10 @@ BEGIN
     WHILE plane_id_var <= @num_planes DO
       SET @current_date = CURRENT_DATE;
       
-      -- Random departure day between current date and current date + 15 days
-      SET @departure_day = @current_date + INTERVAL FLOOR(RAND() * 10) DAY;
-      -- Random arrival day between departure day and departure day + 5 days
-      SET @arrival_day = @departure_day + INTERVAL FLOOR(RAND() * 3) DAY;
+      -- Random departure day between current date and current date + 3 days
+      SET @departure_day = @current_date + INTERVAL FLOOR(RAND() * 3) DAY;
+      -- Random arrival day between departure day and departure day + 2 days
+      SET @arrival_day = @departure_day + INTERVAL FLOOR(RAND() * 2) DAY;
 
       SET @departure_time_sec = FLOOR(RAND() * 86400);
       SET @arrival_time_sec = FLOOR(RAND() * 86400);
