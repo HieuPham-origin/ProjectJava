@@ -48,11 +48,11 @@
     </head>
     <body>
         <!-- Navbar -->
-        <div th:replace="./fragments/header :: header"> </div>
+        <div th:replace="/fragments/header :: header(user=${session.sessionPassenger}, page='profile')"> </div>
         <!-- Navbar -->
 
         <main class="p-5" style="background-image: none;">
-            <h1>Manange account</h1>
+            <h1>Manage account</h1>
             <hr>
             <div class="row">
                 <div class="col-4">
@@ -70,51 +70,89 @@
                 </div>
                 <div class="col-4">
                     <h2>Profile</h2>
-                    <div class="form-floating mb-3">
-                        <input
-                            type="email"
-                            class="form-control"
-                            id="input-email"
-                            placeholder=""
-                            disabled
-                            value="name@example.com"
-                        />
-                        <label for="input-email"
-                            >Email</label
-                        >
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="form-floating">
+                    <form id="profileForm" method="post" th:action="@{/profile/update/{id}(id=${user.passengerId})}">
+                        <div class="form-floating mb-3">
                             <input
-                                type="text"
-                                class="form-control"
-                                id="input-first-name"
-                                placeholder="name@example.com"
+                                    type="email"
+                                    class="form-control"
+                                    id="input-email"
+                                    placeholder=""
+                                    disabled
+                                    th:value="${user.email}"
                             />
-                            <label for="input-first-name">First name</label>
+                            <label for="input-email">Email</label>
                         </div>
-                        <div class="form-floating">
+                        <div class="input-group mb-3">
+                            <div class="form-floating">
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="input-first-name"
+                                        placeholder="Your First Name"
+                                        name="firstName"
+                                        th:value="${user.firstName}"
+                                />
+                                <label for="input-first-name">First name</label>
+                            </div>
+                            <div class="form-floating">
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="input-last-name"
+                                        name="lastName"
+                                        placeholder="Your Last Name"
+                                        th:value="${user.lastName}"
+                                />
+                                <label for="input-last-name">Last name</label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
                             <input
-                                type="text"
-                                class="form-control"
-                                id="input-last-name"
-                                placeholder="name@example.com"
+                                    type="text"
+                                    class="form-control"
+                                    id="input-phone"
+                                    placeholder="Enter your phone"
+                                    name="phoneNumber"
+                                    th:value="${user.phoneNumber}"
                             />
-                            <label for="input-last-name">Last name</label>
+                            <label for="input-phone">Phone number</label>
                         </div>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input
-                            type="number"
-                            class="form-control"
-                            id="input-phone"
-                            placeholder=""
-                        />
-                        <label for="input-phone">Phone number</label>
-                    </div>
-                    <button class="btn btn-primary w-100 mt-3">
-                        Update
-                    </button>
+                        <div class="form-floating mb-3">
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="gender"
+                                    name="gender"
+                                    placeholder="Enter your gender"
+                                    th:value="${user.gender}"
+                            />
+                            <label for="gender">Gender</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="address"
+                                    name="address"
+                                    placeholder="Enter your address"
+                                    th:value="${user.address}"
+                            />
+                            <label for="address">Address</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="country"
+                                    name="country"
+                                    placeholder="Enter your country"
+                                    th:value="${user.country}"
+
+                            />
+                            <label for="country">Country</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3" >Update</button>
+                    </form>
                 </div>
             </div>
         </main>

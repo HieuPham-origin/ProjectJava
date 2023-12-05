@@ -25,8 +25,8 @@ public class PassengerServiceImpl implements PassengerService{
     }
 
     @Override
-    public Passenger updatePassenger(Passenger passenger, Integer passengerId) {
-        return null;
+    public Passenger updatePassenger(Passenger passenger) {
+        return passengerRepository.save(passenger);
     }
 
     @Override

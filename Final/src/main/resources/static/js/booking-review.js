@@ -5,6 +5,12 @@ const tooltipList = [...tooltipTriggerList].map(
     (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 );
 
+$(document).ready(() => {
+    updateBaggagePrice();
+    document.querySelector("#scroll-here").scrollIntoView({
+    });
+})
+
 $("#modal-baggage .select-baggage-item").click(function () {
     $(".select-baggage-item").each((i, e) => {
         $(e).removeClass("selected");
@@ -84,7 +90,7 @@ function updateBaggagePrice() {
         $(e)
             .find('input[type="radio"]:checked')
             .each((i, b) => {
-                weight += parseInt($(b).val());
+                weight += parseInt($(b).data("weight"));
                 price += parseInt($(b).data("price"));
                 console.log(b);
             });

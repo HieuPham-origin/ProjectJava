@@ -9,7 +9,7 @@ public interface PassengerService {
 
     List<Passenger> fetchAllPassenger();
 
-    Passenger updatePassenger(Passenger passenger, Integer passengerId);
+    Passenger updatePassenger(Passenger passenger);
 
     void deletePassenger(Integer passengerId);
 
