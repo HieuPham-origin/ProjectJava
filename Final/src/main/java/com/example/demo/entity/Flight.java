@@ -28,15 +28,10 @@ public class Flight {
     @Column(name = "status")
     private String status;
 
-//    @Column(name = "price")
-//    private double price;
-
     @Column(name = "flight_airline")
     private String flightAirline;
 
     @Column(name = "flight_price")
-    private int flightPrice;
+    private double flightPrice;
 
-    @Column(name="flight_number")
-    private String flightNumber;
 }

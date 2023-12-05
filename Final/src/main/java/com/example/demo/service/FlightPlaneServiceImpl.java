@@ -17,7 +17,6 @@ public class FlightPlaneServiceImpl implements FlightPlaneService{
     @Override
     public List<FlightPlane> findByFlightAndDepartureDayAndArrivalDay(Flight flightId, Date departureDay, Date arrivalDay) {
         return flightPlaneRepository.findByFlightAndDepartureDayAndArrivalDay(flightId,departureDay,arrivalDay);
-
     }
 
     @Override
@@ -29,5 +28,20 @@ public class FlightPlaneServiceImpl implements FlightPlaneService{
     public FlightPlane findById(int flightId) {
         Optional<FlightPlane> dbFlightPlane =  flightPlaneRepository.findById(flightId);
         return dbFlightPlane.orElse(null);
+    }
+
+    @Override
+    public FlightPlane save(FlightPlane flightPlane) {
+        return flightPlaneRepository.save(flightPlane);
+    }
+
+    @Override
+    public List<FlightPlane> getAllFlightPlanes() {
+        return flightPlaneRepository.findAll();
+    }
+
+    @Override
+    public FlightPlane getFlightPlaneById(int id) {
+        return flightPlaneRepository.findById(id).orElse(null);
     }
 }

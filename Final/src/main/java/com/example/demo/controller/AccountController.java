@@ -2,10 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Airport;
+import com.example.demo.entity.CustomerType;
 import com.example.demo.entity.Passenger;
-import com.example.demo.service.AccountService;
-import com.example.demo.service.AirportService;
-import com.example.demo.service.PassengerService;
+import com.example.demo.repository.CustomerTypeRepository;
+import com.example.demo.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
@@ -23,12 +23,16 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
     private final PassengerService passengerService;
+    private final CustomerTypeService customerTypeService;
+
 
     @Autowired
     private AirportService airportService;
-    public AccountController(AccountService accountService, PassengerService passengerService) {
+    public AccountController(AccountService accountService, PassengerService passengerService, CustomerTypeService customerTypeService) {
         this.accountService = accountService;
         this.passengerService = passengerService;
+        this.customerTypeService = customerTypeService;
+
     }
 
     @GetMapping("/login")
@@ -54,7 +58,7 @@ public class AccountController {
         Account account = accountService.getAccountByUsername(username);
         Passenger passenger = passengerService.getPassengerByEmail(username);
         String role = account.getRole();
-        if(role.equals("admin")) {
+        if(role.equals("Admin")) {
             session.setAttribute("admin", account);
             return "redirect:/Admin/airport";
 
@@ -68,7 +72,8 @@ public class AccountController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionPassenger");
+        session.removeAttribute("admin");
 
         // Redirect to the login page or any other desired page
         return "redirect:/login";
@@ -105,7 +110,10 @@ public class AccountController {
         passenger.setLastName(lastName);
         passenger.setPhoneNumber(mobile);
         passenger.setEmail(email);
-//        passenger.setType();  // Default adult
+        CustomerType defaultType = customerTypeService.getCustomerTypeById(1);
+        System.out.println(defaultType.getTypeId());
+        System.out.println(defaultType.getTypeName());
+        passenger.setType(defaultType);
         account.setUsername(email);
         account.setPassword(password);
         account.setRole("user"); // Default user

@@ -40,7 +40,7 @@ public class Passenger {
     private String country;
 
     @ManyToOne(optional = true,cascade = CascadeType.ALL)
-    @JoinColumn(name = "type", referencedColumnName = "type_id", insertable = false, updatable = false)
-    private CustomerType customerType;
+    @JoinColumn(name = "type", referencedColumnName = "type_id")
+    private CustomerType type;
 }
 

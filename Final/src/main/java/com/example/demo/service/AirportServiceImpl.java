@@ -14,7 +14,7 @@ public class AirportServiceImpl implements AirportService{
     @Autowired
     private AirportRepository airportRepository;
     @Override
-    public List<Airport> getAllAirports(){return this.airportRepository.findAll();}
+    public List<Airport> getAllAirports(){return this.airportRepository.findAllByStatusNot("Disabled");}
     @Override
     public Optional<Airport> getAirportById(int id){return this.airportRepository.findById(id);}
     @Override
@@ -52,6 +52,11 @@ public class AirportServiceImpl implements AirportService{
     @Override
     public Airport getAirportByAirPortCode(String airportCode) {
         return this.airportRepository.findByAirportCode(airportCode).get(0);
+    }
+
+    @Override
+    public boolean existByAirportCode(String airportCode) {
+        return airportRepository.existsByAirportCode(airportCode);
     }
 
     public List<Airport> getAllAirportsExceptStatus(String status) {

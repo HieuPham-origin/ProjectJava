@@ -211,26 +211,14 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">ADMIN</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
+
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -245,14 +233,16 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    <div th:if="(${errorMessage != null} )" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;" th:text="${errorMessage}">
+                        <span style="margin-left: 15px;color: white;font-weight: bold;float: right;font-size: 22px;line-height: 20px;cursor: pointer;transition: 0.3s;" onclick="this.parentElement.style.display='none';" >&times;</span>
+                    </div>
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Planes Management</h1>
+                    <h1 class="h3 mb-2 text-gray-800" >Planes Management</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Planes</h6>
+                            <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 15px">Planes</h6>
                             <button class="btn btn-primary" id="addPlaneButton" onclick="openForm()">Add plane</button>
                             <!-- Modal -->
                             <div id="addPlaneModal" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
@@ -264,7 +254,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form id="addPlaneForm" method="post" th:action="@{/Admin/plane/save}">
+                                        <form id="addPlaneForm" method="post" th:action="@{/Admin/plane/save}" onsubmit="return validateForm()">
                                             <div class="modal-body">
                                                 <!-- Form Fields -->
 
@@ -314,12 +304,25 @@
                                             <td th:text="${plane.planeName}"></td>
                                             <td th:text="${plane.capacity}"></td>
                                             <td>
-                                                <form th:action="@{/Admin/plane/delete/{id}(id=${plane.planeId})}" method="post">
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">
-                                                    Update
-                                                </button>
+<!--                                                <form th:action="@{/Admin/plane/delete/{id}(id=${plane.planeId})}" method="post">-->
+<!--                                                    <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--                                                </form>-->
+<!--                                                <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">-->
+<!--                                                    Update-->
+<!--                                                </button>-->
+
+
+
+
+                                                <div class="btn-group" style="width: 50px" >
+                                                    <form  th:action="@{/Admin/plane/delete/{id}(id=${plane.planeId})}" method="post">
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                    <button style="margin-left: 12px; border-radius: 8%"  type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#updatePlaneModal' + ${plane.planeId}" onclick="fillEditForm(this)">
+                                                        Update
+                                                    </button>
+                                                </div>
+
 
                                                 <div th:id="'updatePlaneModal' + ${plane.planeId}" tabindex="-1" role="dialog" aria-labelledby="addAirportModalLabel" class="modal fade">
                                                     <div class="modal-dialog" role="document">
@@ -330,19 +333,19 @@
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <form id="updatePlaneForm" method="post" th:action="@{/Admin/plane/update/{id}(id=${plane.planeId})}">
+                                                            <form id="updatePlaneForm" method="post" th:action="@{/Admin/plane/update/{id}(id=${plane.planeId})}" onsubmit="return validateFormUpdate()">
                                                                 <div class="modal-body">
                                                                     <!-- Form Fields -->
 
                                                                     <div class="form-group">
                                                                         <label for="planeName">Plane Name</label>
-                                                                        <input type="text" class="form-control" id="planeName"
+                                                                        <input type="text" class="form-control" id="planeNameUpdate"
                                                                                th:value="${plane.planeName}" name="planeName" required>
                                                                     </div>
 
                                                                     <div class="form-group">
                                                                         <label for="capacity">Capacity</label>
-                                                                        <input type="text" class="form-control" id="capacity"
+                                                                        <input type="text" class="form-control" id="capacityUpdate"
                                                                                th:value="${plane.capacity}" name="capacity" required>
                                                                     </div>
 
@@ -406,7 +409,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="/logout">Logout</a>
                 </div>
             </div>
         </div>
@@ -417,6 +420,42 @@
 
     <!-- Link JavaScript của DataTables -->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script>
+        function validateForm() {
+            var capacityInput = document.getElementById("capacity");
+            var capacity = capacityInput.value;
+            console.log(capacity);
+
+            // Regular expression to match a valid number
+            var numberRegex = /^[0-9]+$/;
+
+            if (!numberRegex.test(capacity)) {
+                alert("Invalid capacity: Please enter a valid number");
+                capacityInput.focus();
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+
+        function validateFormUpdate() {
+            var capacityInput = document.getElementById("capacityUpdate");
+            var capacity = capacityInput.value;
+            console.log(capacity);
+
+            // Regular expression to match a valid number
+            var numberRegex = /^[0-9]+$/;
+
+            if (!numberRegex.test(capacity)) {
+                alert("Invalid capacity: Please enter a valid number");
+                capacityInput.focus();
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable();
