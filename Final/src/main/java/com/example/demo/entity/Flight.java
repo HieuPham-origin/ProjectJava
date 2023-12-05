@@ -32,6 +32,5 @@ public class Flight {
     private String flightAirline;
 
     @Column(name = "flight_price")
-    private double flightPrice;
-
+    private int flightPrice;
 }

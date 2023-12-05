@@ -1,11 +1,14 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.SearchModel;
 import com.example.demo.entity.Airport;
 import com.example.demo.entity.Flight;
 import com.example.demo.entity.FlightPlane;
+import com.example.demo.entity.TicketClass;
 import com.example.demo.service.AirportService;
 import com.example.demo.service.FlightPlaneService;
 import com.example.demo.service.FlightService;
+import com.example.demo.service.TicketClassService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,11 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 @Controller
 @RequestMapping("/search")
@@ -25,11 +32,13 @@ public class SearchController {
     private final AirportService airportService;
     private final FlightService flightService;
     private final FlightPlaneService flightPlaneService;
+    private final TicketClassService ticketClassService;
 
-    public SearchController(AirportService airportService, FlightService flightService, FlightPlaneService flightPlaneService) {
+    public SearchController(AirportService airportService, FlightService flightService, FlightPlaneService flightPlaneService, TicketClassService ticketClassService) {
         this.airportService = airportService;
         this.flightService = flightService;
         this.flightPlaneService = flightPlaneService;
+        this.ticketClassService = ticketClassService;
     }
 
     @PostMapping("")
@@ -51,7 +60,8 @@ public class SearchController {
         model.addAttribute("passenger",passenger);
         model.addAttribute("departureCity", departure.split(" , ")[1]);
         model.addAttribute("destinationCity", destination.split(" , ")[1]);
-
+        int sumPax = sumOfNumbers(passenger);
+        model.addAttribute("sumPax", sumPax);
         if (checkReturn!=null){
             if (checkReturn.equals("on")){
                 String[] dateReturns = dates.split(" - ");
@@ -83,6 +93,7 @@ public class SearchController {
             model.addAttribute("dateDeparture",formattedDateDeparture);
             model.addAttribute("dateDestination","");
         }
+
         return "flights";
     }
 
@@ -94,10 +105,14 @@ public class SearchController {
 
     @PostMapping("/searchTicket")
     @ResponseBody
-    public List<FlightPlane> searchTicket(@RequestParam("dateDeparture") String dateDeparture,
+    public SearchModel searchTicket(@RequestParam("dateDeparture") String dateDeparture,
                                           @RequestParam("departureText") String departureText,
                                           @RequestParam("destinationText") String destinationText,
-                                          @RequestParam(value = "sortByDuration", required = false) String sortByDuration){
+                                          @RequestParam(value = "sortByDuration", required = false) String sortByDuration,
+                                          @RequestParam(value = "sortByPrice", required = false) String sortByPrice,
+                                          @RequestParam(value = "inputFilterAirline", required = false) String inputFilterAirline,
+                                          @RequestParam(value = "inputFilterDeparture", required = false) String inputFilterDeparture,
+                                          @RequestParam(value = "inputFilterArrival", required = false) String inputFilterArrival){
 
         //Get list flight by departure and destination
         String departureAirportCode =  departureText.split(" , ")[0];
@@ -106,27 +121,88 @@ public class SearchController {
         Airport airportDestination = airportService.getAirportByAirPortCode(destinationAirportCode);
 
         List<Flight> flights = flightService.getFlightsByDepartureAndDestination(airportDeparture.getAirportId(), airportDestination.getAirportId());
-        System.out.println(flights.get(0).getFlightId());
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<FlightPlane> result = new ArrayList<>();
+        System.out.println("1");
         for (Flight flight: flights) {
             List<FlightPlane> flightPlaneList = flightPlaneService.findByFlight(flight);
             for (FlightPlane flightPlane: flightPlaneList){
-                String indexDateDeparture = outputFormat.format(flightPlane.getDepartureDay());
+                Date date = convertToLocalDateToDate(flightPlane.getDepartureDay());
+                String indexDateDeparture = outputFormat.format(date);
                 if (dateDeparture.equals(indexDateDeparture)){
                     result.add(flightPlane);
                 }
             }
         }
-        if (sortByDuration!=null){
-            return sortFlightsByDuration(result, sortByDuration);
+        System.out.println("1");
+
+        // get list filter airline
+        List<FlightPlane> resultFilterAirline = new ArrayList<>();
+        if (inputFilterAirline!=null){
+            if (inputFilterAirline.contains("vna") && !inputFilterAirline.contains("vietjet")){
+                for (FlightPlane flightPlane:  result) {
+                    if (flightPlane.getFlight().getFlightAirline().toLowerCase().contains("vietnam airlines")){
+                        resultFilterAirline.add(flightPlane);
+                    };
+                }
+            } else if (inputFilterAirline.contains("vietjet") && !inputFilterAirline.contains("vna")) {
+                for (FlightPlane flightPlane:  result) {
+                    if (flightPlane.getFlight().getFlightAirline().toLowerCase().contains("vietjet air")){
+                        resultFilterAirline.add(flightPlane);
+                    };
+                }
+            } else {
+                resultFilterAirline = result;
+            }
+        } else{
+            resultFilterAirline = result;
         }
-        return result;
+        // get list filter departure time
+        List<FlightPlane> resultFilterDeparture = result;
+        if (inputFilterDeparture != null) {
+            if (inputFilterDeparture.contains("day") && !inputFilterDeparture.contains("night")) {
+                resultFilterDeparture = getByFilterDeparture(result, Time.valueOf("00:00:00"), Time.valueOf("12:00:00"));
+            } else if (inputFilterDeparture.contains("night") && !inputFilterDeparture.contains("day")) {
+                resultFilterDeparture = getByFilterDeparture(result, Time.valueOf("12:00:00"), Time.valueOf("23:59:59"));
+            }
+        }
+        // get list filter arrival time
+        List<FlightPlane> resultFilterArrival = result;
+        if (inputFilterArrival != null) {
+            if (inputFilterArrival.contains("day") && !inputFilterArrival.contains("night")) {
+                resultFilterArrival = getByFilterArrival(result, Time.valueOf("00:00:00"), Time.valueOf("12:00:00"));
+            } else if (inputFilterArrival.contains("night") && !inputFilterArrival.contains("day")) {
+                resultFilterArrival = getByFilterArrival(result, Time.valueOf("12:00:00"), Time.valueOf("23:59:59"));
+            }
+        }
+
+        List<FlightPlane> intersectionList = new ArrayList<>(resultFilterAirline);
+        intersectionList.retainAll(resultFilterDeparture);
+        intersectionList.retainAll(resultFilterArrival);
+
+        List<TicketClass> ticketClassList = this.ticketClassService.findAll();
+
+        if (sortByDuration!=null){
+           return new SearchModel(ticketClassList, sortFlightsByDuration(intersectionList, sortByDuration));
+
+        }
+        if (sortByPrice!=null){
+           return new SearchModel(ticketClassList, sortFlightsByDuration(intersectionList, sortByPrice));
+            //return sortFlightByPrice(intersectionList, sortByPrice);
+        }
+        return new SearchModel(ticketClassList, intersectionList);
+        //return intersectionList;
     }
     @PostMapping("/bookingFlight")
     @ResponseBody
     public FlightPlane bookingFlight(@RequestParam("flightPlaneId") String flightPlaneId){
         return  flightPlaneService.findById(Integer.parseInt(flightPlaneId));
+    }
+
+    @PostMapping("/getTicketClass")
+    @ResponseBody
+    public List<TicketClass> ticketClassList(){
+        return this.ticketClassService.findAll();
     }
 
     public static List<FlightPlane> sortFlightsByDuration(List<FlightPlane> originalFlightPlanes, String orderBy) {
@@ -137,5 +213,54 @@ public class SearchController {
             Collections.reverse(sortedFlightPlanes);
         }
         return sortedFlightPlanes;
+    }
+
+    public static List<FlightPlane> sortFlightByPrice(List<FlightPlane> originalFlightPlanes, String orderBy) {
+        List<FlightPlane> sortedFlightPlanes = new ArrayList<>(originalFlightPlanes);
+        Comparator<FlightPlane> durationComparator = Comparator.comparingInt(FlightPlane::getPriceForSort);
+        Collections.sort(sortedFlightPlanes, durationComparator);
+        if (orderBy.equals("desc")){
+            Collections.reverse(sortedFlightPlanes);
+        }
+        return sortedFlightPlanes;
+    }
+
+    public static List<FlightPlane> getByFilterDeparture(List<FlightPlane> flightPlaneList, Time start, Time end) {
+        List<FlightPlane> result = new ArrayList<>();
+        for (FlightPlane flightPlane : flightPlaneList) {
+            Time timeDeparture = Time.valueOf(flightPlane.getDepartureTime());
+
+            if (timeDeparture.after(start) && timeDeparture.before(end)) {
+                result.add(flightPlane);
+            }
+        }
+        return result;
+    }
+
+    public static List<FlightPlane> getByFilterArrival(List<FlightPlane> flightPlaneList, Time start, Time end) {
+        List<FlightPlane> result = new ArrayList<>();
+        for (FlightPlane flightPlane : flightPlaneList) {
+
+            Time timeArrival = Time.valueOf(flightPlane.getArrivalTime());
+            if (timeArrival.after(start) && timeArrival.before(end)) {
+
+                result.add(flightPlane);
+            }
+        }
+        return result;
+    }
+    public static int sumOfNumbers(String input) {
+        List<Integer> numbers = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(input);
+        while (matcher.find()) {
+            String numberStr = matcher.group(); // Get the matched number as a string
+            int number = Integer.parseInt(numberStr); // Convert the string to an integer
+            numbers.add(number);
+        }
+        return numbers.stream().mapToInt(Integer::intValue).sum();
+    }
+    private static Date convertToLocalDateToDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }

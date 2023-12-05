@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,7 @@ public class AccountController {
     private final AccountService accountService;
     private final PassengerService passengerService;
     private final CustomerTypeService customerTypeService;
-
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private AirportService airportService;
@@ -39,6 +41,7 @@ public class AccountController {
     public String login(){
         return "login";
     }
+
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
@@ -46,19 +49,25 @@ public class AccountController {
                         RedirectAttributes redirectAttributes,
                         Model model) {
 
-        if (username.isEmpty() || password.isEmpty()) {
+        System.out.println("Login process");
+        String encryptedPassword = passwordEncoder.encode(password);
+
+        System.out.println("Password is :" + password);
+
+        if (username.isEmpty() || encryptedPassword.isEmpty()) {
             redirectAttributes.addAttribute("error", "Please provide both username and password");
             return "redirect:/login";
         }
 
-        if(!accountService.authorize(username,password)) {
+        if(!accountService.authorize(username,encryptedPassword)) {
             redirectAttributes.addAttribute("error", "Invalid username or password");
             return "redirect:/login";
         }
+
         Account account = accountService.getAccountByUsername(username);
         Passenger passenger = passengerService.getPassengerByEmail(username);
         String role = account.getRole();
-        if(role.equals("Admin")) {
+        if(role.equals("ADMIN")) {
             session.setAttribute("admin", account);
             return "redirect:/Admin/airport";
 
@@ -115,7 +124,8 @@ public class AccountController {
         System.out.println(defaultType.getTypeName());
         passenger.setType(defaultType);
         account.setUsername(email);
-        account.setPassword(password);
+        String encryptedPassword = passwordEncoder.encode(password);
+        account.setPassword(encryptedPassword);
         account.setRole("user"); // Default user
 
         //Save to db
