@@ -92,6 +92,10 @@
                             <div th:text="${passenger.lastName + ' ' + passenger.firstName}">Nguyen Van B</div>
                         </div>
                         <div class="col-6 mb-3">
+                            <div class="text-secondary">Gender</div>
+                            <div th:text="${passenger.gender}">Male</div>
+                        </div>
+                        <div class="col-6 mb-3">
                             <div class="text-secondary">Date of birth</div>
                             <div th:text="${#dates.format(passenger.dateOfBirth, 'dd/MM/yyyy')}">01/01/2003</div>
                         </div>
@@ -121,8 +125,8 @@
                                     <div th:if="${bookingDetail.baggageIds1[iStat.index] != 0}" th:text="${baggageList1[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList1[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
                                 </div>
                             </div>
-                            <hr th:if="${bookingDetail.hasExtraBaggage1 && bookingDetail.hasExtraBaggage2}">
-                            <div th:if="${bookingDetail.hasExtraBaggage2}">
+                            <hr th:if="${isReturn && bookingDetail.hasExtraBaggage1 && bookingDetail.hasExtraBaggage2}">
+                            <div th:if="${isReturn && bookingDetail.hasExtraBaggage2}">
                                 <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
                                 <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
                                     <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
@@ -172,12 +176,12 @@
                     <hr />
                     <div class="">
                         <div class="d-flex justify-content-between">
-                            <div th:text="${flight1.flightPlane.flight.flightAirline + ' x' + bookingDetail.passengerDTOS.size()}">Vietnam Airlines x2</div>
-                            <div th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size(), 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
+                            <div th:text="${flight1.flightPlane.flight.flightAirline + ' - ' + ticketClass1.className + ' x' + bookingDetail.passengerDTOS.size()}">Vietnam Airlines x2</div>
+                            <div th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size() * ticketClass1.rate, 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <div th:text="${flight2.flightPlane.flight.flightAirline + ' x' + bookingDetail.passengerDTOS.size()}">Vietnam Airlines x2</div>
-                            <div th:text="${#numbers.formatDecimal(flight2.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size(), 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
+                        <div th:if="${isReturn}" class="d-flex justify-content-between">
+                            <div th:text="${flight2.flightPlane.flight.flightAirline + ' - ' + ticketClass2.className + ' x' + bookingDetail.passengerDTOS.size()}">Vietnam Airlines x2</div>
+                            <div th:text="${#numbers.formatDecimal(flight2.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size() * ticketClass2.rate, 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
                         </div>
                         <div th:if="${bookingDetail.hasExtraBaggage1}" class="d-flex justify-content-between">
                             <div th:text="${'+ Baggage from ' + flight1.flightPlane.flight.departureAirport.city + ' to ' + flight1.flightPlane.flight.arrivalAirport.city}">+ Baggage to Ho Chi Minh City</div>
@@ -222,17 +226,17 @@
                         <div th:object="${flight1}" id="chosen-departure-flight" class="flight-chosen">
                             <div class="d-flex mb-2">
                                 <div class="logo me-2">
-                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vietjet-logo.png" alt="" />
-                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vna-logo.png" alt="" />
+                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
+                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vietjet-logo.png" alt="" />
                                 </div>
                                 <div>
                                     <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
-                                    <div th:text="*{flightPlane.plane.planeName}" class="text-secondary">
+                                    <div th:text="${flight1.flightPlane.plane.planeName + ' • ' + ticketClass1.className}" class="text-secondary">
                                         VN6420 • Eco
                                     </div>
                                 </div>
                                 <div class="ms-auto">
-                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * ticketClass1.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                                     <span class="text-secondary"> / pax</span>
@@ -261,8 +265,8 @@
                                 </div>
                             </div>
                         </div>
-                        <hr />
-                        <div class="flight-item d-flex align-content-center">
+                        <hr th:if="${isReturn}" />
+                        <div th:if="${isReturn}"  class="flight-item d-flex align-content-center">
                             <div class="icon mx-3">
                                 <img
                                         src="/images/flight-destination.png"
@@ -277,20 +281,20 @@
                                 <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
                             </div>
                         </div>
-                        <div th:object="${flight2}" id="chosen-departure-flight" class="flight-chosen">
+                        <div th:if="${isReturn}" th:object="${flight2}" id="chosen-departure-flight" class="flight-chosen">
                             <div class="d-flex mb-2">
                                 <div class="logo me-2">
-                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vietjet-logo.png" alt="" />
-                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vna-logo.png" alt="" />
+                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
+                                    <img th:if="*{flightPlane.flight.flightAirline.equals('Vietjet Air')}" src="/images/vietjet-logo.png" alt="" />
                                 </div>
                                 <div>
                                     <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
-                                    <div th:text="*{flightPlane.plane.planeName}" class="text-secondary">
+                                    <div th:text="${flight2.flightPlane.plane.planeName + ' • ' + ticketClass2.className}" class="text-secondary">
                                         VN6420 • Eco
                                     </div>
                                 </div>
                                 <div class="ms-auto">
-                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight2.flightPlane.flight.flightPrice * ticketClass2.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                                     <span class="text-secondary"> / pax</span>
@@ -324,7 +328,10 @@
                             <div class="d-flex">
                                 Subtotal
                                 <div class="ms-auto">
-                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice + flight2.flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span th:if="${!isReturn}" class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * ticketClass1.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    >3.999.000₫</span
+                                    >
+                                    <span th:if="${isReturn}" class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * ticketClass1.rate + flight2.flightPlane.flight.flightPrice * ticketClass2.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                                     <span class="text-secondary"> / pax</span>
@@ -333,8 +340,12 @@
                             <div class="d-flex align-items-center">
                                 <div th:text="${'Total for ' + bookingDetail.passengerDTOS.size() + ' pax'}">Total for 1 pax</div>
                                 <div class="ms-auto">
-                                    <span
-                                            class="text-primary fw-bold text-large" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size() + flight2.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size(), 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span th:if="${isReturn}"
+                                            class="text-primary fw-bold text-large" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size() * ticketClass1.rate + flight2.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size() * ticketClass2.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    >3.999.000₫</span
+                                    >
+                                    <span th:if="${!isReturn}"
+                                            class="text-primary fw-bold text-large" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * bookingDetail.passengerDTOS.size() * ticketClass1.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                                 </div>
@@ -363,7 +374,7 @@
                                 <div class="price ms-auto">0 ₫</div>
                             </div>
                         </div>
-                        <div id="baggage-flight-2" class="select-baggage-item select-item" data-flight="2">
+                        <div th:if="${isReturn}" id="baggage-flight-2" class="select-baggage-item select-item" data-flight="2">
                             <div class="select-item-title" th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}">
                                 2. Ha Noi (HAN) → Ho Chi Minh City (SGN)
                             </div>
@@ -386,12 +397,12 @@
                                 </label>
                                 <label th:each="baggage, iStat2 : ${baggages}" class="form-check-label d-flex mb-2">
                                     <input type="radio" th:field="*{baggageIds1[__${iStat.index}__]}" class="form-check-input me-3" th:value="${baggage.baggageId}" th:attr="data-price=${baggage.price},data-weight=${baggage.weight}">
-                                    <span th:text="${'+' + baggage.weight + 'kg'}">+20kg</span>
+                                    <span th:text="${baggage.baggageName + ' +' + baggage.weight + 'kg'}">+20kg</span>
                                     <div th:text="${#numbers.formatDecimal(baggage.price, 0, 'POINT', 0, 'POINT') + '₫'}" class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
                                 </label>
                             </div>
                         </div>
-                        <div th:object="${bookingDetail}" class="select-baggage-container d-none" data-flight="2">
+                        <div th:if="${isReturn}" th:object="${bookingDetail}" class="select-baggage-container d-none" data-flight="2">
                             <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold text-large p-3">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
                             <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="item-container mx-3 mb-3">
                                 <div th:text="${'Passenger ' + (iStat.index + 1) + ' of ' + bookingDetail.passengerDTOS.size()}" class="text-secondary fw-bold">Passenger 1 of 2</div>
@@ -435,7 +446,7 @@
                                 1. Ho Chi Minh City (SGN) → Ha Noi (HAN)
                             </div>
                         </div>
-                        <div class="select-flight-item select-item" data-flight="2">
+                        <div th:if="${isReturn}" class="select-flight-item select-item" data-flight="2">
                             <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}"  class="select-item-title">
                                 2. Ha Noi (HAN) → Ho Chi Minh City (SGN)
                             </div>
@@ -452,7 +463,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="select-passenger-container d-none" data-flight="2">
+                        <div th:if="${isReturn}" class="select-passenger-container d-none" data-flight="2">
                             <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="select-passenger-item select-item" th:classappend="${iStat.first ? 'selected' : ''}" th:attr="data-passenger=${iStat.index + 1}">
                                 <div th:text="${(iStat.index+1) + '. ' + passenger.lastName + ' ' + passenger.firstName}" class="select-item-title">
                                     1. Nguyen Van A
@@ -467,16 +478,16 @@
                     <div class="col-8 bg-light d-flex flex-column align-items-center">
                         <div class="select-seat-container" data-flight="1">
                             <div class="item-container m-3">
-                                <div class="seat-container">
+                                <div class="seat-container" th:style="${'grid-template-rows: repeat(' + (seats1.seats.size()/7) +', 40px);'}">
                                     <div th:each="seat, iStat : ${seats1.seats}" th:class="${seat != null ? 'seat-box' : ''}" th:classappend="${seat != null && seat.isTaken() ? 'unavailable' : 'available'}"  data-bs-toggle="tooltip" th:attr="data-number=${seat != null ? seat.seat.seatNumber: ''}, data-bs-title=${seat != null ? seat.seat.seatNumber : ''}, data-id=${seat != null ? seat.id : ''}">
                                         <span th:if="${seat == null}" th:text="${seats1.indicators[iStat.index]}"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="select-seat-container d-none" data-flight="2">
+                        <div th:if="${isReturn}" class="select-seat-container d-none" data-flight="2">
                             <div class="item-container m-3">
-                                <div class="seat-container">
+                                <div class="seat-container" th:style="${'grid-template-rows: repeat(' + (seats2.seats.size()/7) +', 40px);'}">
                                     <div th:each="seat, iStat : ${seats2.seats}" th:class="${seat != null ? 'seat-box' : ''}" th:classappend="${seat != null && seat.isTaken() ? 'unavailable' : 'available'}"  data-bs-toggle="tooltip" th:attr="data-number=${seat != null ? seat.seat.seatNumber: ''}, data-bs-title=${seat != null ? seat.seat.seatNumber : ''}, data-id=${seat != null ? seat.id : ''}">
                                         <span th:if="${seat == null}" th:text="${seats2.indicators[iStat.index]}"></span>
                                     </div>

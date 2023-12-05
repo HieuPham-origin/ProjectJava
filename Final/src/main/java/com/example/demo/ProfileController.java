@@ -3,8 +3,10 @@ package com.example.demo;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.FlightPlane;
 import com.example.demo.entity.Passenger;
+import com.example.demo.entity.Reservation;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.PassengerService;
+import com.example.demo.service.ReservationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +23,8 @@ public class ProfileController {
 
     @Autowired
     AccountService accountService;
+    @Autowired
+    ReservationService reservationService;
 
     @GetMapping(value = {"", "/"})
     public String profile(HttpSession session, Model model) {
@@ -108,7 +112,15 @@ public class ProfileController {
     }
 
     @GetMapping("/reservations")
-    public String reservations() {
+    public String reservations(HttpSession session) {
+        Account account = (Account) session.getAttribute("sessionAccount");
+        if (account == null) {
+            return "redirect:/login";
+        }
+        else{
+            Reservation reservation = reservationService.findByAccount(account);
+            System.out.println(reservation.getId());
+        }
         return "profile-reservation";
     }
 }

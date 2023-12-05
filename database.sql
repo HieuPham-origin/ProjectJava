@@ -19,7 +19,6 @@ CREATE TABLE `Airport`(
     `airport_code` VARCHAR(255) NOT NULL
 );
 
-
 CREATE TABLE `Account`(
     `account_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `username` VARCHAR(255) NOT NULL,
@@ -27,10 +26,12 @@ CREATE TABLE `Account`(
     `role` VARCHAR(255) NOT NULL
 );
 
+-- No data
 CREATE TABLE `Reservation`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `code` VARCHAR(255) NOT NULL,
     `time_created` VARCHAR(255) NOT NULL,
+    `total` INT,
     `account_id` INT NOT NULL,
     FOREIGN KEY(`account_id`) REFERENCES `Account`(`account_id`)
 );
@@ -42,7 +43,6 @@ CREATE TABLE `Plane`(
     `capacity` INT NOT NULL
 );
 
--- **
 CREATE TABLE `Baggage`(
     `baggage_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `baggage_name` VARCHAR(255) NOT NULL,
@@ -85,7 +85,6 @@ CREATE TABLE `Flight_Plane`(
     FOREIGN KEY(`plane_id`) REFERENCES `Plane`(`plane_id`)
 );
 
--- ***
 CREATE TABLE `Seat`(
     `seat_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `seat_number` VARCHAR(255) NOT NULL,
@@ -93,6 +92,7 @@ CREATE TABLE `Seat`(
     FOREIGN KEY(`plane_id`) REFERENCES `Plane`(`plane_id`)
 );
 
+-- No data
 CREATE TABLE `SeatDetail`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `is_taken` BOOLEAN NOT NULL,
@@ -107,6 +107,7 @@ CREATE TABLE `Passenger` (
     `first_name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
     `gender` VARCHAR(255),
+    `date_of_birth` DATETIME,
     `phone_number` VARCHAR(255),
     `email` VARCHAR(255) NOT NULL,
     `address` VARCHAR(255),
@@ -115,7 +116,7 @@ CREATE TABLE `Passenger` (
     FOREIGN KEY (`type`) REFERENCES `Customer_type` (`type_id`)
 );
 
---  **
+-- No data
 CREATE TABLE `Ticket`(
     `ticket_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `seat_detail_id` INT NOT NULL,
@@ -125,16 +126,19 @@ CREATE TABLE `Ticket`(
     `service_id` INT NOT NULL,
     `baggage_id` INT NOT NULL,
     `status` VARCHAR(255) NOT NULL,
+    `passenger_id` INT NOT NULL,
     `reservation_id` INT NOT NULL,
     `day_order` DATETIME NOT NULL,
     `day_pay` DATETIME NOT NULL,
     FOREIGN KEY(`baggage_id`) REFERENCES `Baggage`(`baggage_id`),
     FOREIGN KEY(`service_id`) REFERENCES `Service`(`service_id`),
+    FOREIGN KEY(`passenger_id`) REFERENCES `Passenger`(`passenger_id`),
     FOREIGN KEY(`reservation_id`) REFERENCES `Reservation`(`id`),
     FOREIGN KEY(`class_id`) REFERENCES `Ticket_class`(`class_id`),
     FOREIGN KEY(`seat_detail_id`) REFERENCES `SeatDetail`(`id`)
 );
 
+-- No data
 CREATE TABLE `Ticket_Detail`(
     `type_id` INT NOT NULL,
     `ticket_id` INT NOT NULL,
@@ -144,20 +148,25 @@ CREATE TABLE `Ticket_Detail`(
     FOREIGN KEY(`ticket_id`) REFERENCES `Ticket`(`ticket_id`)
 );
 
+-- Tạo dữ liệu cho bảng Customer_type
 INSERT INTO `Customer_type` (`type_name`) VALUES
 ('adult'),
 ('child'),
 ('infant');
 
-
+-- Tạo dữ liệu cho bảng Ticket_Class
 INSERT INTO Ticket_class (class_name, rate, cabin_baggage, baggage)
 VALUES
     ('Economy', 1, 20, 7),
     ('Business', 2, 25, 9),
     ('First Class', 3, 30, 10);
 
-
+-- Tạo dữ liệu cho bảng Airport
 INSERT INTO `Airport` (`airport_name`, `city`, `country`, `status`, `airport_code`) VALUES
+('Ha Noi Airport', 'Ha Noi', 'Vietnam', 'Active', 'HN'),
+('Tan Son Nhat Airport', 'Ho Chi Minh', 'Vietnam', 'Active', 'TSN'),
+('Da Nang Airport', 'Da Nang', 'Vietnam', 'Active', 'DN'),
+('Hai Phong Airport', 'Hai Phong', 'Vietnam', 'Active', 'HP'),
 ('John F. Kennedy International Airport', 'New York', 'United States', 'Active', 'JFK'),
 ('Heathrow Airport', 'London', 'United Kingdom', 'Active', 'LHR'),
 ('Charles de Gaulle Airport', 'Paris', 'France', 'Active', 'CDG'),
@@ -228,8 +237,7 @@ INSERT INTO `Airport` (`airport_name`, `city`, `country`, `status`, `airport_cod
 ('O. R. Tambo International Airport', 'Johannesburg', 'South Africa', 'Active', 'JNB'),
 ('Doha Hamad International Airport', 'Doha', 'Qatar', 'Active', 'DHIA');
 
-
-
+-- Tạo dữ liệu cho bảng Plane
 INSERT INTO `Plane` (`plane_name`, `status`, `capacity`) VALUES
 ('Boeing 737', 'Active', 150),
 ('Airbus A320', 'Active', 140),
@@ -279,9 +287,72 @@ INSERT INTO `Plane` (`plane_name`, `status`, `capacity`) VALUES
 ('Boeing 747-8', 'Active', 250),
 ('Airbus A330-200', 'Active', 220),
 ('Boeing 737-700ER', 'Active', 150),
-('Airbus A321LR', 'Active', 200);
+('Airbus A321LR', 'Active', 200),
+('Boeing 737-800ER', 'Active', 200);
 
+-- Tạo dữ liệu cho bảng Seat
+DELIMITER $$
+CREATE PROCEDURE InsertSeats()
+BEGIN
+  DECLARE plane_id_var INT;
+  DECLARE capacity_var INT;
+  DECLARE row_number_var INT DEFAULT 1;
+  DECLARE seat_number_var VARCHAR(255);
+  DECLARE seat_count INT;
 
+  -- Cursor to iterate over the planes
+  DECLARE plane_cursor CURSOR FOR
+    SELECT plane_id, capacity
+    FROM Plane;
+
+  -- Cursor to generate seat numbers
+  DECLARE seat_cursor CURSOR FOR
+    SELECT CONCAT(FLOOR((row_number_var - 1) / 6) + 1, CHAR(65 + ((row_number_var - 1) % 6))) AS seat_number;
+
+  -- Declare handlers for exceptions
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET @done = TRUE;
+
+  OPEN plane_cursor;
+
+  -- Loop over planes
+  plane_loop: LOOP
+    FETCH plane_cursor INTO plane_id_var, capacity_var;
+
+    IF (@done) THEN
+      LEAVE plane_loop;
+    END IF;
+
+    SET seat_count = 0;
+    SET row_number_var = 1;
+
+    -- Loop to insert seats
+    seat_loop: LOOP
+      IF (seat_count = capacity_var) THEN
+        LEAVE seat_loop;
+      END IF;
+
+      OPEN seat_cursor;
+      FETCH seat_cursor INTO seat_number_var;
+
+      -- Insert seat
+      INSERT INTO Seat (seat_number, plane_id)
+      VALUES (seat_number_var, plane_id_var);
+
+      CLOSE seat_cursor;
+
+      SET seat_count = seat_count + 1;
+      SET row_number_var = row_number_var + 1;
+    END LOOP seat_loop;
+  END LOOP plane_loop;
+
+  CLOSE plane_cursor;
+END$$
+DELIMITER ;
+
+-- Call the stored procedure to insert seats
+CALL InsertSeats();
+
+-- Tạo dữ liệu cho bảng Baggage
 INSERT INTO `Baggage` (`baggage_name`, `weight`, `price`) VALUES
 ('Small Carry-On', 5, 20),
 ('Standard Carry-On', 8, 25),
@@ -332,7 +403,7 @@ INSERT INTO `Baggage` (`baggage_name`, `weight`, `price`) VALUES
 ('Special Baggage - Fishing Rod', 5, 15),
 ('Special Baggage - Beach Gear', 15, 30);
 
-
+-- Tạo dữ liệu cho bảng Service
 INSERT INTO `Service` (`service_name`, `price`, `description`) VALUES
 ('Priority Boarding', 15, 'Get on the plane early and secure your seat'),
 ('In-Flight Wi-Fi', 10, 'Stay connected with high-speed internet during your flight'),
@@ -375,108 +446,164 @@ INSERT INTO `Service` (`service_name`, `price`, `description`) VALUES
 ('Mobile Boarding Pass', 5, 'Go paperless with a mobile boarding pass on your smartphone'),
 ('Carry-On Essentials Kit', 10, 'Stay refreshed and comfortable with a carry-on essentials kit');
 
-
-INSERT INTO `Passenger` (`first_name`, `last_name`, `gender`, `phone_number`, `email`, `address`, `country`, `type`)
+-- Tạo dữ liệu cho bảng Passenger
+INSERT INTO `Passenger` (`first_name`, `last_name`, `gender`, `date_of_birth`, `phone_number`, `email`, `address`, `country`, `type`)
 VALUES
-('John', 'Doe', 'Male', '123-456-7890', 'john.doe@email.com', '123 Main St', 'USA', 1),
-('Jane', 'Smith', 'Female', '987-654-3210', 'jane.smith@email.com', '456 Oak St', 'Canada', 2),
-('Mike', 'Johnson', 'Male', '555-123-4567', 'mike.johnson@email.com', '789 Elm St', 'UK', 3),
-('Emily', 'Davis', 'Female', '111-222-3333', 'emily.davis@email.com', '101 Pine St', 'Australia', 1),
-('Robert', 'Brown', 'Male', '999-888-7777', 'robert.brown@email.com', '202 Cedar St', 'Germany', 2),
-('Linda', 'Miller', 'Female', '444-555-6666', 'linda.miller@email.com', '303 Birch St', 'France', 3),
-('David', 'Wilson', 'Male', '777-666-5555', 'david.wilson@email.com', '404 Maple St', 'Italy', 1),
-('Sophia', 'Moore', 'Female', '333-444-5555', 'sophia.moore@email.com', '505 Pine St', 'Spain', 2),
-('Daniel', 'Taylor', 'Male', '222-333-4444', 'daniel.taylor@email.com', '606 Oak St', 'Japan', 3),
-('Olivia', 'Anderson', 'Female', '666-777-8888', 'olivia.anderson@email.com', '707 Elm St', 'China', 1),
-('William', 'Clark', 'Male', '444-333-2222', 'william.clark@email.com', '808 Cedar St', 'Brazil', 2),
-('Ava', 'Hill', 'Female', '888-999-0000', 'ava.hill@email.com', '909 Maple St', 'Mexico', 3),
-('James', 'Wright', 'Male', '123-987-4560', 'james.wright@email.com', '111 Pine St', 'India', 1),
-('Emma', 'Turner', 'Female', '321-654-0987', 'emma.turner@email.com', '222 Oak St', 'South Africa', 2),
-('Benjamin', 'Garcia', 'Male', '555-777-9999', 'benjamin.garcia@email.com', '333 Elm St', 'Russia', 3),
-('Mia', 'Fisher', 'Female', '111-222-3333', 'mia.fisher@email.com', '444 Cedar St', 'Argentina', 1),
-('Alexander', 'Hernandez', 'Male', '999-888-7777', 'alexander.hernandez@email.com', '555 Maple St', 'Chile', 2),
-('Sofia', 'Martinez', 'Female', '777-666-5555', 'sofia.martinez@email.com', '666 Pine St', 'Colombia', 3),
-('Ethan', 'Lopez', 'Male', '333-444-5555', 'ethan.lopez@email.com', '777 Oak St', 'Peru', 1),
-('Amelia', 'Rodriguez', 'Female', '222-333-4444', 'amelia.rodriguez@email.com', '888 Elm St', 'Venezuela', 2);
+('David', 'Luis', 'Male', '2003-11-20', '357-456-0798', 'passenger@gmail.com', '19 TDTU', 'VN', 1),
+('John', 'Doe', 'Male', '2000-01-01', '123-456-7890', 'john.doe@email.com', '123 Main St', 'USA', 1),
+('Jane', 'Smith', 'Female', '2002-11-01', '987-654-3210', 'jane.smith@email.com', '456 Oak St', 'Canada', 2),
+('Mike', 'Johnson', 'Male', '2003-10-11', '555-123-4567', 'mike.johnson@email.com', '789 Elm St', 'UK', 3),
+('Emily', 'Davis', 'Female', '2002-03-14', '111-222-3333', 'emily.davis@email.com', '101 Pine St', 'Australia', 1),
+('Robert', 'Brown', 'Male', '2000-02-01', '999-888-7777', 'robert.brown@email.com', '202 Cedar St', 'Germany', 2),
+('Linda', 'Miller', 'Female', '2000-11-05', '444-555-6666', 'linda.miller@email.com', '303 Birch St', 'France', 3),
+('David', 'Wilson', 'Male', '2003-10-12', '777-666-5555', 'david.wilson@email.com', '404 Maple St', 'Italy', 1),
+('Sophia', 'Moore', 'Female', '1999-12-11', '333-444-5555', 'sophia.moore@email.com', '505 Pine St', 'Spain', 2),
+('Daniel', 'Taylor', 'Male', '2000-09-08', '222-333-4444', 'daniel.taylor@email.com', '606 Oak St', 'Japan', 3),
+('Olivia', 'Anderson', 'Female', '2003-12-11', '666-777-8888', 'olivia.anderson@email.com', '707 Elm St', 'China', 1),
+('William', 'Clark', 'Male', '2003-11-27', '444-333-2222', 'william.clark@email.com', '808 Cedar St', 'Brazil', 2),
+('Ava', 'Hill', 'Female', '2000-08-23', '888-999-0000', 'ava.hill@email.com', '909 Maple St', 'Mexico', 3),
+('James', 'Wright', 'Male', '2002-12-11', '123-987-4560', 'james.wright@email.com', '111 Pine St', 'India', 1),
+('Emma', 'Turner', 'Female', '2003-11-22', '321-654-0987', 'emma.turner@email.com', '222 Oak St', 'South Africa', 2),
+('Benjamin', 'Garcia', 'Male', '2004-06-15', '555-777-9999', 'benjamin.garcia@email.com', '333 Elm St', 'Russia', 3),
+('Mia', 'Fisher', 'Female', '2000-07-11', '111-222-3333', 'mia.fisher@email.com', '444 Cedar St', 'Argentina', 1),
+('Alexander', 'Hernandez', 'Male', '2003-08-21', '999-888-7777', 'alexander.hernandez@email.com', '555 Maple St', 'Chile', 2),
+('Sofia', 'Martinez', 'Female', '2004-09-21', '777-666-5555', 'sofia.martinez@email.com', '666 Pine St', 'Colombia', 3),
+('Ethan', 'Lopez', 'Male', '2002-11-30', '333-444-5555', 'ethan.lopez@email.com', '777 Oak St', 'Peru', 1),
+('Amelia', 'Rodriguez', 'Female', '2002-12-16', '222-333-4444', 'amelia.rodriguez@email.com', '888 Elm St', 'Venezuela', 2);
 
-
-INSERT INTO `Account` (`username`, `password`, `role`) VALUES ('admin@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'ADMIN');
--- Tạo dữ liệu cho bảng Account từ bảng Passenger
+-- Tạo dữ liệu cho bảng Account
+INSERT INTO `Account` (`username`, `password`, `role`) VALUES 
+('admin@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'ADMIN');
 INSERT INTO `Account` (`username`, `password`, `role`)
 SELECT `email`, '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'USER' FROM `Passenger`;
+-- password: 123456
 
-
-INSERT INTO `Flight` (`departure_airport_id`, `arrival_airport_id`, `status`, `flight_airline`, `flight_price`) VALUES
-(1, 2, 'Active', 'Vietjet Air', 150),
-(2, 3, 'Active', 'Vietnam AirLines', 150),
-(3, 4, 'Active', 'Vietjet Air', 150),
-(4, 5, 'Active', 'Vietjet Air', 150),
-(5, 1, 'Active', 'Vietnam AirLines', 150),
-(1, 3, 'Active', 'Vietjet Air', 150),
-(2, 4, 'Active', 'Vietnam AirLines', 150),
-(3, 5, 'Active', 'Vietjet Air', 150),
-(4, 1, 'Active', 'Vietnam AirLines', 150),
-(5, 2, 'Active', 'Vietjet Air', 150),
-(1, 4, 'Active', 'Vietnam AirLines', 150),
-(2, 5, 'Active', 'Vietjet Air', 150),
-(3, 1, 'Active', 'Vietnam AirLines', 150),
-(4, 2, 'Active', 'Vietjet Air', 150),
-(5, 3, 'Active', 'Vietnam AirLines', 150),
-(1, 5, 'Active', 'Vietjet Air', 150),
-(2, 1, 'Active', 'Vietnam AirLines', 150),
-(3, 2, 'Active', 'Vietjet Air', 150),
-(4, 3, 'Active', 'Vietnam AirLines', 150),
-(5, 4, 'Active', 'Vietjet Air', 150),
-(1, 3, 'Active', 'Vietnam AirLines', 150),
-(2, 4, 'Active', 'Vietjet Air', 150),
-(3, 5, 'Active', 'Vietnam AirLines', 150),
-(4, 1, 'Active', 'Vietjet Air', 150),
-(5, 2, 'Active', 'Vietnam AirLines', 150),
-(1, 4, 'Active', 'Vietjet Air', 150);
-
-
--- Đặt biến cho số lượng dòng dữ liệu muốn thêm
-SET @num_rows = 50;
-
--- Sử dụng vòng lặp để thêm dữ liệu ngẫu nhiên
+-- Tạo dữ liệu cho bảng Flight
 DELIMITER //
-CREATE PROCEDURE InsertRandomFlightPlane()
+CREATE PROCEDURE GenerateFlightData()
 BEGIN
   DECLARE i INT DEFAULT 1;
+  DECLARE random_value INT;
 
-  WHILE i <= @num_rows DO
-    SET @departure_day = '2023-01-01' + INTERVAL FLOOR(RAND() * 200) DAY;
-    SET @arrival_day = '2023-01-01' + INTERVAL FLOOR(RAND() * 200) DAY;
+  WHILE i <= 72 DO
+    -- Sinh số ngẫu nhiên từ 1 đến 10
+    SET random_value = FLOOR(1 + RAND() * 10);
 
-    -- Kiểm tra điều kiện departure_day phải nhỏ hơn arrival_day
-    WHILE @departure_day >= @arrival_day DO
-      SET @departure_day = '2023-01-01' + INTERVAL FLOOR(RAND() * 20) DAY;
-      SET @arrival_day = '2023-01-01' + INTERVAL FLOOR(RAND() * 20) DAY;
-    END WHILE;
-
-    SET @departure_time_sec = FLOOR(RAND() * 86400);
-    SET @arrival_time_sec = FLOOR(RAND() * 86400);
-
-    -- Kiểm tra điều kiện departure_time phải nhỏ hơn arrival_time
-    WHILE @departure_time_sec >= @arrival_time_sec DO
-      SET @departure_time_sec = FLOOR(RAND() * 86400);
-      SET @arrival_time_sec = FLOOR(RAND() * 86400);
-    END WHILE;
-
-    INSERT INTO `Flight_Plane` (`flight_id`, `plane_id`, `departure_time`, `arrival_time`, `departure_day`, `arrival_day`)
-    SELECT
-      FLOOR(1 + RAND() * 20),
-      FLOOR(1 + RAND() * 40),
-      SEC_TO_TIME(@departure_time_sec),
-      SEC_TO_TIME(@arrival_time_sec),
-      @departure_day,
-      @arrival_day;
+    INSERT INTO `Flight` (`departure_airport_id`, `arrival_airport_id`, `status`, `flight_airline`, `flight_price`) VALUES
+    (i, i + 1, 'Active', 'Vietjet Air', 150 + random_value * 10),
+    (i + 1, i, 'Active', 'Vietnam Airlines', 150 + random_value * 10);
 
     SET i = i + 1;
   END WHILE;
 END //
 DELIMITER ;
 
--- Gọi procedure để thực hiện thêm dữ liệu
-CALL InsertRandomFlightPlane();
+-- Gọi thủ tục để thực hiện lặp
+CALL GenerateFlightData();
 
+DELIMITER //
+CREATE PROCEDURE GenerateFlightDataRepeat()
+BEGIN
+  DECLARE i INT DEFAULT 1;
+  DECLARE random_value INT;
+
+  WHILE i <= 72 DO
+    -- Sinh số ngẫu nhiên từ 1 đến 10
+    SET random_value = FLOOR(1 + RAND() * 10);
+
+    INSERT INTO `Flight` (`departure_airport_id`, `arrival_airport_id`, `status`, `flight_airline`, `flight_price`) VALUES
+    (i, i + 1, 'Active', 'Vietnam Airlines', 150 + random_value * 10),
+    (i + 1, i, 'Active', 'Vietjet Air', 150 + random_value * 10);
+
+    SET i = i + 1;
+  END WHILE;
+END //
+DELIMITER ;
+
+-- Gọi thủ tục để thực hiện lặp
+CALL GenerateFlightDataRepeat();
+
+-- Tạo dữ liệu cho bảng Flight_Plane
+DELIMITER //
+
+CREATE PROCEDURE InsertFlightPlaneCombination()
+BEGIN
+  DECLARE flight_id_var INT DEFAULT 1;
+  DECLARE plane_id_var INT;
+
+  SELECT COUNT(*) INTO @num_flights FROM Flight;
+
+  -- Bắt đầu vòng lặp cho mỗi Flight
+  WHILE flight_id_var <= @num_flights DO
+  
+    SELECT COUNT(*) INTO @num_planes FROM Plane;
+    SET plane_id_var = 1;
+
+    -- Bắt đầu vòng lặp cho mỗi Plane
+    WHILE plane_id_var <= @num_planes DO
+      SET @current_date = CURRENT_DATE;
+      
+      -- Random departure day between current date and current date + 3 days
+      SET @departure_day = @current_date + INTERVAL FLOOR(RAND() * 3) DAY;
+      -- Random arrival day between departure day and departure day + 2 days
+      SET @arrival_day = @departure_day + INTERVAL FLOOR(RAND() * 2) DAY;
+
+      SET @departure_time_sec = FLOOR(RAND() * 86400);
+      SET @arrival_time_sec = FLOOR(RAND() * 86400);
+
+      -- Kiểm tra điều kiện departure_time phải nhỏ hơn arrival_time
+      WHILE @departure_time_sec >= @arrival_time_sec DO
+        SET @departure_time_sec = FLOOR(RAND() * 86400);
+        SET @arrival_time_sec = FLOOR(RAND() * 86400);
+      END WHILE;
+
+      -- Insert dữ liệu vào bảng Flight_Plane
+      INSERT INTO `Flight_Plane` (`flight_id`, `plane_id`, `departure_time`, `arrival_time`, `departure_day`, `arrival_day`)
+      VALUES (flight_id_var, plane_id_var, SEC_TO_TIME(@departure_time_sec), SEC_TO_TIME(@arrival_time_sec), @departure_day, @arrival_day);
+
+      SET plane_id_var = plane_id_var + 1;
+    END WHILE;
+
+    SET flight_id_var = flight_id_var + 1;
+  END WHILE;
+END //
+
+DELIMITER ;
+
+CALL InsertFlightPlaneCombination();
+
+-- Tạo dữ liệu cho bảng SeatDetail
+DELIMITER //
+
+CREATE PROCEDURE InsertSeatDetailData()
+BEGIN
+  DECLARE flight_plane_id_var INT;
+  DECLARE seat_id_var INT;
+  DECLARE done INT DEFAULT FALSE;
+
+  -- Lấy danh sách các flight_plane
+  DECLARE flight_plane_cursor CURSOR FOR SELECT `id` FROM `Flight_Plane`;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN flight_plane_cursor;
+
+  read_loop: LOOP
+    FETCH flight_plane_cursor INTO flight_plane_id_var;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+
+    -- Lấy số lượng seat hiện có
+    SET @num_seats = (SELECT COUNT(*) FROM `Seat`);
+
+    -- Thêm dữ liệu vào bảng SeatDetail
+    INSERT INTO `SeatDetail` (`is_taken`, `flight_plane_id`, `seat_id`)
+    VALUES (0, flight_plane_id_var, FLOOR(1 + RAND() * @num_seats));
+  END LOOP;
+
+  CLOSE flight_plane_cursor;
+END //
+
+DELIMITER ;
+
+CALL InsertSeatDetailData();

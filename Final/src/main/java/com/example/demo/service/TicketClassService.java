@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TicketClassService {
     List<TicketClass> findAll();
+    TicketClass getById(int id);
 }

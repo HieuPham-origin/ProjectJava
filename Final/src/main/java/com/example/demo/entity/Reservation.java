@@ -27,6 +27,8 @@ public class Reservation {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeCreated;
 
+    private int total;
+
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "account_id")
     private Account account;
@@ -34,5 +36,3 @@ public class Reservation {
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 }
-
-

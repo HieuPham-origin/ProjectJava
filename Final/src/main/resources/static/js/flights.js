@@ -400,6 +400,19 @@ $(document).on("click",".button-ticket-class",function() {
 
     $(this).closest(".flight-container").find(".price").text((economyValueInt * rateInt).toLocaleString('vi-VN') + "" + " VND")
 });
+
+function extractNumbersFromString(inputString) {
+    // Use a regular expression to find all matches of digits in the input string
+    var numbersArray = inputString.match(/\d+/g);
+
+    // Convert the array of string numbers to an array of integers
+    var numbers = numbersArray.map(function (str) {
+        return parseInt(str, 10); // Use parseInt to convert each string to an integer
+    });
+
+    return numbers;
+}
+
 $('#btn-continue-booking').click(function(){
     $('#show-exception').text("")
     isChecked = $('input[name="checkReturn"]:checked').length > 0
@@ -415,6 +428,29 @@ $('#btn-continue-booking').click(function(){
             var inputArrivalFlightIdNormalMoney = parseInt($("#input-each-price-arrival-normal").val())
             var arrivalTicketClassId = inputArrivalFlightIdTotalMoney / inputArrivalFlightIdNormalMoney;
             var departureTicketClassId = inputDepartureFlightIdTotalMoney / inputDepartureFlightIdNormalMoney
+
+            var stringPassenger =  $("#input-passenger").val()
+
+            var indexAdult = stringPassenger.indexOf("adult");
+            var numberCountAdult = "0"
+            if (indexAdult!=-1){
+                numberCountAdult = stringPassenger.substring(indexAdult-2,indexAdult-1)
+            }
+
+            var indexChildren = stringPassenger.indexOf("child");
+            var numberCountChild = "0"
+            if (indexChildren!=-1){
+                numberCountChild = stringPassenger.substring(indexChildren-2,indexChildren-1)
+            }
+
+            var indexInfant = stringPassenger.indexOf("infant");
+            var numberCountInfant = "0"
+            if (indexInfant!=-1){
+                numberCountInfant = stringPassenger.substring(indexInfant-2,indexInfant-1)
+            }
+
+            var passengerNumInfo = numberCountAdult + "/" + numberCountChild + "/" + numberCountInfant
+
             $.ajax({
                 url: "/sendDataSessionForReturn",
                 type: "post",
@@ -422,10 +458,11 @@ $('#btn-continue-booking').click(function(){
                     "departureFlightId" : inputDepartureFlightId,
                     "arrivalFlightId": inputArrivalFlightId,
                     "departureTicketClassId": departureTicketClassId,
-                    "arrivalTicketClassId": arrivalTicketClassId
+                    "arrivalTicketClassId": arrivalTicketClassId,
+                    "passengerNumInfo": passengerNumInfo
                 },
                 success : function(data) {
-                    console.log(data)
+
                     window.location.href = "/booking"
                 },
                 error : function() {
@@ -442,12 +479,36 @@ $('#btn-continue-booking').click(function(){
             var inputDepartureFlightIdTotalMoney = parseInt($("#input-each-price-departure").val());
             var inputDepartureFlightIdNormalMoney = parseInt($("#input-each-price-departure-normal").val())
             var departureTicketClassId = inputDepartureFlightIdTotalMoney / inputDepartureFlightIdNormalMoney
+
+             var stringPassenger =  $("#input-passenger").val()
+
+            var indexAdult = stringPassenger.indexOf("adult");
+            var numberCountAdult = "0"
+            if (indexAdult!=-1){
+                numberCountAdult = stringPassenger.substring(indexAdult-2,indexAdult-1)
+            }
+
+            var indexChildren = stringPassenger.indexOf("child");
+            var numberCountChild = "0"
+            if (indexChildren!=-1){
+                numberCountChild = stringPassenger.substring(indexChildren-2,indexChildren-1)
+            }
+
+            var indexInfant = stringPassenger.indexOf("infant");
+            var numberCountInfant = "0"
+            if (indexInfant!=-1){
+                numberCountInfant = stringPassenger.substring(indexInfant-2,indexInfant-1)
+            }
+
+            var passengerNumInfo = numberCountAdult + "/" + numberCountChild + "/" + numberCountInfant
+
             $.ajax({
                 url: "/sendDataSessionForNotReturn",
                 type: "post",
                 data:{
                     "departureFlightId" : inputDepartureFlightId,
                     "departureTicketClassId": departureTicketClassId,
+                    "passengerNumInfo": passengerNumInfo
                 },
                 success : function(data) {
                     console.log(data)

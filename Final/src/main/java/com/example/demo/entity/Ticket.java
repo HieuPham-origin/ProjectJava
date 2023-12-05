@@ -43,7 +43,12 @@ public class Ticket {
     private SeatDetail seatDetail;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "class_id", referencedColumnName = "class_id", insertable = false, updatable = false)
+    @JoinColumn(name = "passenger_id", referencedColumnName = "passenger_id")
+    private Passenger passenger;
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "class_id", referencedColumnName = "class_id")
     private TicketClass ticketClass;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -51,7 +56,7 @@ public class Ticket {
     private Service service;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "baggage_id", referencedColumnName = "baggage_id", insertable = false, updatable = false)
+    @JoinColumn(name = "baggage_id", referencedColumnName = "baggage_id")
     private Baggage baggage;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -59,7 +64,7 @@ public class Ticket {
     private PaymentFormat paymentFormat;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "reservation_id", referencedColumnName = "id")
     private Reservation reservation;
 }
 
