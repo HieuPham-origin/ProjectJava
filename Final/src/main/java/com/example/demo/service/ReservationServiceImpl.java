@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -39,5 +40,9 @@ public class ReservationServiceImpl implements ReservationService {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    public Reservation findById(int reservationId){
+        return reservationRepository.findById(reservationId).orElse(null);
     }
 }

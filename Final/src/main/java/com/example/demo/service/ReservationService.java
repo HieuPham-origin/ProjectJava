@@ -8,4 +8,5 @@ import java.util.List;
 public interface ReservationService {
     Reservation create(Reservation reservation);
     List<Reservation> findByAccount(Account account);
+    Reservation findById(int reservationId);
 }
