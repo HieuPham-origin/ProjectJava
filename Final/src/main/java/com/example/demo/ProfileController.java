@@ -121,6 +121,7 @@ public class ProfileController {
             Reservation reservation = reservationService.findByAccount(account);
             System.out.println(reservation.getId());
             model.addAttribute("reservation",reservation);
+            model.addAttribute("total",reservation.getTotal());
             return "profile-reservation";
         }
     }
