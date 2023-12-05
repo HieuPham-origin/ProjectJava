@@ -81,6 +81,12 @@
     align-items: center;
     user-select: none;
 }
+
+.search-bar .dropdown-menu {
+    max-height: 360px;
+    overflow-y: scroll;
+}
+
 .quantity {
     padding: 0 4px;
 }
@@ -110,6 +116,8 @@
 
 
 
+
+
 .airport-name {
     font-size: smaller;
     color: #7C8DB0;
@@ -121,7 +129,7 @@
     justify-content: center;
     font-weight: bold;
     font-size: larger;
-    margin-left: 16px;
+    margin-left: auto;
 }
 
 .daterangepicker td.active {

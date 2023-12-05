@@ -54,16 +54,28 @@ public class BookingController {
 
         BookingDetail form = new BookingDetail();
         List<PassengerDTO> passengerDTOS = new ArrayList<>();
-        PassengerDTO passengerDTO = new PassengerDTO();
-        passengerDTO.setType("adult");
-        passengerDTOS.add(passengerDTO);
-        passengerDTO = new PassengerDTO();
+        String[] passengerInfos = ((String) session.getAttribute("passengerNumInfo")).split("/");
+        int adult = Integer.parseInt(passengerInfos[0]);
+        int child = Integer.parseInt(passengerInfos[1]);
+        int infant = Integer.parseInt(passengerInfos[2]);
 
-        passengerDTO.setType("child");
-        passengerDTOS.add(passengerDTO);
-        passengerDTO = new PassengerDTO();
-        passengerDTO.setType("infant");
-        passengerDTOS.add(passengerDTO);
+        for (int i = 0; i < adult; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("adult");
+            passengerDTOS.add(passengerDTO);
+        }
+
+        for (int i = 0; i < child; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("child");
+            passengerDTOS.add(passengerDTO);
+        }
+
+        for (int i = 0; i < infant; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("infant");
+            passengerDTOS.add(passengerDTO);
+        }
         form.setPassengerDTOS(passengerDTOS);
 
         model.addAttribute("form", form);
@@ -374,8 +386,11 @@ public class BookingController {
         }
         reservation.setTimeCreated(new Date());
         reservation.setTotal(total);
+        reservation.setContactEmail(bookingDetail.getContactDetail().getEmail());
+        reservation.setContactName(bookingDetail.getContactDetail().getLastName() + ' ' + bookingDetail.getContactDetail().getLastName());
+        reservation.setContactPhone(bookingDetail.getContactDetail().getPhoneNumber());
         reservation = reservationService.create(reservation);
-        model.addAttribute("reservation");
+        model.addAttribute("reservation", reservation);
         return "booking-complete";
     }
 

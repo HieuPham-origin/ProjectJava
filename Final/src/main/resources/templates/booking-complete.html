@@ -84,15 +84,15 @@
         </div>
         <hr>
         <div class="content p-3">
-            <p>Dear <b>Nguyen Van A</b></p>
-            <p>FreeFlight would like to confirm that your flight ticket has been reserved at <b>16:20 - 22/11/2023</b></p>
+            <p>Dear <b th:text="${reservation.contactName}">Nguyen Van A</b></p>
+            <p>FreeFlight would like to confirm that your flight ticket has been reserved at <b th:text="${reservation.timeCreated}">16:20 - 22/11/2023</b></p>
             <div class="bg-primary-subtle d-flex flex-column align-items-center m-auto border border-1 border-light-subtle rounded p-3 mb-3" style="width: 400px;">
                 <div>RESERVATION CODE</div>
-                <h2 class="my-3">ABCXYZ</h2>
+                <h2 th:text="${reservation.code}" class="my-3">ABCXYZ</h2>
                 <div class="text-secondary">Show this code to the check-in officer</div>
             </div>
             <h4>TICKET INFORMATION</h4>
-            <div class="item-container mb-3">
+            <div  class="item-container mb-3">
                 <div class="item-content">
                     <div
                             class="flight-item selected d-flex align-content-center"
@@ -105,10 +105,10 @@
                             />
                         </div>
                         <div>
-                            <div class="text-secondary text-smaller">
+                            <div th:text="*{#temporals.format(reservation.tickets[0].seatDetail.flightPlane.departureDay, 'EEE, dd MMM yyyy')}" class="text-secondary text-smaller">
                                 Thu, 06 Jul 2003
                             </div>
-                            <div class="">Ho Chi Minh City → Hanoi</div>
+                            <div th:text="${}" class="">Ho Chi Minh City → Hanoi</div>
                         </div>
                     </div>
                     <div id="chosen-departure-flight" class="flight-chosen">

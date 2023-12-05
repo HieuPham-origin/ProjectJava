@@ -42,24 +42,28 @@ public class HomeController {
     public String sendDataSessionForReturn(@RequestParam("departureFlightId") String departureFlightId,
                                            @RequestParam("arrivalFlightId") String arrivalFlightId,
                                            @RequestParam("departureTicketClassId") int departureTicketClassId,
-                                           @RequestParam("arrivalTicketClassId") int arrivalTicketClassId
+                                           @RequestParam("arrivalTicketClassId") int arrivalTicketClassId,
+                                           @RequestParam("passengerNumInfo") String passengerNumInfo
                                            ){
         httpSession.setAttribute("isReturn",true);
         httpSession.setAttribute("flight1Id", Integer.parseInt(departureFlightId));
         httpSession.setAttribute("flight2Id", Integer.parseInt(arrivalFlightId));
         httpSession.setAttribute("ticketClass1Id",departureTicketClassId);
         httpSession.setAttribute("ticketClass2Id",arrivalTicketClassId);
+        httpSession.setAttribute("passengerNumInfo",passengerNumInfo);
         return "success";
     }
 
     @PostMapping("/sendDataSessionForNotReturn")
     @ResponseBody
     public String sendDataSessionForNotReturn(@RequestParam("departureFlightId") String departureFlightId,
-                                           @RequestParam("departureTicketClassId") int departureTicketClassId
+                                           @RequestParam("departureTicketClassId") int departureTicketClassId,
+                                              @RequestParam("passengerNumInfo") String passengerNumInfo
     ){
         httpSession.setAttribute("isReturn",false);
         httpSession.setAttribute("flight1Id", Integer.parseInt(departureFlightId));
         httpSession.setAttribute("ticketClass1Id",departureTicketClassId);
+        httpSession.setAttribute("passengerNumInfo",passengerNumInfo);
         return "success";
     }
 }
