@@ -421,39 +421,83 @@ VALUES
 ('Amelia', 'Rodriguez', 'Female', '222-333-4444', 'amelia.rodriguez@email.com', '888 Elm St', 'Venezuela', 2);
 
 
-INSERT INTO `Account` (`username`, `password`, `role`) VALUES ('admin@gmail.com', '123456', 'Admin');
+INSERT INTO `Account` (`username`, `password`, `role`) VALUES ('admin@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'ADMIN');
 -- Tạo dữ liệu cho bảng Account từ bảng Passenger
 INSERT INTO `Account` (`username`, `password`, `role`)
-SELECT `email`, '123456', 'user' FROM `Passenger`;
-
--- Bạn cần thay thế 'your_password' bằng một mật khẩu thực tế bạn muốn sử dụng cho tất cả các account.
+SELECT `email`, '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'USER' FROM `Passenger`;
 
 
 INSERT INTO `Flight` (`departure_airport_id`, `arrival_airport_id`, `status`, `flight_airline`, `flight_price`) VALUES
-(1, 2, 'Scheduled', 'Airline A', 150.50),
-(2, 3, 'Scheduled', 'Airline B', 200.00),
-(3, 4, 'Scheduled', 'Airline C', 180.25),
-(4, 5, 'Delayed', 'Airline D', 220.75),
-(5, 1, 'Canceled', 'Airline E', 130.00),
-(1, 3, 'Scheduled', 'Airline F', 190.00),
-(2, 4, 'Scheduled', 'Airline G', 210.50),
-(3, 5, 'Scheduled', 'Airline H', 160.75),
-(4, 1, 'Delayed', 'Airline I', 240.25),
-(5, 2, 'Canceled', 'Airline J', 170.00),
-(1, 4, 'Scheduled', 'Airline K', 200.00),
-(2, 5, 'Scheduled', 'Airline L', 230.50),
-(3, 1, 'Scheduled', 'Airline M', 170.75),
-(4, 2, 'Delayed', 'Airline N', 250.25),
-(5, 3, 'Canceled', 'Airline O', 180.00),
-(1, 5, 'Scheduled', 'Airline P', 220.00),
-(2, 1, 'Scheduled', 'Airline Q', 190.50),
-(3, 2, 'Scheduled', 'Airline R', 180.75),
-(4, 3, 'Delayed', 'Airline S', 260.25),
-(5, 4, 'Canceled', 'Airline T', 190.00),
-(1, 3, 'Scheduled', 'Airline U', 210.00),
-(2, 4, 'Scheduled', 'Airline V', 240.50),
-(3, 5, 'Scheduled', 'Airline W', 190.75),
-(4, 1, 'Delayed', 'Airline X', 270.25),
-(5, 2, 'Canceled', 'Airline Y', 200.00),
-(1, 4, 'Scheduled', 'Airline Z', 230.00);
+(1, 2, 'Active', 'Airline A', 150.50),
+(2, 3, 'Active', 'Airline B', 200.00),
+(3, 4, 'Active', 'Airline C', 180.25),
+(4, 5, 'Active', 'Airline D', 220.75),
+(5, 1, 'Active', 'Airline E', 130.00),
+(1, 3, 'Active', 'Airline F', 190.00),
+(2, 4, 'Active', 'Airline G', 210.50),
+(3, 5, 'Active', 'Airline H', 160.75),
+(4, 1, 'Active', 'Airline I', 240.25),
+(5, 2, 'Active', 'Airline J', 170.00),
+(1, 4, 'Active', 'Airline K', 200.00),
+(2, 5, 'Active', 'Airline L', 230.50),
+(3, 1, 'Active', 'Airline M', 170.75),
+(4, 2, 'Active', 'Airline N', 250.25),
+(5, 3, 'Active', 'Airline O', 180.00),
+(1, 5, 'Active', 'Airline P', 220.00),
+(2, 1, 'Active', 'Airline Q', 190.50),
+(3, 2, 'Active', 'Airline R', 180.75),
+(4, 3, 'Active', 'Airline S', 260.25),
+(5, 4, 'Active', 'Airline T', 190.00),
+(1, 3, 'Active', 'Airline U', 210.00),
+(2, 4, 'Active', 'Airline V', 240.50),
+(3, 5, 'Active', 'Airline W', 190.75),
+(4, 1, 'Active', 'Airline X', 270.25),
+(5, 2, 'Active', 'Airline Y', 200.00),
+(1, 4, 'Active', 'Airline Z', 230.00);
+
+
+-- Đặt biến cho số lượng dòng dữ liệu muốn thêm
+SET @num_rows = 30;
+
+-- Sử dụng vòng lặp để thêm dữ liệu ngẫu nhiên
+DELIMITER //
+CREATE PROCEDURE InsertRandomFlightPlane()
+BEGIN
+  DECLARE i INT DEFAULT 1;
+
+  WHILE i <= @num_rows DO
+    SET @departure_day = '2023-01-01' + INTERVAL FLOOR(RAND() * 200) DAY;
+    SET @arrival_day = '2023-01-01' + INTERVAL FLOOR(RAND() * 200) DAY;
+
+    -- Kiểm tra điều kiện departure_day phải nhỏ hơn arrival_day
+    WHILE @departure_day >= @arrival_day DO
+      SET @departure_day = '2023-01-01' + INTERVAL FLOOR(RAND() * 20) DAY;
+      SET @arrival_day = '2023-01-01' + INTERVAL FLOOR(RAND() * 20) DAY;
+    END WHILE;
+
+    SET @departure_time_sec = FLOOR(RAND() * 86400);
+    SET @arrival_time_sec = FLOOR(RAND() * 86400);
+
+    -- Kiểm tra điều kiện departure_time phải nhỏ hơn arrival_time
+    WHILE @departure_time_sec >= @arrival_time_sec DO
+      SET @departure_time_sec = FLOOR(RAND() * 86400);
+      SET @arrival_time_sec = FLOOR(RAND() * 86400);
+    END WHILE;
+
+    INSERT INTO `Flight_Plane` (`flight_id`, `plane_id`, `departure_time`, `arrival_time`, `departure_day`, `arrival_day`)
+    SELECT
+      FLOOR(1 + RAND() * 20),
+      FLOOR(1 + RAND() * 40),
+      SEC_TO_TIME(@departure_time_sec),
+      SEC_TO_TIME(@arrival_time_sec),
+      @departure_day,
+      @arrival_day;
+
+    SET i = i + 1;
+  END WHILE;
+END //
+DELIMITER ;
+
+-- Gọi procedure để thực hiện thêm dữ liệu
+CALL InsertRandomFlightPlane();
 
