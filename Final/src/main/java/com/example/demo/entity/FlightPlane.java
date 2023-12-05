@@ -1,12 +1,15 @@
 package com.example.demo.entity;
 
-import java.sql.Time;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "Flight_Plane")
@@ -20,28 +23,31 @@ public class FlightPlane {
     private int id;
 
     @Column(name = "departure_time")
-    private Time departureTime;
+    private LocalTime departureTime;
 
     @Column(name = "arrival_time")
-    private Time arrivalTime;
+    private LocalTime arrivalTime;
 
     @Column(name = "departure_day")
     @Temporal(TemporalType.DATE)
-    private Date departureDay;
+    private LocalDate departureDay;
 
     @Column(name = "arrival_day")
     @Temporal(TemporalType.DATE)
-    private Date arrivalDay;
+    private LocalDate arrivalDay;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "flight_id", referencedColumnName = "flight_id", insertable = false, updatable = false)
+    @JoinColumn(name = "flight_id", referencedColumnName = "flight_id")
     private Flight flight;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "plane_id", referencedColumnName = "plane_id", insertable = false, updatable = false)
+    @JoinColumn(name = "plane_id", referencedColumnName = "plane_id")
     private Plane plane;
     public long getDuration() {
-        return arrivalTime.getTime() - departureTime.getTime();
+        LocalDateTime departureDateTime = departureDay.atTime(departureTime);
+        LocalDateTime arrivalDateTime = arrivalDay.atTime(arrivalTime);
+
+        return Duration.between(departureDateTime, arrivalDateTime).toMinutes();
     }
     public int getPriceForSort(){
         return flight.getFlightPrice();

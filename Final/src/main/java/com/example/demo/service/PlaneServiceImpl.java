@@ -25,6 +25,7 @@ public class PlaneServiceImpl implements PlaneService{
         Optional<Plane> exist = this.planeRepository.findById(id);
         if(exist.isPresent()){
             plane.setPlaneId(id);
+            plane.setStatus("Active");
             return this.planeRepository.save(plane);
         }else{
             return null;

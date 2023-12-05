@@ -12,4 +12,6 @@ public interface AirportRepository extends JpaRepository<Airport, Integer> {
 
     List<Airport> findByAirportCode(String airportCode);
     List<Airport> findAllByStatusNot(String status);
+
+    boolean existsByAirportCode(String airportCode);
 }

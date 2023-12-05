@@ -13,5 +13,4 @@ public class CustomErrorController implements ErrorController {
 
     //BREAK PLS I NEED TO RE PUSH
 
-
 }

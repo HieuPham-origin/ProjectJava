@@ -48,7 +48,7 @@
         <title>Homepage</title>
     </head>
     <body>
-    <div th:replace="./fragments/header :: header"> </div>
+    <div th:replace="/fragments/header :: header(user=${session.sessionPassenger}, page='flight')"> </div>
         <main class="d-flex align-items-center flex-column">
             <form th:action="@{/search}" method="post" class="search-bar w-100">
                 <div class="search-item dropdown search-place">

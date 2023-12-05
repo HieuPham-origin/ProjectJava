@@ -32,6 +32,7 @@ public class FlightPlaneServiceImpl implements FlightPlaneService{
     }
 
     @Override
+
     public List<FlightPlane> findByDepartureTime(Time departureTime) {
         return flightPlaneRepository.findByDepartureTime(departureTime);
     }
@@ -39,5 +40,19 @@ public class FlightPlaneServiceImpl implements FlightPlaneService{
     @Override
     public List<FlightPlane> findByArrivalTime(Time arrivalTime) {
         return flightPlaneRepository.findByArrivalTime(arrivalTime);
+    }
+
+    public FlightPlane save(FlightPlane flightPlane) {
+        return flightPlaneRepository.save(flightPlane);
+    }
+
+    @Override
+    public List<FlightPlane> getAllFlightPlanes() {
+        return flightPlaneRepository.findAll();
+    }
+
+    @Override
+    public FlightPlane getFlightPlaneById(int id) {
+        return flightPlaneRepository.findById(id).orElse(null);
     }
 }

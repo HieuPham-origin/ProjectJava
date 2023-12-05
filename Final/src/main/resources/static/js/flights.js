@@ -83,7 +83,7 @@ $('.flight-item').click(function(){
                     let timeDeparture = e.departureTime.split(":");
                     let timeArrival =  e.arrivalTime.split(":");
                     var fightPriceCurrency = e.flight.flightPrice.toLocaleString('vi-VN');
-                    var airlineLogoSrc = (e.flight.flightAirline === "VietNam Airlines") ?
+                    var airlineLogoSrc = (e.flight.flightAirline === "Vietnam Airlines") ?
                                 "images/vna-logo.png" : "images/vietjet-logo.png";
                     let html = `
                         <div class="flight-container mb-3">
@@ -188,7 +188,11 @@ $('.flight-item').click(function(){
                                                 ${e.flight.flightAirline}
                                             </div>
                                             <div class="text-large fw-bold">
+<<<<<<< HEAD
 
+=======
+                                                ${e.plane.planeName}
+>>>>>>> 267f7d41060fa6f6c2ff7cf233edf6a145a6696c
                                             </div>
                                             <div
                                                 class="text-small text-secondary"
@@ -255,7 +259,7 @@ $(document).on('click','.btn-bookFlight', function(){
             console.log(data)
             let timeDeparture = data.departureTime.split(":");
             let timeArrival =  data.arrivalTime.split(":");
-            var airlineLogoSrc = (data.flight.flightAirline === "VietNam Airlines") ?
+            var airlineLogoSrc = (data.flight.flightAirline === "Vietnam Airlines") ?
                         "images/vna-logo.png" : "images/vietjet-logo.png";
             var rateInt = parseInt($('#rate-save').val())
             var fightPriceInt = data.flight.flightPrice*rateInt
@@ -289,7 +293,11 @@ $(document).on('click','.btn-bookFlight', function(){
                         </div>
                         <div>
                             <div class="fw-bold">${data.flight.flightAirline}</div>
+<<<<<<< HEAD
                             <div class="text-secondary">${data.plane.planeName} • </div>
+=======
+                            <div class="text-secondary">${data.plane.planeName}</div>
+>>>>>>> 267f7d41060fa6f6c2ff7cf233edf6a145a6696c
                         </div>
                         <div class="ms-auto">
                             <input type="hidden" id="${idPrice}-normal" value="${data.flight.flightPrice}">

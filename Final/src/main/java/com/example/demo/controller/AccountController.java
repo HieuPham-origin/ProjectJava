@@ -2,14 +2,16 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Airport;
+import com.example.demo.entity.CustomerType;
 import com.example.demo.entity.Passenger;
-import com.example.demo.service.AccountService;
-import com.example.demo.service.AirportService;
-import com.example.demo.service.PassengerService;
+import com.example.demo.repository.CustomerTypeRepository;
+import com.example.demo.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,18 +25,23 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
     private final PassengerService passengerService;
+    private final CustomerTypeService customerTypeService;
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private AirportService airportService;
-    public AccountController(AccountService accountService, PassengerService passengerService) {
+    public AccountController(AccountService accountService, PassengerService passengerService, CustomerTypeService customerTypeService) {
         this.accountService = accountService;
         this.passengerService = passengerService;
+        this.customerTypeService = customerTypeService;
+
     }
 
     @GetMapping("/login")
     public String login(){
         return "login";
     }
+
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
@@ -42,19 +49,25 @@ public class AccountController {
                         RedirectAttributes redirectAttributes,
                         Model model) {
 
-        if (username.isEmpty() || password.isEmpty()) {
+        System.out.println("Login process");
+        String encryptedPassword = passwordEncoder.encode(password);
+
+        System.out.println("Password is :" + password);
+
+        if (username.isEmpty() || encryptedPassword.isEmpty()) {
             redirectAttributes.addAttribute("error", "Please provide both username and password");
             return "redirect:/login";
         }
 
-        if(!accountService.authorize(username,password)) {
+        if(!accountService.authorize(username,encryptedPassword)) {
             redirectAttributes.addAttribute("error", "Invalid username or password");
             return "redirect:/login";
         }
+
         Account account = accountService.getAccountByUsername(username);
         Passenger passenger = passengerService.getPassengerByEmail(username);
         String role = account.getRole();
-        if(role.equals("admin")) {
+        if(role.equals("ADMIN")) {
             session.setAttribute("admin", account);
             return "redirect:/Admin/airport";
 
@@ -68,7 +81,8 @@ public class AccountController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionPassenger");
+        session.removeAttribute("admin");
 
         // Redirect to the login page or any other desired page
         return "redirect:/login";
@@ -105,9 +119,13 @@ public class AccountController {
         passenger.setLastName(lastName);
         passenger.setPhoneNumber(mobile);
         passenger.setEmail(email);
-//        passenger.setType();  // Default adult
+        CustomerType defaultType = customerTypeService.getCustomerTypeById(1);
+        System.out.println(defaultType.getTypeId());
+        System.out.println(defaultType.getTypeName());
+        passenger.setType(defaultType);
         account.setUsername(email);
-        account.setPassword(password);
+        String encryptedPassword = passwordEncoder.encode(password);
+        account.setPassword(encryptedPassword);
         account.setRole("user"); // Default user
 
         //Save to db

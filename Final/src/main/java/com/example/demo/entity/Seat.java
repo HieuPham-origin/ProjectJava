@@ -17,8 +17,8 @@ public class Seat {
     @Column(name = "seat_id")
     private int seatId;
 
-    @Column(name = "seat_status")
-    private String seatStatus;
+    @Column(name = "seat_number")
+    private String seatNumber;
 
     @Column(name = "plane_id")
     private int planeId;

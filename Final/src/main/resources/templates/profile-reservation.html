@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://kit.fontawesome.com/45f15e8235.js"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"
+        ></script>
+        <link rel="stylesheet" href="/css/index.css" />
+        <link rel="stylesheet" href="/css/utils.css" />
+        <link rel="stylesheet" href="/css/booking.css" />
+        <link rel="stylesheet" href="/css/profile.css" />
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+        ></script>
+        <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css"
+    />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+        />
+        <title>Profile | Reservations</title>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="/fragments/header :: header(user=${session.sessionPassenger}, page='profile')"> </div>
+        <!-- Navbar -->
+
+        <main class="p-5" style="background-image: none;">
+            <h1>Manage account</h1>
+            <hr>
+            <div class="row">
+                <div class="col-4">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item">
+                          <a class="nav-link" href="/profile/">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="/profile/password">Password</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link active" href="/profile/reservations">Reservations</a>
+                        </li>
+                      </ul>
+                </div>
+                <div class="col-8">
+                    <h2>Reservation history</h2>
+                    <div class="item-container mb-3">
+                        <div class="d-flex">
+                            <div>RESERVATION CODE: ABCXYZ &ensp;|&ensp; TIME CREATED: 4/12/2003</div>
+                            <a class="link-underline link-underline-opacity-0 ms-auto" href=""> <i class="fa-solid fa-ticket"></i> E-ticket</a>
+                        </div>
+                        <hr>
+                        <div class="item-container mb-3">
+                            <div class="item-content">
+                                <div
+                                    class="flight-item selected d-flex align-content-center"
+                                >
+                                    <div class="icon mx-3">
+                                        <img
+                                            src="/images/flight-departure.png"
+                                            alt=""
+                                            srcset=""
+                                        />
+                                    </div>
+                                    <div>
+                                        <div class="text-secondary text-smaller">
+                                            Thu, 06 Jul 2003
+                                        </div>
+                                        <div class="">Ho Chi Minh City → Hanoi</div>
+                                    </div>
+                                </div>
+                                <div id="chosen-departure-flight" class="flight-chosen">
+                                    <div class="d-flex mb-2">
+                                        <div class="logo me-2">
+                                            <img src="/images/vna-logo.png" alt="" />
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Vietnam Airlines</div>
+                                            <div class="text-secondary">
+                                                VN6420 • Eco
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">SGN</div>
+                                            <div class="text-secondary">Tan Son Nhat Airport</div>
+                                            <div class="text-larger fw-bold">09:00</div>
+                                        </div>
+                                        <div class="text-secondary">•</div>
+                                        <div
+                                            class="d-flex flex-column align-items-center"
+                                        >
+                                            <i
+                                                class="fa-solid fa-plane text-secondary"
+                                            ></i>
+                                            <div class="text-secondary">2h 30m</div>
+                                        </div>
+                                        <div class="text-secondary">•</div>
+        
+                                        <div class="text-end">
+                                            <div class="fw-bold">HAN</div>
+                                            <div class="text-secondary">Noi Bai Airport</div>
+                                            <div class="text-larger fw-bold">11:30</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="flight-item d-flex align-content-center">
+                                    <div class="icon mx-3">
+                                        <img
+                                            src="/images/flight-destination.png"
+                                            alt=""
+                                            srcset=""
+                                        />
+                                    </div>
+                                    <div>
+                                        <div class="text-secondary text-smaller">
+                                            Thu, 06 Jul 2003
+                                        </div>
+                                        <div class="">Hanoi → Ho Chi Minh City</div>
+                                    </div>
+                                </div>
+                                <div id="chosen-departure-flight" class="flight-chosen">
+                                    <div class="d-flex mb-2">
+                                        <div class="logo me-2">
+                                            <img src="/images/vna-logo.png" alt="" />
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Vietnam Airlines</div>
+                                            <div class="text-secondary">
+                                                VN6420 • Eco
+                                            </div>
+                                        </div>
+    
+                                    </div>
+        
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">SGN</div>
+                                            <div class="text-secondary">Tan Son Nhat Airport</div>
+                                            <div class="text-larger fw-bold">09:00</div>
+                                        </div>
+                                        <div class="text-secondary">•</div>
+                                        <div
+                                            class="d-flex flex-column align-items-center"
+                                        >
+                                            <i
+                                                class="fa-solid fa-plane text-secondary"
+                                            ></i>
+                                            <div class="text-secondary">2h 30m</div>
+                                        </div>
+                                        <div class="text-secondary">•</div>
+        
+                                        <div class="text-end">
+                                            <div class="fw-bold">HAN</div>
+                                            <div class="text-secondary">Noi Bai Airport</div>
+                                            <div class="text-larger fw-bold">11:30</div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <div class="me-2">TOTAL: </div>
+                            <div class="text-danger text-larger fw-bold">5.000.000 VND</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

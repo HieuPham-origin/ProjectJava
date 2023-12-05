@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,19 @@ public class AirportController {
         return "Admin/airport-manager";
     }
     @PostMapping("/airport/save")
-    public String saveAirport(Airport airportObj){
+    public String saveAirport(Airport airportObj, RedirectAttributes redirectAttributes){
+        System.out.println("got here");
+        System.out.println(airportObj.getAirportName());
+        System.out.println(airportObj.getAirportCode());
+        System.out.println(airportObj.getCountry());
+
+
+        if(airportService.existByAirportCode(airportObj.getAirportCode())) {
+            System.out.println("got here2");
+            redirectAttributes.addFlashAttribute("errorMessage", "Airport code already exists");
+            return "redirect:/Admin/airport";
+        }
+        System.out.println("got here3");
         airportObj.setStatus("Active");
         airportService.save(airportObj);
         return "redirect:/Admin/airport";
@@ -53,8 +66,11 @@ public class AirportController {
     public String updateAirport(@PathVariable("id") Integer airportId, Airport airport){
         Optional<Airport> exist = airportService.getAirportById(airportId);
         if(exist.isPresent()){
-            airport.setAirportId(airportId);
-            airportService.update(airportId, airport);
+            exist.get().setAirportName(airport.getAirportName());
+            exist.get().setCity(airport.getCity());
+            exist.get().setCountry(airport.getCountry());
+            exist.get().setAirportCode(airport.getAirportCode());
+            airportService.update(airportId, exist.get());
             selectedAirport = airport;
             return "redirect:/Admin/airport";
         } else {
