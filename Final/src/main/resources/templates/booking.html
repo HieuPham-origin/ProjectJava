@@ -203,7 +203,9 @@
         <h2>Your flights</h2>
         <div class="item-container mb-3">
             <div class="item-content">
-                <div class="flight-item d-flex align-content-center">
+                <div
+                        class="flight-item selected d-flex align-content-center"
+                >
                     <div class="icon mx-3">
                         <img
                                 src="/images/flight-departure.png"
@@ -226,12 +228,12 @@
                         </div>
                         <div>
                             <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
-                            <div th:text="*{flightPlane.plane.planeName}" class="text-secondary">
+                            <div th:text="${flight1.flightPlane.plane.planeName + ' • ' + ticketClass1.className}" class="text-secondary">
                                 VN6420 • Eco
                             </div>
                         </div>
                         <div class="ms-auto">
-                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(priceTicket, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * ticketClass1.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                             <span class="text-secondary"> / pax</span>
@@ -260,8 +262,8 @@
                         </div>
                     </div>
                 </div>
-                <hr />
-                <div th:if="${isReturn=='true'}" class="flight-item d-flex align-content-center">
+                <hr th:if="${isReturn}" />
+                <div th:if="${isReturn}"  class="flight-item d-flex align-content-center">
                     <div class="icon mx-3">
                         <img
                                 src="/images/flight-destination.png"
@@ -276,7 +278,7 @@
                         <div th:text="*{flightPlane.flight.departureAirport.city + ' → ' + flightPlane.flight.arrivalAirport.city}">Ho Chi Minh City → Hanoi</div>
                     </div>
                 </div>
-                <div th:if="${isReturn=='true'}" th:object="${flight2}" id="chosen-arrival-flight" class="flight-chosen">
+                <div th:if="${isReturn}" th:object="${flight2}" id="chosen-departure-flight" class="flight-chosen">
                     <div class="d-flex mb-2">
                         <div class="logo me-2">
                             <img th:if="*{flightPlane.flight.flightAirline.equals('Vietnam Airlines')}" src="/images/vna-logo.png" alt="" />
@@ -284,12 +286,12 @@
                         </div>
                         <div>
                             <div th:text="*{flightPlane.flight.flightAirline}" class="fw-bold">Vietnam Airlines</div>
-                            <div th:text="*{flightPlane.plane.planeName}" class="text-secondary">
+                            <div th:text="${flight2.flightPlane.plane.planeName + ' • ' + ticketClass2.className}" class="text-secondary">
                                 VN6420 • Eco
                             </div>
                         </div>
                         <div class="ms-auto">
-                                    <span class="text-primary fw-bold" th:text="*{#numbers.formatDecimal(priceTicket, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight2.flightPlane.flight.flightPrice * ticketClass2.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
                             <span class="text-secondary"> / pax</span>
@@ -323,19 +325,26 @@
                     <div class="d-flex">
                         Subtotal
                         <div class="ms-auto">
-                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice + flight2.flightPlane.flight.flightPrice, 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span th:if="${!isReturn}" class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * ticketClass1.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
+                            <span th:if="${isReturn}" class="text-primary fw-bold" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * ticketClass1.rate + flight2.flightPlane.flight.flightPrice * ticketClass2.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
+                            >3.999.000₫</span
+                            >
                             <span class="text-secondary"> / pax</span>
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
-                        Total for 1 pax
+                        <div th:text="${'Total for ' + form.passengerDTOS.size() + ' pax'}">Total for 1 pax</div>
                         <div class="ms-auto">
-                                    <span
-                                            class="text-primary fw-bold text-large" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * form.passengerDTOS.size() + flight2.flightPlane.flight.flightPrice * form.passengerDTOS.size(), 0, 'POINT', 0, 'POINT') + '₫'}"
+                                    <span th:if="${isReturn}"
+                                          class="text-primary fw-bold text-large" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * form.passengerDTOS.size() * ticketClass1.rate + flight2.flightPlane.flight.flightPrice * form.passengerDTOS.size() * ticketClass2.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
                                     >3.999.000₫</span
                                     >
+                            <span th:if="${!isReturn}"
+                                  class="text-primary fw-bold text-large" th:text="${#numbers.formatDecimal(flight1.flightPlane.flight.flightPrice * form.passengerDTOS.size() * ticketClass1.rate, 0, 'POINT', 0, 'POINT') + '₫'}"
+                            >3.999.000₫</span
+                            >
                         </div>
                     </div>
                 </div>

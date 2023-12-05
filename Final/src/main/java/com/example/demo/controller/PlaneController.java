@@ -5,6 +5,7 @@ import com.example.demo.entity.Flight;
 import com.example.demo.entity.Plane;
 import com.example.demo.service.AirportService;
 import com.example.demo.service.PlaneService;
+import com.example.demo.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,9 @@ import java.util.Optional;
 public class PlaneController {
     @Autowired
     private PlaneService planeService;
+
+    @Autowired
+    private SeatService seatService;
     @GetMapping("/plane")
     public String showPlanes(Model model){
         List<Plane> planes = planeService.getAllPlanes("Disabled");
@@ -33,6 +37,7 @@ public class PlaneController {
     public String savePlane(Plane plane){
         plane.setStatus("Active");
         planeService.save(plane);
+        seatService.initSeats(plane);
         return "redirect:/Admin/plane";
     }
     @PostMapping("/plane/update/{id}")

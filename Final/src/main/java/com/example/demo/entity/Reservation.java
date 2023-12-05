@@ -27,7 +27,17 @@ public class Reservation {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeCreated;
 
+    @Column(name = "total")
     private int total;
+
+    @Column(name = "contact_name")
+    private String contactName;
+
+    @Column(name = "contact_phone")
+    private String contactPhone;
+
+    @Column(name = "contact_email")
+    private String contactEmail;
 
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "account_id")

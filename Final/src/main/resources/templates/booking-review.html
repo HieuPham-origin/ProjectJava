@@ -122,7 +122,7 @@
                                 <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
                                     <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
                                     <div th:if="${bookingDetail.baggageIds1[iStat.index] == 0}" class="ms-auto">No extra baggage</div>
-                                    <div th:if="${bookingDetail.baggageIds1[iStat.index] != 0}" th:text="${baggageList1[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList1[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
+                                    <div th:if="${bookingDetail.baggageIds1[iStat.index] != 0}" th:text="${baggageList1[iStat.index].baggageName + ' - ' + baggageList1[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList1[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
                                 </div>
                             </div>
                             <hr th:if="${isReturn && bookingDetail.hasExtraBaggage1 && bookingDetail.hasExtraBaggage2}">
@@ -131,7 +131,7 @@
                                 <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
                                     <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
                                     <div th:if="${bookingDetail.baggageIds2[iStat.index] == 0}" class="ms-auto">No extra baggage</div>
-                                    <div th:if="${bookingDetail.baggageIds2[iStat.index] != 0}" th:text="${baggageList2[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList2[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
+                                    <div th:if="${bookingDetail.baggageIds2[iStat.index] != 0}" th:text="${baggageList2[iStat.index].baggageName + ' - ' + baggageList2[iStat.index].weight + 'kg - ' + #numbers.formatDecimal(baggageList2[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
                                 </div>
                             </div>
                         </div>
@@ -389,7 +389,7 @@
                             <div th:text="${'1. ' + flight1.flightPlane.flight.departureAirport.city + ' (' + flight1.flightPlane.flight.departureAirport.airportCode + ') → ' + flight1.flightPlane.flight.arrivalAirport.city + ' (' + flight1.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold text-large p-3">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
                             <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="item-container mx-3 mb-3">
                                 <div th:text="${'Passenger ' + (iStat.index + 1) + ' of ' + bookingDetail.passengerDTOS.size()}" class="text-secondary fw-bold">Passenger 1 of 2</div>
-                                <div th:tex="${passenger.lastName + ' ' + passenger.firstName}" class="fw-bold text-large">Nguyen Van A</div>
+                                <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="fw-bold text-large">Nguyen Van A</div>
                                 <hr>
                                 <label class="form-check-label d-flex mb-2">
                                     <input type="radio" th:field="*{baggageIds1[__${iStat.index}__]}" class="form-check-input me-3" checked value="0" data-price="0" data-weight="0">
@@ -406,7 +406,7 @@
                             <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold text-large p-3">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
                             <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="item-container mx-3 mb-3">
                                 <div th:text="${'Passenger ' + (iStat.index + 1) + ' of ' + bookingDetail.passengerDTOS.size()}" class="text-secondary fw-bold">Passenger 1 of 2</div>
-                                <div th:tex="${passenger.lastName + ' ' + passenger.firstName}" class="fw-bold text-large">Nguyen Van A</div>
+                                <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="fw-bold text-large">Nguyen Van A</div>
                                 <hr>
                                 <label class="form-check-label d-flex mb-2">
                                     <input type="radio" th:field="*{baggageIds2[__${iStat.index}__]}" class="form-check-input me-3" checked value="0" data-price="0" data-weight="0">

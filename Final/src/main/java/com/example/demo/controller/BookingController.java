@@ -41,42 +41,51 @@ public class BookingController {
     @GetMapping(value = {"", "/"})
     public String booking(HttpServletRequest req, Model model) {
         HttpSession session = req.getSession();
-        String isReturn = session.getAttribute("isReturn").toString();
-        if (isReturn.equals("true")){
-            String flight1Id = session.getAttribute("flight1Id").toString();
-            String flight2Id = session.getAttribute("flight2Id").toString();
-            int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
-            int flight2TicketClassId = Integer.parseInt(session.getAttribute("flight2TicketClassId").toString());
-            FlightPlane flight1 = flightPlaneService.findById(Integer.parseInt(flight1Id));
-            FlightPlane flight2 = flightPlaneService.findById(Integer.parseInt(flight2Id));
-            model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
-            model.addAttribute("flight2", new FlightDTO(flight2,flight2TicketClassId));
-            model.addAttribute("isReturn", isReturn);
-        } else {
-            String flight1Id = session.getAttribute("flight1Id").toString();
-            int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
-            FlightPlane flight1 = flightPlaneService.findById(Integer.parseInt(flight1Id));
-            model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
-            model.addAttribute("isReturn", isReturn);
-        }
+
+        if (session.getAttribute("flight1Id") == null || session.getAttribute("ticketClass1Id") == null)
+            return "redirect:/";
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
+
+        FlightPlane flight1 = flightPlaneService.findById((int) session.getAttribute("flight1Id"));
+        FlightPlane flight2 = isReturn ? flightPlaneService.findById((int) session.getAttribute("flight2Id")) : null;
+        List<Baggage> baggages = baggageService.getAllBaggages();
+        TicketClass ticketClass1 = ticketClassService.getById((int) session.getAttribute("ticketClass1Id"));
+        TicketClass ticketClass2 = isReturn ? ticketClassService.getById((int) session.getAttribute("ticketClass2Id")) : null;
+
         BookingDetail form = new BookingDetail();
         List<PassengerDTO> passengerDTOS = new ArrayList<>();
-        PassengerDTO passengerDTO = new PassengerDTO();
-        passengerDTO.setType("adult");
-        passengerDTOS.add(passengerDTO);
-        passengerDTO = new PassengerDTO();
+        String[] passengerInfos = ((String) session.getAttribute("passengerNumInfo")).split("/");
+        int adult = Integer.parseInt(passengerInfos[0]);
+        int child = Integer.parseInt(passengerInfos[1]);
+        int infant = Integer.parseInt(passengerInfos[2]);
 
-        passengerDTO.setType("child");
-        passengerDTOS.add(passengerDTO);
-        passengerDTO = new PassengerDTO();
-        passengerDTO.setType("infant");
-        passengerDTOS.add(passengerDTO);
+        for (int i = 0; i < adult; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("adult");
+            passengerDTOS.add(passengerDTO);
+        }
+
+        for (int i = 0; i < child; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("child");
+            passengerDTOS.add(passengerDTO);
+        }
+
+        for (int i = 0; i < infant; i++) {
+            PassengerDTO passengerDTO = new PassengerDTO();
+            passengerDTO.setType("infant");
+            passengerDTOS.add(passengerDTO);
+        }
         form.setPassengerDTOS(passengerDTOS);
 
         model.addAttribute("form", form);
-
-
-
+        model.addAttribute("flight1", new FlightDTO(flight1));
+        model.addAttribute("ticketClass1", ticketClass1);
+        if (isReturn) {
+            model.addAttribute("flight2", new FlightDTO(flight2));
+            model.addAttribute("ticketClass2", ticketClass2);
+        }
+        model.addAttribute("isReturn", isReturn);
         return "booking";
     }
 
@@ -193,12 +202,9 @@ public class BookingController {
         model.addAttribute("seats1", new SeatContainer(seatDetails1));
         model.addAttribute("seats2", new SeatContainer(seatDetails2));
         model.addAttribute("bookingDetail", bookingDetail);
-
-        int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
-        int flight2TicketClassId = Integer.parseInt(session.getAttribute("flight2TicketClassId").toString());
-        model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
+        model.addAttribute("flight1", new FlightDTO(flight1));
         if (isReturn)
-            model.addAttribute("flight2", new FlightDTO(flight2,flight2TicketClassId));
+            model.addAttribute("flight2", new FlightDTO(flight2));
         model.addAttribute("ticketClass1", ticketClass1);
         if (isReturn)
             model.addAttribute("ticketClass2", ticketClass2);
@@ -212,7 +218,7 @@ public class BookingController {
         HttpSession session = req.getSession();
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
 
         BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
 
@@ -239,7 +245,7 @@ public class BookingController {
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
 
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
 
 
         BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
@@ -271,7 +277,7 @@ public class BookingController {
         if (session.getAttribute("bookingDetail") == null)
             return "redirect:/booking";
 
-        boolean isReturn = session.getAttribute("isReturn") != null;
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
         FlightPlane flightPlane1 = flightPlaneService.getFlightPlaneById((int)session.getAttribute("flight1Id"));
         FlightPlane flightPlane2 = isReturn ? flightPlaneService.getFlightPlaneById((int) session.getAttribute("flight2Id")) : null;
 
@@ -282,11 +288,13 @@ public class BookingController {
         Reservation reservation = new Reservation();
         reservation.setTickets(new ArrayList<>());
         int total = 0;
+        System.out.println("1");
         for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
             int ticketTotal = flightPlane1.getFlight().getFlightPrice() * ticketClass1.getRate();
             PassengerDTO passengerDTO = bookingDetail.getPassengerDTOS().get(i);
             Ticket ticket = new Ticket();
             ticket.setReservation(reservation);
+            ticket.setTicketClass(ticketClass1);
             if (bookingDetail.getBaggageIds1().get(i) != 0) {
                 Baggage baggage = baggageService.getById(bookingDetail.getBaggageIds1().get(i));
                 ticket.setBaggage(baggage);
@@ -306,13 +314,16 @@ public class BookingController {
             }
             else
                 seatDetail = seatService.getSeatDetailById(bookingDetail.getSeatDetailIds1().get(i));
-            if (seatDetail == null)
-                continue;
+            if (seatDetail == null) {
+                // continue
+            }
             ticket.setSeatDetail(seatDetail);
             ticket.setDayOrder(new Date());
             ticket.setTotalPrice(ticketTotal);
-            seatDetail.setTaken(true);
-            seatDetail.setTicket(ticket);
+            if (seatDetail != null) {
+                seatDetail.setTaken(true);
+                seatDetail.setTicket(ticket);
+            }
             Passenger passenger = new Passenger();
             passenger.setType(customerTypeService.getCustomerTypeByName(passengerDTO.getType()));
             passenger.setGender(passengerDTO.getGender());
@@ -322,11 +333,13 @@ public class BookingController {
             passenger.setLastName(passengerDTO.getLastName());
 
             ticket.setPassenger(passenger);
-            ticketService.create(ticket);
+            ticket.setDayPay(new Date());
+            //ticket = ticketService.create(ticket);
             reservation.getTickets().add(ticket);
 
             total += ticketTotal;
         }
+        System.out.println("2");
 
         if (isReturn) {
             for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
@@ -339,6 +352,7 @@ public class BookingController {
                     ticket.setBaggage(baggage);
                     ticketTotal += baggage.getPrice();
                 }
+                ticket.setTicketClass(ticketClass2);
 
                 SeatDetail seatDetail = null;
                 if (bookingDetail.getSeatDetailIds2().get(i) == 0) { // not choose seat
@@ -352,13 +366,16 @@ public class BookingController {
                 }
                 else
                     seatDetail = seatService.getSeatDetailById(bookingDetail.getSeatDetailIds2().get(i));
-                if (seatDetail == null)
-                    continue;
+                if (seatDetail == null) {
+                    // continue
+                }
                 ticket.setSeatDetail(seatDetail);
                 ticket.setDayOrder(new Date());
                 ticket.setTotalPrice(ticketTotal);
-                seatDetail.setTaken(true);
-                seatDetail.setTicket(ticket);
+                if (seatDetail != null) {
+                    seatDetail.setTaken(true);
+                    seatDetail.setTicket(ticket);
+                }
                 Passenger passenger = new Passenger();
                 passenger.setType(customerTypeService.getCustomerTypeByName(passengerDTO.getType()));
                 passenger.setGender(passengerDTO.getGender());
@@ -366,21 +383,27 @@ public class BookingController {
                 passenger.setDateOfBirth(passengerDTO.getDateOfBirth());
                 passenger.setFirstName(passengerDTO.getFirstName());
                 passenger.setLastName(passengerDTO.getLastName());
-
+                ticket.setDayPay(new Date());
                 ticket.setPassenger(passenger);
-                ticketService.create(ticket);
+                //ticket = ticketService.create(ticket);
                 reservation.getTickets().add(ticket);
                 total += ticketTotal;
             }
         }
+        System.out.println("3");
 
-        if (session.getAttribute("sessionPassenger") != null) { // book with account
-            Passenger user = (Passenger) session.getAttribute("sessionPassenger");
-            reservation.setAccount(accountService.getAccountByUsername(user.getEmail()));
+        if (session.getAttribute("sessionAccount") != null) { // book with account
+            Account account = (Account) session.getAttribute("sessionAccount");
+            reservation.setAccount(account);
         }
         reservation.setTimeCreated(new Date());
         reservation.setTotal(total);
-        reservationService.create(reservation);
+        System.out.println(total);
+        reservation.setContactEmail(bookingDetail.getContactDetail().getEmail());
+        reservation.setContactName(bookingDetail.getContactDetail().getLastName() + ' ' + bookingDetail.getContactDetail().getLastName());
+        reservation.setContactPhone(bookingDetail.getContactDetail().getPhoneNumber());
+        reservation = reservationService.create(reservation);
+        model.addAttribute("reservation", reservation);
         return "booking-complete";
     }
 
