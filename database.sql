@@ -449,7 +449,7 @@ INSERT INTO `Service` (`service_name`, `price`, `description`) VALUES
 -- Tạo dữ liệu cho bảng Passenger
 INSERT INTO `Passenger` (`first_name`, `last_name`, `gender`, `date_of_birth`, `phone_number`, `email`, `address`, `country`, `type`)
 VALUES
-('David', 'Luis', 'Male', '2003-11-20', '357-456-0798', 'passenger@gmail.com', '19, TDTU', 'VN', 1),
+('David', 'Luis', 'Male', '2003-11-20', '357-456-0798', 'passenger@gmail.com', '19 TDTU', 'VN', 1),
 ('John', 'Doe', 'Male', '2000-01-01', '123-456-7890', 'john.doe@email.com', '123 Main St', 'USA', 1),
 ('Jane', 'Smith', 'Female', '2002-11-01', '987-654-3210', 'jane.smith@email.com', '456 Oak St', 'Canada', 2),
 ('Mike', 'Johnson', 'Male', '2003-10-11', '555-123-4567', 'mike.johnson@email.com', '789 Elm St', 'UK', 3),
@@ -473,8 +473,7 @@ VALUES
 
 -- Tạo dữ liệu cho bảng Account
 INSERT INTO `Account` (`username`, `password`, `role`) VALUES 
-('admin@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'ADMIN'),
-('passenger@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'USER');
+('admin@gmail.com', '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'ADMIN');
 INSERT INTO `Account` (`username`, `password`, `role`)
 SELECT `email`, '$2a$10$b4fPVlmra8fqY6VqMnsL6OWsIZtt/i5XGYIMwkS2Fn0gB4gYSqr8G', 'USER' FROM `Passenger`;
 -- password: 123456
