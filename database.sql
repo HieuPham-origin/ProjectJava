@@ -572,3 +572,39 @@ END //
 DELIMITER ;
 
 CALL InsertFlightPlaneCombination();
+
+-- Tạo dữ liệu cho bảng SeatDetail
+DELIMITER //
+
+CREATE PROCEDURE InsertSeatDetailData()
+BEGIN
+  DECLARE flight_plane_id_var INT;
+  DECLARE seat_id_var INT;
+  DECLARE done INT DEFAULT FALSE;
+
+  -- Lấy danh sách các flight_plane
+  DECLARE flight_plane_cursor CURSOR FOR SELECT `id` FROM `Flight_Plane`;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN flight_plane_cursor;
+
+  read_loop: LOOP
+    FETCH flight_plane_cursor INTO flight_plane_id_var;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+
+    -- Lấy số lượng seat hiện có
+    SET @num_seats = (SELECT COUNT(*) FROM `Seat`);
+
+    -- Thêm dữ liệu vào bảng SeatDetail
+    INSERT INTO `SeatDetail` (`is_taken`, `flight_plane_id`, `seat_id`)
+    VALUES (0, flight_plane_id_var, FLOOR(1 + RAND() * @num_seats));
+  END LOOP;
+
+  CLOSE flight_plane_cursor;
+END //
+
+DELIMITER ;
+
+CALL InsertSeatDetailData();
