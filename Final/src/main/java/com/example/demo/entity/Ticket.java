@@ -38,9 +38,9 @@ public class Ticket {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dayPay;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "seat_id", referencedColumnName = "seat_id", insertable = false, updatable = false)
-    private Seat seat;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seat_detail_id", referencedColumnName = "id")
+    private SeatDetail seatDetail;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "class_id", referencedColumnName = "class_id", insertable = false, updatable = false)

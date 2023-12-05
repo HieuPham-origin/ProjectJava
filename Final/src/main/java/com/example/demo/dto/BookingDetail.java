@@ -15,4 +15,8 @@ public class BookingDetail {
     private List<Integer> baggageIds2;
     private boolean hasExtraBaggage1 = false;
     private boolean hasExtraBaggage2 = false;
+    private List<Integer> seatDetailIds1;
+    private List<Integer> seatDetailIds2;
+    private boolean hasChosenSeat1 = false;
+    private boolean hasChosenSeat2 = false;
 }

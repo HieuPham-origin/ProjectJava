@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Seat")
 @NoArgsConstructor
@@ -20,11 +22,9 @@ public class Seat {
     @Column(name = "seat_number")
     private String seatNumber;
 
-    @Column(name = "plane_id")
-    private int planeId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "plane_id", referencedColumnName = "plane_id", insertable = false, updatable = false)
+    @JoinColumn(name = "plane_id", referencedColumnName = "plane_id")
     private Plane plane;
 }
 

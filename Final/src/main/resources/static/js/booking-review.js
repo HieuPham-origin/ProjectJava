@@ -67,6 +67,7 @@ $(".seat-box").click(function () {
     let passengerNumber = passengerElem.data("passenger") 
     if ($(this).hasClass("available")) {
         passengerElem.find(".seat").text(number);
+        passengerElem.find(".input-chosen-seat-detail-id").val($(this).data("id"));
         container.find(`.seat-box.selected[data-selected-by="${passengerNumber}"]`).removeClass("selected").addClass("available").text("").removeAttr("data-selected-by")
         $(this).addClass("selected").removeClass("available").text(passengerNumber).attr("data-selected-by", passengerNumber);
         return;
@@ -76,6 +77,7 @@ $(".seat-box").click(function () {
         if ($(this).data("selected-by") === passengerNumber) {
             $(this).removeClass("selected").addClass("available").text("").removeAttr("data-selected-by")
             passengerElem.find(".seat").text("No preference");
+            passengerElem.find(".input-chosen-seat-detail-id").val(0);
             return;
         }
     }
@@ -107,6 +109,15 @@ function updateBaggagePrice() {
     $("#modal-baggage .subtotal").text(formatter().format(subtotal));
 }
 
+$("#btn-reset-seat").click(() => {
+    let reset = confirm("Are you sure to reset your seat selection ?");
+    if (reset) {
+        $('#modal-seat .seat').text('No preference');
+        $('#modal-seat .input-chosen-seat-detail-id').val(0);
+        $('#modal-seat').modal('show');
+    }
+})
+
 function formatter() {
     return new Intl.NumberFormat("vi-VN", {
         style: "currency",
@@ -117,3 +128,4 @@ function formatter() {
         //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
     });
 }
+

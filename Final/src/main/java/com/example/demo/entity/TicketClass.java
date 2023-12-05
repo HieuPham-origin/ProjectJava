@@ -23,11 +23,11 @@ public class TicketClass {
     @Column(name = "rate")
     private int rate;
 
-    @Column(name = "cabin_baggage")
-    private int cabinBaggage;
-
     @Column(name = "baggage")
     private int baggage;
+
+    @Column(name = "cabin_baggage")
+    private int cabinBaggage;
 
 }
 

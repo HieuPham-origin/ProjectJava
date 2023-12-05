@@ -13,13 +13,11 @@ public class FlightDTO {
 
     public FlightDTO(FlightPlane flightPlane) {
         this.flightPlane = flightPlane;
+
 //        Duration duration = Duration.between(flightPlane.getDepartureTime().toLocalTime(), flightPlane.getArrivalTime().toLocalTime());
         Duration duration = Duration.between(flightPlane.getDepartureTime(), flightPlane.getArrivalTime());
 
         this.duration = duration.toHours() + "h " + duration.toMinutesPart() + "m";
     }
-
-
-
 
 }

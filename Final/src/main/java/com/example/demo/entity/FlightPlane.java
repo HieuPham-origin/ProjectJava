@@ -49,5 +49,8 @@ public class FlightPlane {
 
         return Duration.between(departureDateTime, arrivalDateTime).toMinutes();
     }
+    public int getPriceForSort(){
+        return flight.getFlightPrice();
+    }
 }
 

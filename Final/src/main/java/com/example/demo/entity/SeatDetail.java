@@ -7,11 +7,11 @@ import lombok.Setter;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "SeatStatus")
+@Table(name = "SeatDetail")
 @NoArgsConstructor
 @Getter @Setter
 @AllArgsConstructor
-public class SeatStatus {
+public class SeatDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,16 +21,15 @@ public class SeatStatus {
     private boolean isTaken;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "seat_id", referencedColumnName = "seat_id", insertable = false, updatable = false)
+    @JoinColumn(name = "seat_id", referencedColumnName = "seat_id")
     private Seat seat;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "passenger_id", referencedColumnName = "passenger_id", insertable = false, updatable = false)
-    private Passenger passenger;
+    @OneToOne(mappedBy = "seatDetail")
+    private Ticket ticket;
 
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "flight_plane_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "flight_plane_id", referencedColumnName = "id")
     private FlightPlane flightPlane;
 }
 
