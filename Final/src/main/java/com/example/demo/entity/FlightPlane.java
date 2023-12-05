@@ -43,5 +43,8 @@ public class FlightPlane {
     public long getDuration() {
         return arrivalTime.getTime() - departureTime.getTime();
     }
+    public int getPriceForSort(){
+        return flight.getFlightPrice();
+    }
 }
 

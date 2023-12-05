@@ -6,6 +6,7 @@ import com.example.demo.repository.FlightPlaneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,6 @@ public class FlightPlaneServiceImpl implements FlightPlaneService{
     @Override
     public List<FlightPlane> findByFlightAndDepartureDayAndArrivalDay(Flight flightId, Date departureDay, Date arrivalDay) {
         return flightPlaneRepository.findByFlightAndDepartureDayAndArrivalDay(flightId,departureDay,arrivalDay);
-
     }
 
     @Override
@@ -29,5 +29,15 @@ public class FlightPlaneServiceImpl implements FlightPlaneService{
     public FlightPlane findById(int flightId) {
         Optional<FlightPlane> dbFlightPlane =  flightPlaneRepository.findById(flightId);
         return dbFlightPlane.orElse(null);
+    }
+
+    @Override
+    public List<FlightPlane> findByDepartureTime(Time departureTime) {
+        return flightPlaneRepository.findByDepartureTime(departureTime);
+    }
+
+    @Override
+    public List<FlightPlane> findByArrivalTime(Time arrivalTime) {
+        return flightPlaneRepository.findByArrivalTime(arrivalTime);
     }
 }
