@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Account;
 import com.example.demo.entity.Reservation;
 import com.example.demo.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setCode(code);
         return reservationRepository.save(reservation);
     }
+
+    @Override
+    public Reservation findByAccount(Account account) {
+        return this.reservationRepository.findByAccount(account);
+    }
+
     private String generateCode() {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
