@@ -1,8 +1,6 @@
-
-
 $('.search-place .dropdown-item').click(function() {
     let value = $(this).data("value");
-    console.log(value)
+    console.log("1")
     $(this).closest('.search-item').find('input').val(value);
 })
 
@@ -78,28 +76,35 @@ $('#input-airport-departure').keyup(function(){
             } else
             {
              data.forEach(e=>{
-                            let html = `
-                            <li>
-                                <a
-                                        class="dropdown-item d-flex"
-                                        href="#"
-                                        th:attr="data-value=${e.airportCode + ' , ' + e.city}"
-                                >
-                                    <div class="me-3">
-                                        <div class="airport-location">
-                                            <span>${e.city}</span>,
-                                            <span>${e.country}</span>
-                                        </div>
-                                        <div class="airport-name">
-                                            <span>${e.airportName}</span>
-                                        </div>
-                                    </div>
-                                    <div class="airport-code"><span>${e.airportCode}</span></div>
-                                </a>
-                            </li>
-                            `
-                            $('#dropdown-menu-departure').append(html)
-                        })
+                let data = e.airportCode + " , " + e.city
+                let html = `
+                <li>
+                    <a
+                            class="dropdown-item d-flex"
+                            href="#"
+                            data-value="${data}"
+                    >
+                        <div class="me-3">
+                            <div class="airport-location">
+                                <span>${e.city}</span>,
+                                <span>${e.country}</span>
+                            </div>
+                            <div class="airport-name">
+                                <span>${e.airportName}</span>
+                            </div>
+                        </div>
+                        <div class="airport-code"><span>${e.airportCode}</span></div>
+                    </a>
+                </li>
+                `
+                $('#dropdown-menu-departure').append(html)
+                $('.search-place .dropdown-item').unbind('click')
+                $('.search-place .dropdown-item').click(function() {
+                    let value = $(this).data("value");
+                    console.log(value)
+                    $(this).closest('.search-item').find('input').val(value);
+                })
+            })
             }
         },
         error : function() {
@@ -133,28 +138,35 @@ $('#input-airport-destination').keyup(function(){
                 } else
                 {
                  data.forEach(e=>{
-                                let html = `
-                                <li>
-                                    <a
-                                            class="dropdown-item d-flex"
-                                            href="#"
-                                            th:attr="data-value=${e.airportCode + ' , ' + e.city}"
-                                    >
-                                        <div class="me-3">
-                                            <div class="airport-location">
-                                                <span>${e.city}</span>,
-                                                <span>${e.country}</span>
-                                            </div>
-                                            <div class="airport-name">
-                                                <span>${e.airportName}</span>
-                                            </div>
-                                        </div>
-                                        <div class="airport-code"><span>${e.airportCode}</span></div>
-                                    </a>
-                                </li>
-                                `
-                                $('#dropdown-menu-destination').append(html)
-                            })
+                    let data = e.airportCode + " , " + e.city
+                    let html = `
+                    <li>
+                        <a
+                                class="dropdown-item d-flex"
+                                href="#"
+                                data-value="${data}"
+                        >
+                            <div class="me-3">
+                                <div class="airport-location">
+                                    <span>${e.city}</span>,
+                                    <span>${e.country}</span>
+                                </div>
+                                <div class="airport-name">
+                                    <span>${e.airportName}</span>
+                                </div>
+                            </div>
+                            <div class="airport-code"><span>${e.airportCode}</span></div>
+                        </a>
+                    </li>
+                    `
+                    $('#dropdown-menu-destination').append(html)
+                    $('.search-place .dropdown-item').unbind('click')
+                    $('.search-place .dropdown-item').click(function() {
+                        let value = $(this).data("value");
+                        console.log(value)
+                        $(this).closest('.search-item').find('input').val(value);
+                    })
+                 })
                 }
             },
             error : function() {

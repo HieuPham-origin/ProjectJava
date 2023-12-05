@@ -23,7 +23,7 @@ $('#check-return').click(function() {
         $('input[name="dates"]').daterangepicker({ drops: 'down', singleDatePicker: true, locale: {format: "DD/MM/YY"}});
 })
 
-function getSubTime(start, end){
+function getSubTime(start, end, a , b){
     s = start.split(':');
     e = end.split(':');
     min = e[1]-s[1];
@@ -32,9 +32,15 @@ function getSubTime(start, end){
         min += 60;
         hour_carry += 1;
     }
-    hour = e[0]-s[0]-hour_carry;
-    diff = hour + "h " + min + "m";
-    return diff;
+    if (a===b){
+        hour = e[0]-s[0]-hour_carry;
+        diff = hour + "h " + min + "m";
+        return diff;
+    } else {
+        hour = e[0]-s[0]-hour_carry + 24;
+        diff = hour + "h " + min + "m";
+        return diff;
+    }
 }
 
 $('.flight-item').click(function(){
@@ -104,7 +110,7 @@ $('.flight-item').click(function(){
                                     </div>
                                     <div class="duration-info mx-lg-4 mx-md-3 mx-sm-1">
                                         <div class="duration">${getSubTime(timeDeparture[0]+":" +timeDeparture[1],
-                                        timeArrival[0]+":" +timeArrival[1])}</div>
+                                        timeArrival[0]+":" +timeArrival[1],new Date(e.departureDay).getDay(), new Date(e.arrivalDay).getDay())}</div>
                                         <div class="d-flex align-items-center">
                                             <i
                                                 class="text-primary fa-regular fa-circle"
@@ -420,6 +426,7 @@ $('#btn-continue-booking').click(function(){
                 },
                 success : function(data) {
                     console.log(data)
+                    window.location.href = "/booking"
                 },
                 error : function() {
                     console.log("There was an error");
@@ -444,6 +451,7 @@ $('#btn-continue-booking').click(function(){
                 },
                 success : function(data) {
                     console.log(data)
+                    window.location.href = "/booking"
                 },
                 error : function() {
                     console.log("There was an error");

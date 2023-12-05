@@ -34,24 +34,20 @@ public class BookingController {
     ReservationService reservationService;
     @Autowired
     TicketService ticketService;
+    @Autowired
+    HttpSession httpSession;
     @GetMapping(value = {"", "/"})
     public String booking(HttpServletRequest req, Model model) {
-        HttpSession session = req.getSession();
-//        if (session.getAttribute("bookingDetail") == null)
-//            return "redirect:/booking";
-        // test
 
+        String isReturn = httpSession.getAttribute("isReturn").toString();
+        if (isReturn.equals("true")){
+            String flight1Id = httpSession.getAttribute("flight1Id").toString();
+            String flight2Id = httpSession.getAttribute("flight2Id").toString();
+        }
+        //System.out.println(flight1Id);
 
-//        seatService.initSeat(flightPlaneService.getFlightPlaneById(1), 100);
-//        seatService.initSeat(flightPlaneService.getFlightPlaneById(2), 100);
-//        seatService.initSeat(flightPlaneService.getFlightPlaneById(3), 100);
-
-        session.setAttribute("flight1", 1);
-        session.setAttribute("flight2", 3);
         FlightPlane flight1 = flightPlaneService.findById(1);
         FlightPlane flight2 = flightPlaneService.findById(3);
-
-
 
         BookingDetail form = new BookingDetail();
         List<PassengerDTO> passengerDTOS = new ArrayList<>();
