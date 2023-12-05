@@ -34,20 +34,29 @@ public class BookingController {
     ReservationService reservationService;
     @Autowired
     TicketService ticketService;
-    @Autowired
-    HttpSession httpSession;
     @GetMapping(value = {"", "/"})
     public String booking(HttpServletRequest req, Model model) {
-
-        String isReturn = httpSession.getAttribute("isReturn").toString();
+        HttpSession session = req.getSession();
+        String isReturn = session.getAttribute("isReturn").toString();
         if (isReturn.equals("true")){
-            String flight1Id = httpSession.getAttribute("flight1Id").toString();
-            String flight2Id = httpSession.getAttribute("flight2Id").toString();
+            String flight1Id = session.getAttribute("flight1Id").toString();
+            String flight2Id = session.getAttribute("flight2Id").toString();
+            int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
+            int flight2TicketClassId = Integer.parseInt(session.getAttribute("flight2TicketClassId").toString());
+            FlightPlane flight1 = flightPlaneService.findById(Integer.parseInt(flight1Id));
+            FlightPlane flight2 = flightPlaneService.findById(Integer.parseInt(flight2Id));
+            model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
+            model.addAttribute("flight2", new FlightDTO(flight2,flight2TicketClassId));
+            model.addAttribute("isReturn", isReturn);
+        } else {
+            String flight1Id = session.getAttribute("flight1Id").toString();
+            int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
+            FlightPlane flight1 = flightPlaneService.findById(Integer.parseInt(flight1Id));
+            model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
+            model.addAttribute("isReturn", isReturn);
         }
-        //System.out.println(flight1Id);
 
-        FlightPlane flight1 = flightPlaneService.findById(1);
-        FlightPlane flight2 = flightPlaneService.findById(3);
+
 
         BookingDetail form = new BookingDetail();
         List<PassengerDTO> passengerDTOS = new ArrayList<>();
@@ -64,8 +73,9 @@ public class BookingController {
         form.setPassengerDTOS(passengerDTOS);
 
         model.addAttribute("form", form);
-        model.addAttribute("flight1", new FlightDTO(flight1));
-        model.addAttribute("flight2", new FlightDTO(flight2));
+
+
+
         return "booking";
     }
 
@@ -172,8 +182,11 @@ public class BookingController {
         model.addAttribute("seats1", new SeatContainer(seatDetails1));
         model.addAttribute("seats2", new SeatContainer(seatDetails2));
         model.addAttribute("bookingDetail", bookingDetail);
-        model.addAttribute("flight1", new FlightDTO(flight1));
-        model.addAttribute("flight2", new FlightDTO(flight2));
+
+        int flight1TicketClassId = Integer.parseInt(session.getAttribute("flight1TicketClassId").toString());
+        int flight2TicketClassId = Integer.parseInt(session.getAttribute("flight2TicketClassId").toString());
+        model.addAttribute("flight1", new FlightDTO(flight1,flight1TicketClassId));
+        model.addAttribute("flight2", new FlightDTO(flight2,flight2TicketClassId));
         model.addAttribute("baggages", baggages);
         return "booking-review";
     }
