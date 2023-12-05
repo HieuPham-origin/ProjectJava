@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
@@ -118,10 +120,8 @@ public class ProfileController {
             return "redirect:/login";
         }
         else{
-            Reservation reservation = reservationService.findByAccount(account);
-            System.out.println(reservation.getId());
-            model.addAttribute("reservation",reservation);
-            model.addAttribute("total",reservation.getTotal());
+            List<Reservation> reservations = reservationService.findByAccount(account);
+            model.addAttribute("reservations",reservations);
             return "profile-reservation";
         }
     }
