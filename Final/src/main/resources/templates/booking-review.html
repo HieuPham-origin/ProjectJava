@@ -222,6 +222,14 @@
                             <div th:text="${'+ Baggage from ' + flight2.flightPlane.flight.departureAirport.city + ' to ' + flight2.flightPlane.flight.arrivalAirport.city}">+ Baggage to Ho Chi Minh City</div>
                             <div th:text="${#numbers.formatDecimal(baggage2Sum, 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
                         </div>
+                        <div th:if="${bookingDetail.hasExtraService1}" class="d-flex justify-content-between">
+                            <div th:text="${'+ Service from ' + flight1.flightPlane.flight.departureAirport.city + ' to ' + flight1.flightPlane.flight.arrivalAirport.city}">+ Service to Ho Chi Minh City</div>
+                            <div th:text="${#numbers.formatDecimal(service1Sum, 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
+                        </div>
+                        <div th:if="${bookingDetail.hasExtraService2}" class="d-flex justify-content-between">
+                            <div th:text="${'+ Service from ' + flight2.flightPlane.flight.departureAirport.city + ' to ' + flight2.flightPlane.flight.arrivalAirport.city}">+ Service to Ho Chi Minh City</div>
+                            <div th:text="${#numbers.formatDecimal(service2Sum, 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end">
@@ -523,7 +531,7 @@
                                     </label>
                                     <label th:each="service, iStat2 : ${services}" class="form-check-label d-flex mb-2">
                                         <input type="radio" th:field="*{serviceIds2[__${iStat.index}__]}" class="form-check-input me-3" th:value="${service.serviceId}" th:attr="data-price=${service.price}">
-<!--                                        <span th:text="${'+' + baggage.weight + 'kg'}">+20kg</span>-->
+                                        <span th:text="${service.serviceName}">+20kg</span>
                                         <div th:text="${#numbers.formatDecimal(service.price, 0, 'POINT', 0, 'POINT') + '₫'}" class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
                                     </label>
                                 </div>
