@@ -48,7 +48,7 @@
     </head>
     <body>
         <!-- Navbar -->
-        <div th:replace="./fragments/header :: header"> </div>
+        <div th:replace="/fragments/header :: header(user=${session.sessionPassenger}, page='bookingreview')"> </div>
         <!-- Navbar -->
 
         <!-- Main -->

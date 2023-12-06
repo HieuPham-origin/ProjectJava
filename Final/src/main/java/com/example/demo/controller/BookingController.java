@@ -340,6 +340,7 @@ public class BookingController {
 
             ticket.setPassenger(passenger);
             ticket.setDayPay(new Date());
+            ticket.setStatus("Paid");
             //ticket = ticketService.create(ticket);
             reservation.getTickets().add(ticket);
 
