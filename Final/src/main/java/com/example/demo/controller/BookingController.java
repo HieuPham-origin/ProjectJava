@@ -290,6 +290,8 @@ public class BookingController {
         reservation.setTickets(new ArrayList<>());
         int total = 0;
         System.out.println("1");
+        List<Integer> selectedSeatDetailIds = new ArrayList<>();
+
         for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
             int ticketTotal = flightPlane1.getFlight().getFlightPrice() * ticketClass1.getRate();
             PassengerDTO passengerDTO = bookingDetail.getPassengerDTOS().get(i);
@@ -308,6 +310,7 @@ public class BookingController {
                 // get next available seat
                 List<SeatDetail> seatList = seatService.getSeatDetailsByFlightPlane(flightPlane1);
                 for (SeatDetail s : seatList) {
+                    if (selectedSeatDetailIds.contains(s.getId())) continue;
                     if (bookingDetail.getSeatDetailIds1().contains(s.getId())) continue;
                     if (s.isTaken()) continue;
                     seatDetail = s;
@@ -323,6 +326,7 @@ public class BookingController {
             ticket.setDayOrder(new Date());
             ticket.setTotalPrice(ticketTotal);
             if (seatDetail != null) {
+                selectedSeatDetailIds.add(seatDetail.getId());
                 seatDetail.setTaken(true);
                 seatDetail.setTicket(ticket);
             }
@@ -343,6 +347,7 @@ public class BookingController {
         }
 
         if (isReturn) {
+            selectedSeatDetailIds = new ArrayList<>();
             for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
                 int ticketTotal = flightPlane2.getFlight().getFlightPrice() * ticketClass2.getRate();
                 PassengerDTO passengerDTO = bookingDetail.getPassengerDTOS().get(i);
@@ -360,6 +365,7 @@ public class BookingController {
                     // get next available seat
                     List<SeatDetail> seatList = seatService.getSeatDetailsByFlightPlane(flightPlane2);
                     for (SeatDetail s : seatList) {
+                        if (selectedSeatDetailIds.contains(s.getId())) continue;
                         if (bookingDetail.getSeatDetailIds2().contains(s.getId())) continue;
                         if (s.isTaken()) continue;
                         seatDetail = s;
@@ -375,6 +381,7 @@ public class BookingController {
                 ticket.setDayOrder(new Date());
                 ticket.setTotalPrice(ticketTotal);
                 if (seatDetail != null) {
+                    selectedSeatDetailIds.add(seatDetail.getId());
                     seatDetail.setTaken(true);
                     seatDetail.setTicket(ticket);
                 }
@@ -391,6 +398,8 @@ public class BookingController {
                 reservation.getTickets().add(ticket);
                 total += ticketTotal;
             }
+            selectedSeatDetailIds.forEach(System.out::println);
+
         }
 
         if (session.getAttribute("sessionAccount") != null) { // book with account
