@@ -53,9 +53,11 @@ public class ReservationDTO {
                 passenger.setSeat1(reservation.getTickets().get(i).getSeatDetail().getSeat().getSeatNumber());
                 passenger.setTicket1Id(reservation.getTickets().get(i).getTicketId());
                 passenger.setBaggage1(reservation.getTickets().get(i).getBaggage() == null ? "No extra baggage" : reservation.getTickets().get(i).getBaggage().getBaggageName() + " - " + reservation.getTickets().get(i).getBaggage().getWeight());
+                passenger.setService1(reservation.getTickets().get(i).getService() == null ? "No extra service" : reservation.getTickets().get(i).getService().getServiceName());
                 passenger.setSeat2(reservation.getTickets().get(i + numberOfPassengers).getSeatDetail().getSeat().getSeatNumber());
                 passenger.setTicket2Id(reservation.getTickets().get(i + numberOfPassengers).getTicketId());
                 passenger.setBaggage2(reservation.getTickets().get(i + numberOfPassengers).getBaggage() == null ? "No extra baggage" : reservation.getTickets().get(i).getBaggage().getBaggageName() + " - " + reservation.getTickets().get(i).getBaggage().getWeight());
+                passenger.setService2(reservation.getTickets().get(i + numberOfPassengers).getService() == null ? "No extra service" : reservation.getTickets().get(i).getService().getServiceName());
                 passengers.add(passenger);
             }
         }
@@ -66,6 +68,7 @@ public class ReservationDTO {
                 passenger.setSeat1(reservation.getTickets().get(i).getSeatDetail().getSeat().getSeatNumber());
                 passenger.setTicket1Id(reservation.getTickets().get(i).getTicketId());
                 passenger.setBaggage1(reservation.getTickets().get(i).getBaggage() == null ? "No extra baggage" : reservation.getTickets().get(i).getBaggage().getBaggageName() + " - " + reservation.getTickets().get(i).getBaggage().getWeight());
+                passenger.setService1(reservation.getTickets().get(i).getService() == null ? "No extra service" : reservation.getTickets().get(i).getService().getServiceName());
                 passengers.add(passenger);
             }
         }
