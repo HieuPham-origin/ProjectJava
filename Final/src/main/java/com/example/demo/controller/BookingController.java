@@ -29,6 +29,8 @@ public class BookingController {
     @Autowired
     SeatService seatService;
     @Autowired
+    ServiceofFlightService serviceofFlightService;
+    @Autowired
     ReservationService reservationService;
     @Autowired
     TicketService ticketService;
@@ -104,11 +106,12 @@ public class BookingController {
             return "redirect:/booking";
 
         boolean isReturn = (boolean) session.getAttribute("isReturn");
-
+        System.out.println("2");
         BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
         FlightPlane flight1 = flightPlaneService.findById((int) session.getAttribute("flight1Id"));
         FlightPlane flight2 = isReturn ? flightPlaneService.findById((int) session.getAttribute("flight2Id")) : null;
         List<Baggage> baggages = baggageService.getAllBaggages();
+        List<Service> services = serviceofFlightService.getAllServices();
         TicketClass ticketClass1 = ticketClassService.getById((int) session.getAttribute("ticketClass1Id"));
         TicketClass ticketClass2 = isReturn ? ticketClassService.getById((int) session.getAttribute("ticketClass2Id")) : null;
 
@@ -116,7 +119,7 @@ public class BookingController {
         total += flight1.getFlight().getFlightPrice() * bookingDetail.getPassengerDTOS().size() * ticketClass1.getRate();
         if (isReturn)
             total += flight2.getFlight().getFlightPrice() * bookingDetail.getPassengerDTOS().size() * ticketClass2.getRate();
-
+        System.out.println("3");
         if (!bookingDetail.isHasExtraBaggage1() && !bookingDetail.isHasExtraBaggage2()) {
             bookingDetail.setBaggageIds1(new ArrayList<>());
             bookingDetail.setBaggageIds2(new ArrayList<>());
@@ -160,7 +163,51 @@ public class BookingController {
             model.addAttribute("baggage1Sum", baggage1Sum);
             model.addAttribute("baggage2Sum", baggage2Sum);
         }
+        System.out.println(4);
+        if(!bookingDetail.isHasExtraService1() && !bookingDetail.isHasExtraService2()){
+            bookingDetail.setServiceIds1(new ArrayList<>());
+            bookingDetail.setServiceIds2(new ArrayList<>());
 
+            for (PassengerDTO p : bookingDetail.getPassengerDTOS()){
+                bookingDetail.getServiceIds1().add(0);
+                if (isReturn)
+                    bookingDetail.getServiceIds2().add(0);
+            }
+        }
+        else {
+            List<Service> serviceList1 = new ArrayList<>();
+            int service1Sum = 0;
+            int service2Sum = 0;
+            for (int id : bookingDetail.getServiceIds1()) {
+                if (id != 0) {
+                    Service service = serviceofFlightService.getById(id);
+                    serviceList1.add(service);
+                    service1Sum += service.getPrice();
+                }
+                else
+                    serviceList1.add(null);
+
+            }
+            if (isReturn) {
+                List<Service> serviceList2 = new ArrayList<>();
+                for (int id : bookingDetail.getServiceIds2()) {
+                    if (id != 0) {
+                        Service service = serviceofFlightService.getById(id);
+                        serviceList2.add(service);
+                        service2Sum += service.getPrice();
+                    }
+                    else
+                        serviceList2.add(null);
+                }
+                model.addAttribute("serviceList2", serviceList2);
+            }
+
+            total += service1Sum + service2Sum;
+            model.addAttribute("serviceList1", serviceList1);
+            model.addAttribute("service1Sum", service1Sum);
+            model.addAttribute("service2Sum", service2Sum);
+        }
+        System.out.println(5);
         if (!bookingDetail.isHasChosenSeat1() && !bookingDetail.isHasChosenSeat2()) {
             bookingDetail.setSeatDetailIds1(new ArrayList<>());
             bookingDetail.setSeatDetailIds2(new ArrayList<>());
@@ -173,7 +220,7 @@ public class BookingController {
         else {
             List<SeatDetail> chosenSeats1 = new ArrayList<>();
             for (int id : bookingDetail.getSeatDetailIds1()) {
-                System.out.println(id);
+                System.out.println("ASD " + id);
                 if (id != 0)
                     chosenSeats1.add(seatService.getSeatDetailById(id));
                 else
@@ -194,7 +241,7 @@ public class BookingController {
             model.addAttribute("chosenSeats1", chosenSeats1);
         }
 
-
+        System.out.println("5");
         List<SeatDetail> seatDetails1 = seatService.getSeatDetailsByFlightPlane(flight1);
         List<SeatDetail> seatDetails2 = seatService.getSeatDetailsByFlightPlane(flight2);
 
@@ -209,7 +256,9 @@ public class BookingController {
         if (isReturn)
             model.addAttribute("ticketClass2", ticketClass2);
         model.addAttribute("baggages", baggages);
+        model.addAttribute("services", services);
         model.addAttribute("isReturn", (boolean) session.getAttribute("isReturn"));
+        System.out.println("6");
         return "booking-review";
     }
 
@@ -234,6 +283,31 @@ public class BookingController {
         bookingDetail.setBaggageIds1(newBookingDetail.getBaggageIds1());
         if (isReturn)
             bookingDetail.setBaggageIds2(newBookingDetail.getBaggageIds2());
+        session.setAttribute("bookingDetail", bookingDetail);
+
+        return "redirect:/booking/review";
+    }
+    @PostMapping("/review/service")
+    public String postService(HttpServletRequest req, BookingDetail newBookingDetail) {
+        HttpSession session = req.getSession();
+        if (session.getAttribute("bookingDetail") == null)
+            return "redirect:/booking";
+        boolean isReturn = (boolean) session.getAttribute("isReturn");
+
+        BookingDetail bookingDetail = (BookingDetail) session.getAttribute("bookingDetail");
+
+        for (int id : newBookingDetail.getServiceIds1()) {
+            if (id != 0) bookingDetail.setHasExtraService1(true);
+        }
+        if (isReturn) {
+            for (int id : newBookingDetail.getServiceIds2()) {
+                if (id != 0) bookingDetail.setHasExtraService2(true);
+            }
+        }
+        else bookingDetail.setHasExtraService2(false);
+        bookingDetail.setServiceIds1(newBookingDetail.getServiceIds1());
+        if (isReturn)
+            bookingDetail.setServiceIds2(newBookingDetail.getServiceIds2());
         session.setAttribute("bookingDetail", bookingDetail);
 
         return "redirect:/booking/review";
@@ -289,6 +363,8 @@ public class BookingController {
         reservation.setTickets(new ArrayList<>());
         int total = 0;
         System.out.println("1");
+        List<Integer> selectedSeatDetailIds = new ArrayList<>();
+
         for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
             int ticketTotal = flightPlane1.getFlight().getFlightPrice() * ticketClass1.getRate();
             PassengerDTO passengerDTO = bookingDetail.getPassengerDTOS().get(i);
@@ -300,27 +376,34 @@ public class BookingController {
                 ticket.setBaggage(baggage);
                 ticketTotal += baggage.getPrice();
             }
-
+            if (bookingDetail.getServiceIds1().get(i) != 0){
+                Service service = serviceofFlightService.getById(bookingDetail.getServiceIds1().get(i));
+                ticket.setService(service);
+                ticketTotal += service.getPrice();
+            }
 
             SeatDetail seatDetail = null;
             if (bookingDetail.getSeatDetailIds1().get(i) == 0) { // not choose seat
                 // get next available seat
                 List<SeatDetail> seatList = seatService.getSeatDetailsByFlightPlane(flightPlane1);
                 for (SeatDetail s : seatList) {
+                    if (selectedSeatDetailIds.contains(s.getId())) continue;
                     if (bookingDetail.getSeatDetailIds1().contains(s.getId())) continue;
                     if (s.isTaken()) continue;
                     seatDetail = s;
+                    break;
                 }
             }
             else
                 seatDetail = seatService.getSeatDetailById(bookingDetail.getSeatDetailIds1().get(i));
             if (seatDetail == null) {
-                // continue
+                // continue;
             }
             ticket.setSeatDetail(seatDetail);
             ticket.setDayOrder(new Date());
             ticket.setTotalPrice(ticketTotal);
             if (seatDetail != null) {
+                selectedSeatDetailIds.add(seatDetail.getId());
                 seatDetail.setTaken(true);
                 seatDetail.setTicket(ticket);
             }
@@ -334,14 +417,15 @@ public class BookingController {
 
             ticket.setPassenger(passenger);
             ticket.setDayPay(new Date());
+            ticket.setStatus("Paid");
             //ticket = ticketService.create(ticket);
             reservation.getTickets().add(ticket);
 
             total += ticketTotal;
         }
-        System.out.println("2");
 
         if (isReturn) {
+            selectedSeatDetailIds = new ArrayList<>();
             for (int i = 0; i < bookingDetail.getPassengerDTOS().size(); i++) {
                 int ticketTotal = flightPlane2.getFlight().getFlightPrice() * ticketClass2.getRate();
                 PassengerDTO passengerDTO = bookingDetail.getPassengerDTOS().get(i);
@@ -352,6 +436,11 @@ public class BookingController {
                     ticket.setBaggage(baggage);
                     ticketTotal += baggage.getPrice();
                 }
+                if (bookingDetail.getSeatDetailIds2().get(i) != 0){
+                    Service service = serviceofFlightService.getById(bookingDetail.getServiceIds2().get(i));
+                    ticket.setService(service);
+                    ticketTotal += service.getPrice();
+                }
                 ticket.setTicketClass(ticketClass2);
 
                 SeatDetail seatDetail = null;
@@ -359,9 +448,11 @@ public class BookingController {
                     // get next available seat
                     List<SeatDetail> seatList = seatService.getSeatDetailsByFlightPlane(flightPlane2);
                     for (SeatDetail s : seatList) {
+                        if (selectedSeatDetailIds.contains(s.getId())) continue;
                         if (bookingDetail.getSeatDetailIds2().contains(s.getId())) continue;
                         if (s.isTaken()) continue;
                         seatDetail = s;
+                        break;
                     }
                 }
                 else
@@ -373,6 +464,7 @@ public class BookingController {
                 ticket.setDayOrder(new Date());
                 ticket.setTotalPrice(ticketTotal);
                 if (seatDetail != null) {
+                    selectedSeatDetailIds.add(seatDetail.getId());
                     seatDetail.setTaken(true);
                     seatDetail.setTicket(ticket);
                 }
@@ -385,12 +477,15 @@ public class BookingController {
                 passenger.setLastName(passengerDTO.getLastName());
                 ticket.setDayPay(new Date());
                 ticket.setPassenger(passenger);
+                ticket.setStatus("Paid");
+
                 //ticket = ticketService.create(ticket);
                 reservation.getTickets().add(ticket);
                 total += ticketTotal;
             }
+            selectedSeatDetailIds.forEach(System.out::println);
+
         }
-        System.out.println("3");
 
         if (session.getAttribute("sessionAccount") != null) { // book with account
             Account account = (Account) session.getAttribute("sessionAccount");
@@ -398,7 +493,10 @@ public class BookingController {
         }
         reservation.setTimeCreated(new Date());
         reservation.setTotal(total);
-        System.out.println(total);
+        if (isReturn)
+            reservation.setIsTwoway(true);
+        else
+            reservation.setIsTwoway(false);
         reservation.setContactEmail(bookingDetail.getContactDetail().getEmail());
         reservation.setContactName(bookingDetail.getContactDetail().getLastName() + ' ' + bookingDetail.getContactDetail().getLastName());
         reservation.setContactPhone(bookingDetail.getContactDetail().getPhoneNumber());

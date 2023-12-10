@@ -47,7 +47,7 @@
 </head>
 <body>
 <!-- Navbar -->
-<div th:replace="./fragments/header :: header"> </div>
+<div th:replace="/fragments/header :: header(user=${session.sessionPassenger}, page='bookingcomplete')"> </div>
 <!-- Navbar -->
 
 <!-- Main Container -->
@@ -231,7 +231,6 @@
                         <br th:if="*{isTwoWay()}">
                         <span th:if="*{isTwoWay()}" th:text="${passenger.getBaggage2()}"></span>
                     </td>
-
                 </tr>
                 </tbody>
             </table>

@@ -7,6 +7,7 @@ const tooltipList = [...tooltipTriggerList].map(
 
 $(document).ready(() => {
     updateBaggagePrice();
+    updateServicePrice();
     document.querySelector("#scroll-here").scrollIntoView({
     });
 })
@@ -23,7 +24,18 @@ $("#modal-baggage .select-baggage-item").click(function () {
         else $(e).removeClass("d-none");
     });
 });
+$('#modal-service .select-service-item').click(function (){
+    $(".select-service-item").each((i,e) => {
+        $(e).removeClass("selected");
+    });
+    $(this).addClass("selected");
 
+    let flight = $(this).data("flight");
+    $(".select-service-container").each((i,e) => {
+        if($(e).data("flight") != flight) $(e).addClass("d-none");
+        else $(e).removeClass("d-none");
+    });
+});
 $("#modal-seat .select-flight-item").click(function () {
     $(".select-flight-item").each((i, e) => {
         $(e).removeClass("selected");
@@ -53,7 +65,9 @@ $("#modal-seat .select-passenger-item").click(function () {
 $('.select-baggage-container input[type="radio"]').change(function () {
     updateBaggagePrice();
 });
-
+$('.select-service-container input[type="radio"]').change(function (){
+    updateServicePrice();
+});
 $(".seat-box").click(function () {
     if ($(this).hasClass("unavailable"))
         return;
@@ -107,6 +121,26 @@ function updateBaggagePrice() {
         subtotal += price;
     });
     $("#modal-baggage .subtotal").text(formatter().format(subtotal));
+}
+
+function updateServicePrice(){
+    let subtotal=0;
+    $(".select-service-container").each((i,e) => {
+        let flight = $(e).data("flight");
+        let price = 0;
+        $(e)
+            .find('input[type=radio]:checked')
+            .each((i,b) => {
+                price += parseInt($(b).data("price"));
+                console.log(b);
+            });
+        console.log(`.select-service-item[data-flight="${flight}"] .price`);
+        $(`.select-service-item[data-flight="${flight}"] .price`).text(
+            formatter().format(price)
+        );
+        subtotal += price;
+    });
+    $("#modal-service .subtotal").text(formatter().format(subtotal));
 }
 
 $("#btn-reset-seat").click(() => {

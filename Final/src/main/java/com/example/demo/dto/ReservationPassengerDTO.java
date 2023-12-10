@@ -12,6 +12,7 @@ public class ReservationPassengerDTO {
     private int ticket2Id;
     private String baggage1;
     private String baggage2;
-
+    private String service1;
+    private String service2;
 
 }

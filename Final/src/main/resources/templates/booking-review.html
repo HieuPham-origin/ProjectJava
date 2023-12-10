@@ -48,7 +48,7 @@
     </head>
     <body>
         <!-- Navbar -->
-        <div th:replace="./fragments/header :: header"> </div>
+        <div th:replace="/fragments/header :: header(user=${session.sessionPassenger}, page='bookingreview')"> </div>
         <!-- Navbar -->
 
         <!-- Main -->
@@ -139,6 +139,37 @@
                 </div>
                 <div class="item-container mb-3">
                     <div class="d-flex">
+                        <div class="fw-bold text-large"><i class="fa-solid fa-suitcase me-2 text-primary"></i>Service</div>
+                        <a href="" class="ms-auto link-underline link-underline-opacity-0" data-bs-toggle="modal" data-bs-target="#modal-service">Select service</a>
+                    </div>
+                    <hr />
+                    <div th:object="${bookingDetail}" class="row gx-2">
+                        <div th:if="${!bookingDetail.hasExtraService1 && !bookingDetail.hasExtraService1}" class="text-secondary">
+                            Why cram your stuff in a carry-on? Add service to lighten your load.
+                        </div>
+                        <div>
+                            <div th:if="${bookingDetail.hasExtraService1}">
+                                <div th:text="${'1. ' + flight1.flightPlane.flight.departureAirport.city + ' (' + flight1.flightPlane.flight.departureAirport.airportCode + ') → ' + flight1.flightPlane.flight.arrivalAirport.city + ' (' + flight1.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
+                                <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
+                                    <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
+                                    <div th:if="${bookingDetail.serviceIds1[iStat.index] == 0}" class="ms-auto">No extra baggage</div>
+                                    <div th:if="${bookingDetail.serviceIds1[iStat.index] != 0}" th:text="${serviceList1[iStat.index].serviceName + ' - ' + #numbers.formatDecimal(serviceList1[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
+                                </div>
+                            </div>
+                            <hr th:if="${isReturn && bookingDetail.hasExtraService1 && bookingDetail.hasExtraService2}">
+                            <div th:if="${isReturn && bookingDetail.hasExtraService2}">
+                                <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
+                                <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="d-flex">
+                                    <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="text-secondary">Nguyen Van A</div>
+                                    <div th:if="${bookingDetail.serviceIds2[iStat.index] == 0}" class="ms-auto">No extra baggage</div>
+                                    <div th:if="${bookingDetail.serviceIds2[iStat.index] != 0}" th:text="${serviceList2[iStat.index].serviceName + ' - ' + #numbers.formatDecimal(serviceList2[iStat.index].price, 0, 'POINT', 0, 'POINT') + '₫'}" class="ms-auto">20kg - 200.000 VND</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-container mb-3">
+                    <div class="d-flex">
                         <div class="fw-bold text-large"><i class="fa-solid fa-couch me-2 text-primary"></i>Seat number</div>
                         <a th:if="${!bookingDetail.hasChosenSeat1 && !bookingDetail.hasChosenSeat2}" href="" class="ms-auto link-underline link-underline-opacity-0" data-bs-toggle="modal" data-bs-target="#modal-seat">Select seat</a>
                         <a th:if="${bookingDetail.hasChosenSeat1 || bookingDetail.hasChosenSeat2}" class="ms-auto link-underline link-underline-opacity-0" id="btn-reset-seat">Select seat</a>
@@ -190,6 +221,14 @@
                         <div th:if="${bookingDetail.hasExtraBaggage2}" class="d-flex justify-content-between">
                             <div th:text="${'+ Baggage from ' + flight2.flightPlane.flight.departureAirport.city + ' to ' + flight2.flightPlane.flight.arrivalAirport.city}">+ Baggage to Ho Chi Minh City</div>
                             <div th:text="${#numbers.formatDecimal(baggage2Sum, 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
+                        </div>
+                        <div th:if="${bookingDetail.hasExtraService1}" class="d-flex justify-content-between">
+                            <div th:text="${'+ Service from ' + flight1.flightPlane.flight.departureAirport.city + ' to ' + flight1.flightPlane.flight.arrivalAirport.city}">+ Service to Ho Chi Minh City</div>
+                            <div th:text="${#numbers.formatDecimal(service1Sum, 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
+                        </div>
+                        <div th:if="${bookingDetail.hasExtraService2}" class="d-flex justify-content-between">
+                            <div th:text="${'+ Service from ' + flight2.flightPlane.flight.departureAirport.city + ' to ' + flight2.flightPlane.flight.arrivalAirport.city}">+ Service to Ho Chi Minh City</div>
+                            <div th:text="${#numbers.formatDecimal(service2Sum, 0, 'POINT', 0, 'POINT') + '₫'}" class="text-danger">5.000.000 VND</div>
                         </div>
                     </div>
                 </div>
@@ -357,7 +396,7 @@
 
         </main>
         <!-- Main -->
-
+        <!-- Baggage -->
         <div id="modal-baggage" class="modal fade " tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <form th:action="@{/booking/review/baggage}" method="post" class="modal-content">
@@ -434,6 +473,85 @@
               </form>
             </div>
         </div>
+
+        <!-- Service -->
+        <div id="modal-service" class="modal fade " tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <form th:action="@{/booking/review/service}" method="post" class="modal-content">
+                    <div class="modal-body row gx-0">
+                        <div class="sidebar col-4">
+                            <div class="fw-bold text-large p-3"><i class="fa-solid fa-suitcase me-2"></i>Service</div>
+                            <div class="fw-bold my-3 px-3">Select flight</div>
+                            <div id="service-flight-1" class="select-service-item select-item selected" data-flight="1">
+                                <div class="select-item-title" th:text="${'1. ' + flight1.flightPlane.flight.departureAirport.city + ' (' + flight1.flightPlane.flight.departureAirport.airportCode + ') → ' + flight1.flightPlane.flight.arrivalAirport.city + ' (' + flight1.flightPlane.flight.arrivalAirport.airportCode + ')'}">
+                                    1. Ho Chi Minh City (SGN) → Ha Noi (HAN)
+                                </div>
+                                <div class="d-flex text-secondary">
+                                    <div class="weight">0 kg</div>
+                                    <div class="price ms-auto">0 ₫</div>
+                                </div>
+                            </div>
+                            <div th:if="${isReturn}" id="service-flight-2" class="select-service-item select-item" data-flight="2">
+                                <div class="select-item-title" th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}">
+                                    2. Ha Noi (HAN) → Ho Chi Minh City (SGN)
+                                </div>
+                                <div class="d-flex text-secondary">
+                                    <div class="weight">0 kg</div>
+                                    <div class="price ms-auto">0 ₫</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8 bg-light">
+                            <div th:object="${bookingDetail}" class="select-service-container" data-flight="1">
+                                <div th:text="${'1. ' + flight1.flightPlane.flight.departureAirport.city + ' (' + flight1.flightPlane.flight.departureAirport.airportCode + ') → ' + flight1.flightPlane.flight.arrivalAirport.city + ' (' + flight1.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold text-large p-3">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
+                                <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="item-container mx-3 mb-3">
+                                    <div th:text="${'Passenger ' + (iStat.index + 1) + ' of ' + bookingDetail.passengerDTOS.size()}" class="text-secondary fw-bold">Passenger 1 of 2</div>
+                                    <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="fw-bold text-large">Nguyen Van A</div>
+                                    <hr>
+                                    <label class="form-check-label d-flex mb-2">
+                                        <input type="radio" th:field="*{serviceIds1[__${iStat.index}__]}" class="form-check-input me-3" checked value="0" data-price="0" data-weight="0">
+                                        No extra service
+                                    </label>
+                                    <label th:each="service, iStat2 : ${services}" class="form-check-label d-flex mb-2">
+                                        <input type="radio" th:field="*{serviceIds1[__${iStat.index}__]}" class="form-check-input me-3" th:value="${service.serviceId}" th:attr="data-price=${service.price}">
+                                        <span th:text="${service.serviceName}">+20kg</span>
+                                        <div th:text="${#numbers.formatDecimal(service.price, 0, 'POINT', 0, 'POINT') + '₫'}" class="service-price ms-auto text-danger fw-bold">200.000 ₫</div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div th:if="${isReturn}" th:object="${bookingDetail}" class="select-service-container d-none" data-flight="2">
+                                <div th:text="${'2. ' + flight2.flightPlane.flight.departureAirport.city + ' (' + flight2.flightPlane.flight.departureAirport.airportCode + ') → ' + flight2.flightPlane.flight.arrivalAirport.city + ' (' + flight2.flightPlane.flight.arrivalAirport.airportCode + ')'}" class="fw-bold text-large p-3">1. Ho Chi Minh City (SGN) → Ha Noi (HAN)</div>
+                                <div th:each="passenger, iStat : ${bookingDetail.passengerDTOS}" class="item-container mx-3 mb-3">
+                                    <div th:text="${'Passenger ' + (iStat.index + 1) + ' of ' + bookingDetail.passengerDTOS.size()}" class="text-secondary fw-bold">Passenger 1 of 2</div>
+                                    <div th:text="${passenger.lastName + ' ' + passenger.firstName}" class="fw-bold text-large">Nguyen Van A</div>
+                                    <hr>
+                                    <label class="form-check-label d-flex mb-2">
+                                        <input type="radio" th:field="*{serviceIds2[__${iStat.index}__]}" class="form-check-input me-3" checked value="0" data-price="0" data-weight="0">
+                                        No extra service
+                                    </label>
+                                    <label th:each="service, iStat2 : ${services}" class="form-check-label d-flex mb-2">
+                                        <input type="radio" th:field="*{serviceIds2[__${iStat.index}__]}" class="form-check-input me-3" th:value="${service.serviceId}" th:attr="data-price=${service.price}">
+                                        <span th:text="${service.serviceName}">+20kg</span>
+                                        <div th:text="${#numbers.formatDecimal(service.price, 0, 'POINT', 0, 'POINT') + '₫'}" class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-3 border-top border-1 border-secondary-subtle">
+                        <div class="col-4 d-flex">
+                            <div class="fw-bold text-large">Subtotal</div>
+                            <div class="subtotal fw-bold text-large text-danger ms-auto">0 ₫</div>
+                        </div>
+                        <div class="col-8 d-flex">
+                            <button type="button" class="btn btn-secondary me-2 ms-auto" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Done</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Seat -->
         <div id="modal-seat" class="modal fade " tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <form method="post" th:action="@{/booking/review/seat}" class="modal-content">

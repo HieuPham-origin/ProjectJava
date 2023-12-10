@@ -39,10 +39,15 @@ public class Reservation {
     @Column(name = "contact_email")
     private String contactEmail;
 
+    @Column(name = "isTwoway")
+    private Boolean isTwoway;
+
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "account_id")
     private Account account;
 
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
+
+
 }

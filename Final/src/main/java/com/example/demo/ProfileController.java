@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.dto.ReservationDTO;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.FlightPlane;
 import com.example.demo.entity.Passenger;
@@ -124,5 +125,11 @@ public class ProfileController {
             model.addAttribute("reservations",reservations);
             return "profile-reservation";
         }
+    }
+    @GetMapping("/reservations/{id}")
+    public String getReservations(@PathVariable("id") Integer reservationId, Model model){
+        Reservation reservation = reservationService.findById(reservationId);
+        model.addAttribute("reservation", new ReservationDTO(reservation));
+        return "eticket";
     }
 }
