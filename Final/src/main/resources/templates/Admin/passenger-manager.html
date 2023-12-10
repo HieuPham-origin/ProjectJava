@@ -260,14 +260,12 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                    <tr th:each="passenger:${passengerList}">
-                                        <td th:text="${passenger.passengerId}"></td>
-                                        <td th:text="${passenger.firstName}"></td>
-                                        <td th:text="${passenger.lastName}"></td>
-<!--                                        <td th:text="${passenger.phoneNumber}"></td>-->
-<!--                                        <td th:text="${passenger.email}"></td>-->
-                                        <td th:text="${passenger.type.getTypeName()}"></td>
-                                        <td></td>
+                                    <tr th:each="entry : ${passengerList.entrySet()}">
+                                        <td th:text="${entry.key.passengerId}"></td>
+                                        <td th:text="${entry.key.firstName}"></td>
+                                        <td th:text="${entry.key.lastName}"></td>
+                                        <td th:text="${entry.key.type.getTypeName()}"></td>
+                                        <td th:text="${entry.value?.dayOrder}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
