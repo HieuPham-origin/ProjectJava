@@ -6,6 +6,8 @@ import com.example.demo.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TicketServiceImpl implements TicketService{
     @Autowired
@@ -17,5 +19,10 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public Ticket getTicketByPassenger(Passenger passenger){
         return this.ticketRepository.findByPassenger(passenger);
+    }
+
+    @Override
+    public List<Ticket> fetchAllTickets() {
+        return ticketRepository.findAll();
     }
 }

@@ -241,10 +241,9 @@
                                             <th>ID</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
-<!--                                            <th>Phone Number</th>-->
+                                            <th>Gender</th>
 <!--                                            <th>Email</th>-->
                                             <th>Type</th>
-                                            <th>Booking History</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -252,10 +251,9 @@
                                             <th>ID</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
-<!--                                            <th>Phone Number</th>-->
+                                            <th>Gender</th>
 <!--                                            <th>Email</th>-->
                                             <th>Type</th>
-                                            <th>Booking History</th>
 
                                         </tr>
                                     </tfoot>
@@ -264,8 +262,9 @@
                                         <td th:text="${entry.key.passengerId}"></td>
                                         <td th:text="${entry.key.firstName}"></td>
                                         <td th:text="${entry.key.lastName}"></td>
+                                        <td th:text="${entry.key.gender}"></td>
                                         <td th:text="${entry.key.type.getTypeName()}"></td>
-                                        <td th:text="${entry.value?.dayOrder}"></td>
+<!--                                        <td th:text="${entry.value?.dayOrder}"></td>-->
                                     </tr>
                                     </tbody>
                                 </table>

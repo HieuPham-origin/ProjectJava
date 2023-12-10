@@ -45,4 +45,9 @@ public class ReservationServiceImpl implements ReservationService {
     public Reservation findById(int reservationId){
         return reservationRepository.findById(reservationId).orElse(null);
     }
+
+    @Override
+    public List<Reservation> fetchAllReservation() {
+        return reservationRepository.findAll();
+    }
 }
