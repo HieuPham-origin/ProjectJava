@@ -273,8 +273,8 @@
                                     <td th:text="${ticket.ticketId}"> </td>
                                     <td th:text="${ticket.seatDetail.getId()}"> </td>
                                     <td th:text="${ticket.ticketClass.getClassName()}"></td>
-                                    <td th:text="${ticket.service.getServiceName()}"></td>
-                                    <td th:text="${ticket.baggage.getBaggageName()}"></td>
+                                    <td th:text="${ticket.service?.getServiceName()}"></td>
+                                    <td th:text="${ticket.baggage?.getBaggageName()}"></td>
                                     <td th:text="${ticket.totalPrice}"></td>
 
                                     <td th:text="${ticket.status}"></td>
