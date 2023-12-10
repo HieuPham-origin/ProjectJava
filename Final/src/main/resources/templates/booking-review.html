@@ -453,7 +453,7 @@
                                 </label>
                                 <label th:each="baggage, iStat2 : ${baggages}" class="form-check-label d-flex mb-2">
                                     <input type="radio" th:field="*{baggageIds2[__${iStat.index}__]}" class="form-check-input me-3" th:value="${baggage.baggageId}" th:attr="data-price=${baggage.price},data-weight=${baggage.weight}">
-                                    <span th:text="${'+' + baggage.weight + 'kg'}">+20kg</span>
+                                    <span th:text="${baggage.baggageName + '+' + baggage.weight + 'kg'}">+20kg</span>
                                     <div th:text="${#numbers.formatDecimal(baggage.price, 0, 'POINT', 0, 'POINT') + '₫'}" class="baggage-price ms-auto text-danger fw-bold">200.000 ₫</div>
                                 </label>
                             </div>

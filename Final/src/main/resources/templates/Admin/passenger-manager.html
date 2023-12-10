@@ -241,9 +241,10 @@
                                             <th>ID</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
-                                            <th>Phone Number</th>
-                                            <th>Email</th>
+<!--                                            <th>Phone Number</th>-->
+<!--                                            <th>Email</th>-->
                                             <th>Type</th>
+                                            <th>Booking History</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -251,9 +252,11 @@
                                             <th>ID</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
-                                            <th>Phone Number</th>
-                                            <th>Email</th>
+<!--                                            <th>Phone Number</th>-->
+<!--                                            <th>Email</th>-->
                                             <th>Type</th>
+                                            <th>Booking History</th>
+
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -261,9 +264,10 @@
                                         <td th:text="${passenger.passengerId}"></td>
                                         <td th:text="${passenger.firstName}"></td>
                                         <td th:text="${passenger.lastName}"></td>
-                                        <td th:text="${passenger.phoneNumber}"></td>
-                                        <td th:text="${passenger.email}"></td>
+<!--                                        <td th:text="${passenger.phoneNumber}"></td>-->
+<!--                                        <td th:text="${passenger.email}"></td>-->
                                         <td th:text="${passenger.type.getTypeName()}"></td>
+                                        <td></td>
                                     </tr>
                                     </tbody>
                                 </table>
