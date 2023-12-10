@@ -51,7 +51,7 @@ public class Ticket {
     private TicketClass ticketClass;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "service_id", referencedColumnName = "service_id", insertable = false, updatable = false)
+    @JoinColumn(name = "service_id", referencedColumnName = "service_id")
     private Service service;
 
     @ManyToOne(cascade = CascadeType.ALL)
