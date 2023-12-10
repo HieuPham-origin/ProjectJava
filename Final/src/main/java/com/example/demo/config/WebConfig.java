@@ -14,8 +14,8 @@ public class WebConfig {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST","PUT", "DELETE");
+                        .allowedOrigins("*") // Cho phép truy cập tất cả các nguồn
+                        .allowedMethods("GET", "POST","PUT", "DELETE"); // Xác định các phương thức HTTP
             }
         };
     }

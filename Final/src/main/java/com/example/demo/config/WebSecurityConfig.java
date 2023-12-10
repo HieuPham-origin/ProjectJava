@@ -1,6 +1,5 @@
 package com.example.demo.config;
 
-import com.example.demo.config.jwt.JwtAuthenticationFilter;
 import com.example.demo.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +14,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -26,23 +24,23 @@ public class WebSecurityConfig {
     @Autowired
     private LoginSuccessHandler loginSuccessHandler;
 
-    @Autowired
-    public JwtAuthenticationFilter jwtAuthenticationFilter;
-
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
+    // Quản lý xác thực người dùng
     @Bean
     public AuthenticationManager authenticationManager(
             AccountService accountService,
             PasswordEncoder passwordEncoder) {
 
+        // Một triển khai của AuthenticationProvider được cung cấp bởi Spring Security
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(accountService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
+        authenticationProvider.setUserDetailsService(accountService); // UserDetailService được AccountService implements
+        authenticationProvider.setPasswordEncoder(passwordEncoder); // passwordEncoder
 
+        // Là một triển khai của AuthenticationManager trong Spring Security và được sử dụng để quản lý danh sách các AuthenticationProvider.
         return new ProviderManager(authenticationProvider);
     }
 
@@ -52,13 +50,13 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         (authorize) -> authorize
                                 .requestMatchers("/Admin/**").hasRole("ADMIN")
-                                .requestMatchers("/authorize", "/logout", "/register", "/", "/index",
+                                .requestMatchers("/logout", "/register", "/", "/index",
                                         "/fonts/**", "/lib/**", "/js/**", "/css/**", "/images/**",
                                         "/admin/**", "/img.contact/**")
                                 .permitAll() // Cho phép tất cả mọi người truy cập vào địa chỉ này
                                 .anyRequest().authenticated() // Tất cả các request khác đều cần phải xác thực mới được truy cập
                 )
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable) // Tắt CSRF protection
                 .cors(AbstractHttpConfigurer::disable) // Ngăn chặn request từ một domain khác
                 .formLogin(
                         form -> form
@@ -74,9 +72,6 @@ public class WebSecurityConfig {
                                 .logoutSuccessUrl("/login")
                 )
                 .httpBasic(withDefaults());
-
-        // Thêm một lớp Filter kiểm tra jwt
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
