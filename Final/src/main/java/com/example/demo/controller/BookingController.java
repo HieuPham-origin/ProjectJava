@@ -436,7 +436,7 @@ public class BookingController {
                     ticket.setBaggage(baggage);
                     ticketTotal += baggage.getPrice();
                 }
-                if (bookingDetail.getSeatDetailIds2().get(i) != 0){
+                if (bookingDetail.getServiceIds2().get(i) != 0){
                     Service service = serviceofFlightService.getById(bookingDetail.getServiceIds2().get(i));
                     ticket.setService(service);
                     ticketTotal += service.getPrice();
